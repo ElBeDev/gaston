@@ -1,0 +1,207 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.eva-voice-container {
+  padding: 24px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 16px;
+  background: #fafbfc;
+  max-width: 420px;
+  margin: 32px auto 0 auto;
+  box-shadow: 0 2px 16px 0 #0001;
+}
+
+.eva-voice-btn {
+  background: #ff1744;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 4px 16px #ff174455;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  outline: none;
+  position: relative;
+}
+
+.eva-voice-btn.recording {
+  background: #d50000;
+  box-shadow: 0 0 0 8px #ff174422, 0 4px 16px #ff174455;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 8px #ff174422, 0 4px 16px #ff174455; }
+  70% { box-shadow: 0 0 0 24px #ff174400, 0 4px 16px #ff174455; }
+  100% { box-shadow: 0 0 0 8px #ff174422, 0 4px 16px #ff174455; }
+}
+
+.eva-voice-status {
+  margin-top: 18px;
+  font-size: 1.1rem;
+  color: #444;
+  min-height: 24px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.eva-voice-wave {
+  margin: 18px auto 0 auto;
+  width: 60px;
+  height: 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+}
+
+.eva-voice-bar {
+  width: 6px;
+  background: #ff1744;
+  border-radius: 3px;
+  animation: wave 1s infinite;
+}
+
+.eva-voice-bar:nth-child(1) { animation-delay: 0s; }
+.eva-voice-bar:nth-child(2) { animation-delay: 0.2s; }
+.eva-voice-bar:nth-child(3) { animation-delay: 0.4s; }
+.eva-voice-bar:nth-child(4) { animation-delay: 0.2s; }
+.eva-voice-bar:nth-child(5) { animation-delay: 0s; }
+
+@keyframes wave {
+  0%, 100% { height: 12px; }
+  50% { height: 24px; }
+}
+
+.eva-voice-animated-wave {
+  margin: 22px auto 0 auto;
+  width: 80px;
+  height: 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+}
+
+.eva-voice-animated-bar {
+  width: 8px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #ff1744 60%, #ff8a65 100%);
+  animation: siri-wave 1.2s infinite cubic-bezier(.4,0,.2,1);
+  opacity: 0.85;
+}
+
+.eva-voice-animated-bar:nth-child(1) { animation-delay: 0s; }
+.eva-voice-animated-bar:nth-child(2) { animation-delay: 0.15s; }
+.eva-voice-animated-bar:nth-child(3) { animation-delay: 0.3s; }
+.eva-voice-animated-bar:nth-child(4) { animation-delay: 0.15s; }
+.eva-voice-animated-bar:nth-child(5) { animation-delay: 0s; }
+
+@keyframes siri-wave {
+  0%, 100% { height: 16px; }
+  20% { height: 32px; }
+  50% { height: 12px; }
+  70% { height: 28px; }
+}
+
+.eva-voice-transcription {
+  margin-top: 18px;
+  font-size: 1.08rem;
+  color: #222;
+  background: #fff7f7;
+  border-radius: 8px;
+  padding: 10px 16px;
+  box-shadow: 0 1px 6px #ff174408;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeInTranscription 0.7s forwards;
+}
+
+@keyframes fadeInTranscription {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.eva-voice-error {
+  color: #d50000;
+  margin-top: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.eva-voice-audio-player {
+  margin-top: 18px;
+  width: 100%;
+  max-width: 320px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.eva-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 18px auto;
+  box-shadow: 0 2px 16px #ff174422;
+  transition: box-shadow 0.3s, filter 0.3s;
+  display: block;
+}
+
+.eva-avatar.speaking {
+  animation: eva-avatar-glow 1.2s infinite alternate;
+  box-shadow: 0 0 0 12px #ff174422, 0 2px 16px #ff174455;
+  filter: brightness(1.15) saturate(1.2);
+}
+
+@keyframes eva-avatar-glow {
+  0% { box-shadow: 0 0 0 12px #ff174422, 0 2px 16px #ff174455; }
+  100% { box-shadow: 0 0 0 28px #ff174400, 0 2px 16px #ff174455; }
+}
