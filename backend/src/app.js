@@ -26,9 +26,9 @@ app.use((req, res, next) => {
 const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production' ? false : [
-      "http://localhost:3000",
       "http://localhost:3001",
-      "http://192.168.10.147:3000"
+      "http://localhost:3002",
+      "http://192.168.10.147:3001"
     ],
     methods: ["GET", "POST"]
   }
@@ -50,9 +50,9 @@ app.use(session({
 app.use(helmet());
 app.use(cors({
   origin: [
-    'http://localhost:3000',
     'http://localhost:3001',
-    'http://192.168.10.147:3000'
+    'http://localhost:3002',
+    'http://192.168.10.147:3001'
   ],
   credentials: true
 }));
@@ -64,8 +64,10 @@ app.use(express.urlencoded({ extended: true, limit: '10mb', parameterLimit: 1000
 // --- Eva Google OAuth2 & Email Integration ---
 const authRoutes = require('./routes/auth');
 const emailRoutes = require('./routes/email');
+const calendarRoutes = require('../routes/calendar-fallback'); // Temporary fallback
 app.use('/auth', authRoutes);
 app.use('/api/email', emailRoutes);
+app.use('/api/calendar', calendarRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)

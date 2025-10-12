@@ -9,12 +9,14 @@ const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3001/auth/google/callback';
 const SCOPES = [
+  'openid',
+  'profile',
+  'email',
   'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/gmail.send',
   'https://www.googleapis.com/auth/gmail.compose',
-  'openid',
-  'profile',
-  'email'
+  'https://www.googleapis.com/auth/calendar',
+  'https://www.googleapis.com/auth/calendar.events'
 ];
 
 function getOAuth2Client() {
@@ -30,6 +32,7 @@ router.get('/google', (req, res) => {
   const oauth2Client = getOAuth2Client();
   const state = Math.random().toString(36).substring(2); // simple state
   req.session.oauthState = state;
+  console.log('🔐 Requested scopes:', SCOPES);
   const url = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES,
@@ -37,12 +40,14 @@ router.get('/google', (req, res) => {
     prompt: 'consent',
     include_granted_scopes: true
   });
+  console.log('🔗 OAuth URL generated:', url);
   res.redirect(url);
 });
 
 // Step 2: Handle OAuth2 callback, exchange code for tokens
 router.get('/google/callback', async (req, res) => {
   const { code, state } = req.query;
+  console.log('📝 Callback received with scopes:', req.query.scope);
   if (!code || !state || state !== req.session.oauthState) {
     return res.status(400).send('Invalid state or missing code.');
   }
@@ -57,7 +62,7 @@ router.get('/google/callback', async (req, res) => {
     const userinfo = await oauth2.userinfo.get();
     req.session.userinfo = userinfo.data;
     // Redirigir a la app React (ajusta la ruta si quieres ir a /chat, /correo, etc)
-    res.redirect('http://localhost:3000/');
+    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3001'}?auth=success`);
   } catch (err) {
     console.error('OAuth2 callback error:', err);
     res.status(500).send('Authentication failed.');

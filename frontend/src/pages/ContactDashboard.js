@@ -79,7 +79,7 @@ const ContactDashboard = () => {
 
         {/* Quick Stats */}
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={2}>
+          <Grid size={{ xs: 12 }} sm={6} md={2}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#2563eb' }}>
@@ -91,7 +91,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+          <Grid size={{ xs: 12 }} sm={6} md={2}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#059669' }}>
@@ -103,7 +103,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+          <Grid size={{ xs: 12 }} sm={6} md={2}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#7c3aed' }}>
@@ -115,7 +115,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+          <Grid size={{ xs: 12 }} sm={6} md={2}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#dc2626' }}>
@@ -127,7 +127,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+          <Grid size={{ xs: 12 }} sm={6} md={2}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#be185d' }}>
@@ -139,7 +139,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+          <Grid size={{ xs: 12 }} sm={6} md={2}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#ea580c' }}>
@@ -216,7 +216,7 @@ const ContactDashboard = () => {
                 Analytics del CRM
               </Typography>
               <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <Card sx={{ p: 3 }}>
                     <Typography variant="h6" sx={{ mb: 2 }}>
                       Engagement por Segmento
@@ -246,7 +246,7 @@ const ContactDashboard = () => {
                     </Box>
                   </Card>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <Card sx={{ p: 3 }}>
                     <Typography variant="h6" sx={{ mb: 2 }}>
                       Actividad Reciente

@@ -9,12 +9,14 @@ const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
 const SCOPES = [
+  'openid',
+  'profile',
+  'email',
   'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/gmail.send',
   'https://www.googleapis.com/auth/gmail.compose',
-  'openid',
-  'profile',
-  'email'
+  'https://www.googleapis.com/auth/calendar',
+  'https://www.googleapis.com/auth/calendar.events'
 ];
 
 function getOAuth2Client() {
@@ -30,19 +32,23 @@ router.get('/google', (req, res) => {
   const oauth2Client = getOAuth2Client();
   const state = Math.random().toString(36).substring(2);
   req.session.oauthState = state;
+  console.log('🔐 Requested scopes:', SCOPES);
   const url = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES,
     state,
     prompt: 'consent',
-    include_granted_scopes: true
+    include_granted_scopes: true,
+    approval_prompt: 'force'
   });
+  console.log('🔗 OAuth URL:', url);
   res.redirect(url);
 });
 
 // OAuth2 callback
 router.get('/google/callback', async (req, res) => {
   const { code, state } = req.query;
+  console.log('📝 Callback received with scopes:', req.query.scope);
   if (!code || !state || state !== req.session.oauthState) {
     return res.status(400).send('Invalid state or missing code.');
   }
@@ -63,17 +69,23 @@ router.get('/google/callback', async (req, res) => {
       picture: userInfo.picture
     };
 
-    // Store session in emailService for AI assistant to use
+    // Store session in both emailService and calendarService for AI assistant to use
     emailService.setUserSession(req.session.user.id, {
+      tokens: tokens,
+      user: req.session.user
+    });
+
+    const calendarService = require('../src/services/calendarService');
+    calendarService.setUserSession(req.session.user.id, {
       tokens: tokens,
       user: req.session.user
     });
     
     // Redirect to frontend with success
-    res.redirect('http://localhost:3001?auth=success');
+    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3001'}?auth=success`);
   } catch (error) {
     console.error('Google callback error:', error);
-    res.redirect('http://localhost:3001?auth=error');
+    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3001'}?auth=error`);
   }
 });
 

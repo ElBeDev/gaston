@@ -29,7 +29,9 @@ import {
   Security,
   Cloud,
   ArrowForward,
-  Refresh
+  Refresh,
+  Work,
+  Note
 } from '@mui/icons-material';
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -38,6 +40,7 @@ const DashboardPage = () => {
   const [stats, setStats] = useState({
     totalConversations: 0,
     totalContacts: 0,
+    totalProjects: 0,
     totalTasks: 0,
     totalNotes: 0,
     totalEmails: 0,
@@ -51,6 +54,7 @@ const DashboardPage = () => {
       setStats({
         totalConversations: 24,
         totalContacts: 156,
+        totalProjects: 12,
         totalTasks: 8,
         totalNotes: 42,
         totalEmails: 3,
@@ -148,7 +152,7 @@ const DashboardPage = () => {
 
       {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 6 }}>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Conversaciones"
             value={stats.totalConversations}
@@ -158,17 +162,27 @@ const DashboardPage = () => {
           />
         </Grid>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Contactos"
             value={stats.totalContacts}
             icon={<Person />}
-            color="success"
+            color="secondary"
             onClick={() => navigate('/crm')}
           />
         </Grid>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
+          <StatsCard
+            title="Proyectos"
+            value={stats.totalProjects}
+            icon={<Work />}
+            color="success"
+            onClick={() => navigate('/projects')}
+          />
+        </Grid>
+        
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Tareas"
             value={stats.totalTasks}
@@ -178,33 +192,23 @@ const DashboardPage = () => {
           />
         </Grid>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
-          <StatsCard
-            title="Notas"
-            value={stats.totalNotes}
-            icon={<Notes />}
-            color="info"
-            onClick={() => navigate('/notes')}
-          />
-        </Grid>
-        
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Emails"
             value={stats.totalEmails}
             icon={<Email />}
-            color="secondary"
+            color="info"
             onClick={() => navigate('/email')}
           />
         </Grid>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
-            title="WhatsApp"
-            value={stats.whatsappConnected ? "Conectado" : "Desconectado"}
-            icon={<WhatsApp />}
-            color={stats.whatsappConnected ? "success" : "error"}
-            onClick={() => navigate('/whatsapp')}
+            title="Notas"
+            value={stats.totalNotes}
+            icon={<Note />}
+            color="purple"
+            onClick={() => navigate('/notes')}
           />
         </Grid>
       </Grid>
@@ -212,22 +216,20 @@ const DashboardPage = () => {
       {/* Main Content Grid */}
       <Grid container spacing={4}>
         {/* Quick Actions */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <QuickActionsCard navigate={navigate} />
         </Grid>
 
         {/* Eva Capabilities */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <EvaCapabilitiesCard />
         </Grid>
 
-        {/* Recent Activity */}
-        <Grid item xs={12} md={8}>
+        {/* Recent Activity & AI Intelligence */}
+        <Grid size={{ xs: 12, md: 8 }}>
           <RecentActivityCard />
         </Grid>
-
-        {/* System Status */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <SystemStatusCard />
         </Grid>
       </Grid>
@@ -356,7 +358,7 @@ const QuickActionsCard = ({ navigate }) => {
         </Typography>
         <Grid container spacing={2}>
           {actions.map((action, index) => (
-            <Grid item xs={12} sm={6} key={index}>
+            <Grid size={{ xs: 12, sm: 6 }} key={index}>
               <Paper
                 sx={{
                   p: 2,

@@ -6,7 +6,11 @@ import {
   Button,
   Box,
   IconButton,
-  useTheme
+  useTheme,
+  Avatar,
+  Menu,
+  MenuItem,
+  Chip
 } from '@mui/material';
 import {
   Dashboard,
@@ -14,12 +18,17 @@ import {
   People,
   Analytics,
   Email,
+  CalendarToday,
   WhatsApp,
   Brightness4,
-  Brightness7
+  Brightness7,
+  AccountCircle,
+  Logout,
+  CheckCircle
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTheme as useCustomTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 import EvaAvatar from './EvaAvatar';
 
 const Header = () => {
@@ -27,7 +36,22 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toggleTheme } = useCustomTheme();
+  const { user, isAuthenticated, loginWithGoogle, logout } = useAuth();
   const [evaHeaderStatus] = useState('online');
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleUserMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleUserMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    handleUserMenuClose();
+    logout();
+  };
 
   const navItems = [
     { label: 'Dashboard', path: '/', icon: <Dashboard /> },
@@ -35,6 +59,7 @@ const Header = () => {
     { label: 'CRM', path: '/crm', icon: <People /> },
     { label: 'Analytics', path: '/analytics', icon: <Analytics /> },
     { label: 'Email', path: '/email', icon: <Email /> },
+    { label: 'Calendar', path: '/calendar', icon: <CalendarToday /> },
     { label: 'WhatsApp', path: '/whatsapp', icon: <WhatsApp /> },
     { label: 'WhatsApp Web', path: '/whatsapp-web', icon: <WhatsApp /> },
   ];
@@ -108,6 +133,61 @@ const Header = () => {
               {item.label}
             </Button>
           ))}
+
+          {/* Google Auth Status */}
+          {isAuthenticated && user ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2 }}>
+              <Chip
+                icon={<CheckCircle />}
+                label="Gmail"
+                size="small"
+                color="success"
+                variant="outlined"
+              />
+              <IconButton onClick={handleUserMenuOpen}>
+                <Avatar
+                  src={user.picture}
+                  alt={user.name}
+                  sx={{ width: 32, height: 32 }}
+                />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleUserMenuClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <MenuItem disabled>
+                  <Box>
+                    <Typography variant="subtitle2">{user.name}</Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {user.email}
+                    </Typography>
+                  </Box>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <Logout sx={{ mr: 1 }} />
+                  Cerrar Sesión
+                </MenuItem>
+              </Menu>
+            </Box>
+          ) : (
+            <Button
+              variant="outlined"
+              startIcon={<AccountCircle />}
+              onClick={loginWithGoogle}
+              sx={{ ml: 2 }}
+            >
+              Login Gmail
+            </Button>
+          )}
 
           <IconButton
             onClick={toggleTheme}

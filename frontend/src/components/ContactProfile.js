@@ -203,7 +203,7 @@ const ContactProfile = ({ contact }) => {
 
           {/* Contact Information */}
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12 }} sm={6}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 <Email sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Typography variant="body2" color="text.secondary">
@@ -211,7 +211,7 @@ const ContactProfile = ({ contact }) => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12 }} sm={6}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 <Phone sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Typography variant="body2" color="text.secondary">
@@ -219,7 +219,7 @@ const ContactProfile = ({ contact }) => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12 }} sm={6}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 <CalendarToday sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Typography variant="body2" color="text.secondary">
@@ -240,7 +240,7 @@ const ContactProfile = ({ contact }) => {
           </Typography>
           
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Box sx={{ mb: 2 }}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                   Nivel de Engagement
@@ -265,7 +265,7 @@ const ContactProfile = ({ contact }) => {
               </Box>
             </Grid>
             
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Box sx={{ mb: 2 }}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                   Riesgo de Churn
@@ -291,7 +291,7 @@ const ContactProfile = ({ contact }) => {
             </Grid>
 
             {conversionProbability !== undefined && (
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                     Probabilidad de Conversión

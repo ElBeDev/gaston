@@ -11,7 +11,147 @@ function requireAuth(req, res, next) {
   next();
 }
 
-// List emails (basic example)
+// Get messages from specific folder/label
+router.get('/messages', requireAuth, async (req, res) => {
+  try {
+    const gmail = googleAuthService.getGmailClient(req.session.tokens);
+    const folder = req.query.folder || 'INBOX';
+    const maxResults = parseInt(req.query.maxResults) || 20;
+    
+    // Get message list
+    const response = await gmail.users.messages.list({ 
+      userId: 'me', 
+      labelIds: [folder],
+      maxResults: maxResults
+    });
+    
+    if (!response.data.messages) {
+      return res.json({ messages: [] });
+    }
+    
+    // Get full message details for each message
+    const messages = await Promise.all(
+      response.data.messages.map(async (message) => {
+        try {
+          const msgDetails = await gmail.users.messages.get({
+            userId: 'me',
+            id: message.id,
+            format: 'full'
+          });
+          
+          const headers = msgDetails.data.payload.headers;
+          const getHeader = (name) => headers.find(h => h.name === name)?.value || '';
+          
+          // Extract text content
+          let body = '';
+          let snippet = msgDetails.data.snippet || '';
+          
+          const extractTextFromPart = (part) => {
+            if (part.mimeType === 'text/plain' && part.body.data) {
+              return Buffer.from(part.body.data, 'base64').toString('utf-8');
+            }
+            if (part.parts) {
+              return part.parts.map(extractTextFromPart).join('');
+            }
+            return '';
+          };
+          
+          if (msgDetails.data.payload.body.data) {
+            body = Buffer.from(msgDetails.data.payload.body.data, 'base64').toString('utf-8');
+          } else if (msgDetails.data.payload.parts) {
+            body = extractTextFromPart(msgDetails.data.payload);
+          }
+          
+          return {
+            id: message.id,
+            threadId: msgDetails.data.threadId,
+            subject: getHeader('Subject'),
+            from: getHeader('From'),
+            to: getHeader('To'),
+            date: getHeader('Date'),
+            snippet: snippet,
+            body: body.substring(0, 1000), // Limit body length
+            unread: msgDetails.data.labelIds?.includes('UNREAD') || false,
+            starred: msgDetails.data.labelIds?.includes('STARRED') || false,
+            labels: msgDetails.data.labelIds || []
+          };
+        } catch (error) {
+          console.error('Error getting message details:', error);
+          return null;
+        }
+      })
+    );
+    
+    // Filter out null results
+    const validMessages = messages.filter(msg => msg !== null);
+    
+    res.json({ messages: validMessages });
+  } catch (err) {
+    console.error('Error listing emails:', err);
+    res.status(500).json({ error: 'Error al listar emails.' });
+  }
+});
+
+// Get specific message
+router.get('/messages/:messageId', requireAuth, async (req, res) => {
+  try {
+    const gmail = googleAuthService.getGmailClient(req.session.tokens);
+    const messageId = req.params.messageId;
+    
+    const response = await gmail.users.messages.get({
+      userId: 'me',
+      id: messageId,
+      format: 'full'
+    });
+    
+    const headers = response.data.payload.headers;
+    const getHeader = (name) => headers.find(h => h.name === name)?.value || '';
+    
+    // Extract full text content
+    let body = '';
+    const extractTextFromPart = (part) => {
+      if (part.mimeType === 'text/plain' && part.body.data) {
+        return Buffer.from(part.body.data, 'base64').toString('utf-8');
+      }
+      if (part.mimeType === 'text/html' && part.body.data) {
+        return Buffer.from(part.body.data, 'base64').toString('utf-8');
+      }
+      if (part.parts) {
+        return part.parts.map(extractTextFromPart).join('');
+      }
+      return '';
+    };
+    
+    if (response.data.payload.body.data) {
+      body = Buffer.from(response.data.payload.body.data, 'base64').toString('utf-8');
+    } else if (response.data.payload.parts) {
+      body = extractTextFromPart(response.data.payload);
+    }
+    
+    const message = {
+      id: messageId,
+      threadId: response.data.threadId,
+      subject: getHeader('Subject'),
+      from: getHeader('From'),
+      to: getHeader('To'),
+      cc: getHeader('Cc'),
+      bcc: getHeader('Bcc'),
+      date: getHeader('Date'),
+      body: body,
+      snippet: response.data.snippet,
+      unread: response.data.labelIds?.includes('UNREAD') || false,
+      starred: response.data.labelIds?.includes('STARRED') || false,
+      labels: response.data.labelIds || []
+    };
+    
+    res.json(message);
+  } catch (err) {
+    console.error('Error getting message:', err);
+    res.status(500).json({ error: 'Error al obtener el mensaje.' });
+  }
+});
+
+// List emails (basic example) - Keep for backward compatibility
 router.get('/list', requireAuth, async (req, res) => {
   try {
     const gmail = googleAuthService.getGmailClient(req.session.tokens);
@@ -26,11 +166,13 @@ router.get('/list', requireAuth, async (req, res) => {
   }
 });
 
-// Send email (expects to, subject, body in req.body)
+// Send email (expects to, subject, text/body in req.body)
 router.post('/send', requireAuth, async (req, res) => {
-  const { to, subject, body, cc, bcc } = req.body;
-  if (!to || !subject || !body) {
-    return res.status(400).json({ error: 'Faltan campos requeridos (to, subject, body).' });
+  const { to, subject, text, body, cc, bcc } = req.body;
+  const emailBody = body || text; // Support both 'body' and 'text' fields
+  
+  if (!to || !subject || !emailBody) {
+    return res.status(400).json({ error: 'Faltan campos requeridos (to, subject, body/text).' });
   }
   try {
     const gmail = googleAuthService.getGmailClient(req.session.tokens);
@@ -45,7 +187,7 @@ router.post('/send', requireAuth, async (req, res) => {
     if (cc) messageParts.push(`Cc: ${cc}`);
     if (bcc) messageParts.push(`Bcc: ${bcc}`);
     
-    messageParts.push('', body);
+    messageParts.push('', emailBody);
     
     const message = messageParts.join('\n');
     const encodedMessage = Buffer.from(message)

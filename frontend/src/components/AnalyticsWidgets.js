@@ -143,7 +143,7 @@ const AnalyticsWidgets = () => {
 
         {/* Compact Segments & Engagement */}
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1.5, color: 'text.secondary' }}>
               Engagement por Segmento
             </Typography>
@@ -189,7 +189,7 @@ const AnalyticsWidgets = () => {
             </Box>
           </Grid>
           
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1.5, color: 'text.secondary' }}>
               Engagement General
             </Typography>

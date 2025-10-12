@@ -185,7 +185,7 @@ const IntelligenceDashboard = ({ userId = 'gaston' }) => {
 
       <Grid container spacing={3}>
         {/* Estado Actual del Usuario */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card elevation={3}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
@@ -222,7 +222,7 @@ const IntelligenceDashboard = ({ userId = 'gaston' }) => {
         </Grid>
 
         {/* Necesidades Inmediatas */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card elevation={3}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
@@ -254,7 +254,7 @@ const IntelligenceDashboard = ({ userId = 'gaston' }) => {
         </Grid>
 
         {/* Acciones Próximas */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={3}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
@@ -280,7 +280,7 @@ const IntelligenceDashboard = ({ userId = 'gaston' }) => {
         </Grid>
 
         {/* Recomendaciones Personalizadas */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={3}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
@@ -303,7 +303,7 @@ const IntelligenceDashboard = ({ userId = 'gaston' }) => {
         </Grid>
 
         {/* Evaluación de Riesgos */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card elevation={3}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>
@@ -350,7 +350,7 @@ const IntelligenceDashboard = ({ userId = 'gaston' }) => {
         </Grid>
 
         {/* Patrones de Trabajo */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card elevation={3}>
             <CardContent>
               <Box display="flex" alignItems="center" mb={2}>

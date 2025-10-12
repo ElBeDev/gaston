@@ -331,7 +331,7 @@ const AnalyticsPage = () => {
       {activeTab === 0 && analytics && (
         <Grid container spacing={3}>
           {/* Overview Metrics */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <MetricCard
               title="Total Interacciones"
               value={analytics.overview.totalInteractions.toLocaleString()}
@@ -341,7 +341,7 @@ const AnalyticsPage = () => {
               color="#2563eb"
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <MetricCard
               title="Contactos Activos"
               value={analytics.overview.totalContacts}
@@ -351,7 +351,7 @@ const AnalyticsPage = () => {
               color="#059669"
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <MetricCard
               title="Tiempo de Respuesta"
               value={analytics.overview.avgResponseTime}
@@ -361,7 +361,7 @@ const AnalyticsPage = () => {
               color="#7c3aed"
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <MetricCard
               title="Satisfacción"
               value={`${analytics.overview.satisfactionScore}/5`}
@@ -373,15 +373,15 @@ const AnalyticsPage = () => {
           </Grid>
 
           {/* Charts */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <ChannelChart channels={analytics.communications.channels} />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <ActivityChart data={analytics.communications.hourlyActivity} />
           </Grid>
 
           {/* Recent Activity */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Card sx={{ boxShadow: 1 }}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -389,17 +389,17 @@ const AnalyticsPage = () => {
                   Resumen de Actividad
                 </Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
+                  <Grid size={{ xs: 12, md: 4 }}>
                     <Alert severity="success" sx={{ mb: 1 }}>
                       ✅ {analytics.overview.totalInteractions} interacciones procesadas
                     </Alert>
                   </Grid>
-                  <Grid item xs={12} md={4}>
+                  <Grid size={{ xs: 12, md: 4 }}>
                     <Alert severity="info" sx={{ mb: 1 }}>
                       📈 Crecimiento del {analytics.overview.trendsData.interactions.change}% en interacciones
                     </Alert>
                   </Grid>
-                  <Grid item xs={12} md={4}>
+                  <Grid size={{ xs: 12, md: 4 }}>
                     <Alert severity="warning" sx={{ mb: 1 }}>
                       ⚡ Tiempo de respuesta mejorado en {Math.abs(analytics.overview.trendsData.responseTime.change)}%
                     </Alert>
@@ -413,14 +413,14 @@ const AnalyticsPage = () => {
 
       {activeTab === 1 && analytics && (
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <ActivityChart data={analytics.communications.hourlyActivity} />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <ChannelChart channels={analytics.communications.channels} />
           </Grid>
           
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Card sx={{ boxShadow: 1 }}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
@@ -438,7 +438,7 @@ const AnalyticsPage = () => {
       {activeTab === 2 && analytics && (
         <Grid container spacing={3}>
           {analytics.performance.aiInsights.map((insight, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
               <Card sx={{ boxShadow: 1 }}>
                 <CardContent>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
@@ -466,7 +466,7 @@ const AnalyticsPage = () => {
             </Grid>
           ))}
 
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Card sx={{ boxShadow: 1 }}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
@@ -500,7 +500,7 @@ const AnalyticsPage = () => {
 
       {activeTab === 3 && analytics && (
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12 }} sm={4}>
             <MetricCard
               title="Usuarios Activos"
               value={analytics.users.activeUsers}
@@ -510,7 +510,7 @@ const AnalyticsPage = () => {
               color="#2563eb"
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12 }} sm={4}>
             <MetricCard
               title="Nuevos Usuarios"
               value={analytics.users.newUsers}
@@ -520,7 +520,7 @@ const AnalyticsPage = () => {
               color="#059669"
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12 }} sm={4}>
             <MetricCard
               title="Usuarios Recurrentes"
               value={analytics.users.returningUsers}
@@ -531,7 +531,7 @@ const AnalyticsPage = () => {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Card sx={{ boxShadow: 1 }}>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
@@ -539,7 +539,7 @@ const AnalyticsPage = () => {
                 </Typography>
                 <Grid container spacing={2}>
                   {analytics.users.userSegments.map((segment) => (
-                    <Grid item xs={12} md={4} key={segment.segment}>
+                    <Grid size={{ xs: 12, md: 4 }} key={segment.segment}>
                       <Paper sx={{ p: 2 }}>
                         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                           {segment.segment}

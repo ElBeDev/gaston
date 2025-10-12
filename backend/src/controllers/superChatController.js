@@ -16,6 +16,8 @@ const DocumentProcessor = require('../services/documentProcessor');
 const VisionAnalyzer = require('../services/visionAnalyzer');
 const AudioProcessor = require('../services/audioProcessor');
 const emailService = require('../services/emailService');
+const calendarService = require('../services/calendarService');
+const googleWorkspaceService = require('../services/googleWorkspaceService');
 const Conversation = require('../models/Conversation');
 const Contact = require('../models/Contact');
 const Task = require('../models/Task');
@@ -121,7 +123,11 @@ class SuperChatController {
       
       // 🤖 STEP 7: Generate Eva's super-intelligent response
       console.log('🤖 Generating super-intelligent response...');
-      const response = await this.generateSuperIntelligentResponse(message, superEnhancedContext, userId);
+      
+      // 📧📅 STEP 7.1: Check for Google Workspace intentions (Email & Calendar)
+      const googleWorkspaceResult = await this.processGoogleWorkspaceIntentions(message, userId);
+      
+      const response = await this.generateSuperIntelligentResponse(message, superEnhancedContext, userId, googleWorkspaceResult);
       
       // 💾 STEP 8: Save Eva's response (With error handling)
       let assistantConversation;
@@ -204,10 +210,10 @@ class SuperChatController {
   /**
    * 🧠 Generate super-intelligent response with predictions
    */
-  async generateSuperIntelligentResponse(message, enhancedContext, userId) {
+  async generateSuperIntelligentResponse(message, enhancedContext, userId, googleWorkspaceResult = null) {
     try {
       // Build enhanced prompt with predictions and behavior analysis
-      const enhancedPrompt = this.buildSuperEnhancedPrompt(message, enhancedContext);
+      const enhancedPrompt = this.buildSuperEnhancedPrompt(message, enhancedContext, googleWorkspaceResult);
       
       // Get AI response
       const aiResponse = await openaiService.getChatResponse(enhancedPrompt, userId);
@@ -220,8 +226,31 @@ class SuperChatController {
           tokensUsed: 100 // Placeholder
         },
         actions: this.extractActionsFromResponse(aiResponse.response || aiResponse),
-        suggestions: this.generateIntelligentSuggestions(enhancedContext)
+        suggestions: this.generateIntelligentSuggestions(enhancedContext),
+        googleWorkspace: googleWorkspaceResult // Include Google Workspace results
       };
+      
+      // If Google Workspace action was performed, enhance the response
+      if (googleWorkspaceResult && googleWorkspaceResult.hasIntent) {
+        let workspaceMessage = '';
+        
+        if (googleWorkspaceResult.email) {
+          workspaceMessage += googleWorkspaceResult.email.message + ' ';
+        }
+        
+        if (googleWorkspaceResult.calendar) {
+          workspaceMessage += googleWorkspaceResult.calendar.message + ' ';
+        }
+        
+        if (workspaceMessage) {
+          enhancedResponse.content = workspaceMessage.trim() + '\n\n' + enhancedResponse.content;
+        }
+      }
+      
+      // If user needs Google auth, add that to response
+      if (googleWorkspaceResult && googleWorkspaceResult.needsAuth) {
+        enhancedResponse.content = googleWorkspaceResult.message + '\n\n' + enhancedResponse.content;
+      }
       
       return enhancedResponse;
     } catch (error) {
@@ -238,8 +267,26 @@ class SuperChatController {
   /**
    * 🎯 Build super-enhanced prompt with predictions
    */
-  buildSuperEnhancedPrompt(message, enhancedContext) {
+  buildSuperEnhancedPrompt(message, enhancedContext, googleWorkspaceResult = null) {
     let prompt = `Usuario: ${message}\n\n`;
+    
+    // Add Google Workspace context if available
+    if (googleWorkspaceResult) {
+      prompt += `GOOGLE WORKSPACE:\n`;
+      if (googleWorkspaceResult.needsAuth) {
+        prompt += `- Estado: Usuario no autenticado con Google\n`;
+        prompt += `- Acción requerida: Iniciar sesión con Google para enviar emails y crear eventos\n`;
+      } else if (googleWorkspaceResult.hasIntent) {
+        prompt += `- Estado: Usuario autenticado con Google\n`;
+        if (googleWorkspaceResult.email) {
+          prompt += `- Email: ${googleWorkspaceResult.email.success ? 'Enviado exitosamente' : 'Error o información incompleta'}\n`;
+        }
+        if (googleWorkspaceResult.calendar) {
+          prompt += `- Calendar: ${googleWorkspaceResult.calendar.success ? 'Evento creado exitosamente' : 'Error o información incompleta'}\n`;
+        }
+      }
+      prompt += `\n`;
+    }
     
     // Add user profile context
     if (enhancedContext.userProfile) {
@@ -1137,6 +1184,293 @@ INSTRUCCIONES:
       subject: subjectMatch ? subjectMatch[1] : null,
       body: bodyMatch ? bodyMatch[1] : null,
       hasEmailIntent: this.detectEmailIntent(message)
+    };
+  }
+
+  /**
+   * 📧📅 Process Google Workspace intentions (Email & Calendar)
+   */
+  async processGoogleWorkspaceIntentions(message, userId) {
+    console.log('📧📅 Checking Google Workspace intentions...');
+    
+    try {
+      // Check if user has Google access
+      const hasGoogleAccess = emailService.canUserSendEmails(userId) && 
+                             calendarService.canUserAccessCalendar(userId);
+      
+      if (!hasGoogleAccess) {
+        console.log('❌ User not authenticated with Google');
+        return {
+          hasIntent: false,
+          needsAuth: true,
+          message: 'Para enviar correos o crear eventos, necesitas iniciar sesión con Google primero.'
+        };
+      }
+
+      // Detect email intention
+      const emailIntentions = this.detectEmailIntentions(message);
+      const calendarIntentions = this.detectCalendarIntentions(message);
+      
+      let result = {
+        hasIntent: false,
+        email: null,
+        calendar: null,
+        needsAuth: false
+      };
+
+      // Process email if detected
+      if (emailIntentions.detected) {
+        console.log('📧 Email intention detected');
+        try {
+          const emailDetails = this.extractEmailDetails(message);
+          
+          if (emailDetails.to && emailDetails.subject && emailDetails.body) {
+            const emailResult = await emailService.sendEmailAsUser(userId, {
+              to: emailDetails.to,
+              subject: emailDetails.subject,
+              body: emailDetails.body,
+              cc: emailDetails.cc,
+              bcc: emailDetails.bcc
+            });
+            
+            result.email = {
+              success: true,
+              action: 'sent',
+              details: emailResult,
+              message: `Email enviado exitosamente a ${emailDetails.to}`
+            };
+            result.hasIntent = true;
+          } else {
+            result.email = {
+              success: false,
+              action: 'incomplete',
+              missing: {
+                to: !emailDetails.to,
+                subject: !emailDetails.subject,
+                body: !emailDetails.body
+              },
+              message: 'Necesito más información para enviar el email (destinatario, asunto y mensaje)'
+            };
+          }
+        } catch (error) {
+          result.email = {
+            success: false,
+            action: 'error',
+            error: error.message,
+            message: `Error enviando email: ${error.message}`
+          };
+        }
+      }
+
+      // Process calendar if detected
+      if (calendarIntentions.detected) {
+        console.log('📅 Calendar intention detected');
+        try {
+          const eventDetails = this.extractCalendarDetails(message);
+          
+          if (eventDetails.summary && eventDetails.startDateTime && eventDetails.endDateTime) {
+            const calendarResult = await calendarService.createEvent(userId, {
+              summary: eventDetails.summary,
+              description: eventDetails.description || 'Evento creado por Eva Assistant',
+              startDateTime: eventDetails.startDateTime,
+              endDateTime: eventDetails.endDateTime,
+              location: eventDetails.location,
+              attendees: eventDetails.attendees
+            });
+            
+            result.calendar = {
+              success: true,
+              action: 'created',
+              details: calendarResult,
+              message: `Evento "${eventDetails.summary}" creado exitosamente`
+            };
+            result.hasIntent = true;
+          } else {
+            result.calendar = {
+              success: false,
+              action: 'incomplete',
+              missing: {
+                summary: !eventDetails.summary,
+                startDateTime: !eventDetails.startDateTime,
+                endDateTime: !eventDetails.endDateTime
+              },
+              message: 'Necesito más información para crear el evento (título, fecha y hora)'
+            };
+          }
+        } catch (error) {
+          result.calendar = {
+            success: false,
+            action: 'error',
+            error: error.message,
+            message: `Error creando evento: ${error.message}`
+          };
+        }
+      }
+
+      return result;
+      
+    } catch (error) {
+      console.error('❌ Error processing Google Workspace intentions:', error);
+      return {
+        hasIntent: false,
+        error: error.message,
+        message: 'Error procesando solicitud de Google Workspace'
+      };
+    }
+  }
+
+  /**
+   * 📧 Detect email intentions in message
+   */
+  detectEmailIntentions(message) {
+    const emailKeywords = [
+      'envía un email', 'envía un correo', 'enviar email', 'enviar correo',
+      'manda un email', 'manda un correo', 'mandar email', 'mandar correo',
+      'send email', 'send mail', 'write email', 'compose email',
+      'escribir email', 'escribir correo', 'redactar email', 'redactar correo'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    const detected = emailKeywords.some(keyword => lowerMessage.includes(keyword));
+    
+    return {
+      detected,
+      keywords: emailKeywords.filter(keyword => lowerMessage.includes(keyword))
+    };
+  }
+
+  /**
+   * 📅 Detect calendar intentions in message
+   */
+  detectCalendarIntentions(message) {
+    const calendarKeywords = [
+      'crear cita', 'crear evento', 'agendar cita', 'agendar reunión',
+      'crear reunión', 'schedule meeting', 'create event', 'book appointment',
+      'nueva cita', 'nuevo evento', 'reunión', 'meeting', 'calendar',
+      'calendario', 'agendar', 'programar cita', 'programar reunión'
+    ];
+    
+    const lowerMessage = message.toLowerCase();
+    const detected = calendarKeywords.some(keyword => lowerMessage.includes(keyword));
+    
+    return {
+      detected,
+      keywords: calendarKeywords.filter(keyword => lowerMessage.includes(keyword))
+    };
+  }
+
+  /**
+   * 📧 Extract email details from natural language
+   */
+  extractEmailDetails(message) {
+    // Extract email addresses
+    const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+    const emails = message.match(emailRegex) || [];
+    
+    // Extract subject (various patterns)
+    const subjectPatterns = [
+      /(?:con asunto|asunto|subject)[:\s]*["']([^"']+)["']/i,
+      /(?:con asunto|asunto|subject)[:\s]+([^,\n.]+)/i,
+      /["']([^"']+)["']\s*(?:como asunto|de asunto)/i
+    ];
+    
+    let subject = '';
+    for (const pattern of subjectPatterns) {
+      const match = message.match(pattern);
+      if (match) {
+        subject = match[1].trim();
+        break;
+      }
+    }
+    
+    // Extract message content
+    const messagePatterns = [
+      /(?:mensaje|contenido|content|body)[:\s]*["']([^"']+)["']/i,
+      /(?:mensaje|contenido|content|body)[:\s]+([^,\n.]+)/i,
+      /(?:que diga|diciendo)[:\s]*["']([^"']+)["']/i,
+      /(?:que diga|diciendo)[:\s]+([^,\n.]+)/i
+    ];
+    
+    let body = '';
+    for (const pattern of messagePatterns) {
+      const match = message.match(pattern);
+      if (match) {
+        body = match[1].trim();
+        break;
+      }
+    }
+    
+    return {
+      to: emails[0] || '',
+      cc: emails.slice(1, 2).join(','),
+      bcc: emails.slice(2).join(','),
+      subject: subject,
+      body: body
+    };
+  }
+
+  /**
+   * 📅 Extract calendar details from natural language
+   */
+  extractCalendarDetails(message) {
+    // Extract event title/summary
+    const titlePatterns = [
+      /(?:crear|agendar|programar)\s+(?:cita|evento|reunión)\s+["']([^"']+)["']/i,
+      /(?:crear|agendar|programar)\s+(?:cita|evento|reunión)\s+([^,\n.]+)/i,
+      /(?:título|title|evento)[:\s]*["']([^"']+)["']/i,
+      /(?:llamada|call|meeting|reunión)\s+["']([^"']+)["']/i,
+      /(?:llamada|call|meeting|reunión)\s+([^,\n.]+)/i
+    ];
+    
+    let summary = '';
+    for (const pattern of titlePatterns) {
+      const match = message.match(pattern);
+      if (match) {
+        summary = match[1].trim();
+        break;
+      }
+    }
+    
+    // Extract location
+    const locationPatterns = [
+      /(?:en|at|location|lugar)[:\s]*["']([^"']+)["']/i,
+      /(?:en|at|location|lugar)[:\s]+([^,\n.]+)/i
+    ];
+    
+    let location = '';
+    for (const pattern of locationPatterns) {
+      const match = message.match(pattern);
+      if (match) {
+        location = match[1].trim();
+        break;
+      }
+    }
+    
+    // Extract attendees (email addresses)
+    const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+    const attendees = message.match(emailRegex) || [];
+    
+    // Basic date/time extraction (simplified)
+    const now = new Date();
+    let startDateTime = new Date(now.getTime() + 60 * 60 * 1000).toISOString(); // Default: 1 hour from now
+    let endDateTime = new Date(now.getTime() + 2 * 60 * 60 * 1000).toISOString(); // Default: 2 hours from now
+    
+    // Try to extract relative time references
+    if (message.toLowerCase().includes('mañana')) {
+      const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+      tomorrow.setHours(10, 0, 0, 0); // Default to 10 AM
+      startDateTime = tomorrow.toISOString();
+      tomorrow.setHours(11, 0, 0, 0); // 1 hour duration
+      endDateTime = tomorrow.toISOString();
+    }
+    
+    return {
+      summary: summary,
+      description: `Evento creado por Eva Assistant`,
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+      location: location,
+      attendees: attendees
     };
   }
 }

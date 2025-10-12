@@ -10,6 +10,8 @@ import DashboardPage from './pages/DashboardPage';
 import ChatPage from './pages/ChatPage';
 import ContactDashboard from './pages/ContactDashboard';
 import AnalyticsPage from './pages/AnalyticsPage';
+import EmailPageAdvanced from './pages/EmailPageAdvanced';
+import CalendarPageAdvanced from './pages/CalendarPageAdvanced';
 import EmailPage from './pages/EmailPage';
 import WhatsAppPage from './pages/WhatsAppPage';
 import WhatsAppWebPage from './pages/WhatsAppWebPage';
@@ -35,7 +37,9 @@ function AppContent() {
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/crm" element={<ContactDashboard />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
-            <Route path="/email" element={<EmailPage />} />
+            <Route path="/email" element={<EmailPageAdvanced />} />
+            <Route path="/email-simple" element={<EmailPage />} />
+            <Route path="/calendar" element={<CalendarPageAdvanced />} />
             <Route path="/whatsapp" element={<WhatsAppPage />} />
             <Route path="/whatsapp-web" element={<WhatsAppWebPage />} />
             <Route path="/notes" element={

@@ -357,7 +357,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
       {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* Conversations Card */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ height: '100%' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -376,7 +376,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
         </Grid>
 
         {/* Contacts Card */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ height: '100%' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -395,7 +395,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
         </Grid>
 
         {/* Tasks Card */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ height: '100%' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -414,7 +414,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
         </Grid>
 
         {/* Notes Card */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ height: '100%' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -436,7 +436,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
       {/* Main Content */}
       <Grid container spacing={3}>
         {/* Conversations Chart */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2 }}>
@@ -461,7 +461,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
         </Grid>
 
         {/* Recent Conversations */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2 }}>
@@ -506,7 +506,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
         </Grid>
 
         {/* Recent Contacts/Tasks */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2 }}>
@@ -576,23 +576,23 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
         </Grid>
 
         {/* Eva Demo Section */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2 }}>
                 Demos de Eva
               </Typography>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12 }} sm={6}>
                   <EvaProactividadDemo />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12 }} sm={6}>
                   <EvaMulticanalDemo />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12 }} sm={6}>
                   <EvaReunionesDemo />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12 }} sm={6}>
                   <EvaWorkflowsDemo />
                 </Grid>
               </Grid>
@@ -625,7 +625,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
       {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 4, alignItems: 'stretch' }}>
         {statsCards.map((card, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
             <Card
               sx={{
                 background: card.gradient,
@@ -684,7 +684,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
 
       {/* Analytics Widgets */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={12} md={6}>
+        <Grid size={{ xs: 12 }} sm={12} md={6}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
@@ -708,7 +708,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={12} md={6}>
+        <Grid size={{ xs: 12 }} sm={12} md={6}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
@@ -738,7 +738,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={12} md={6}>
+        <Grid size={{ xs: 12 }} sm={12} md={6}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
@@ -792,7 +792,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
 
       {/* Quick Actions */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2 }}>
@@ -800,7 +800,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
               </Typography>
               <Grid container spacing={2}>
                 {quickActions.map((action, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Grid size={{ xs: 12 }} sm={6} md={4} key={index}>
                     <Button
                       variant="outlined"
                       color={action.color}
@@ -835,7 +835,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
       {/* Recent Activity */}
       <Grid container spacing={3}>
         {/* Recent Conversations */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2 }}>
@@ -887,7 +887,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
         </Grid>
 
         {/* Recent Contacts/Tasks */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2 }}>
