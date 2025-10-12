@@ -1,0 +1,60 @@
+{
+  "migrationDate": "2025-06-18T18:21:10.894Z",
+  "userId": "gaston",
+  "stats": {
+    "users": {
+      "total": 0,
+      "migrated": 0,
+      "failed": 0
+    },
+    "contacts": {
+      "total": 0,
+      "migrated": 0,
+      "failed": 0
+    },
+    "tasks": {
+      "total": 0,
+      "migrated": 0,
+      "failed": 0
+    },
+    "notes": {
+      "total": 0,
+      "migrated": 0,
+      "failed": 0
+    },
+    "conversations": {
+      "total": 0,
+      "migrated": 0,
+      "failed": 0
+    },
+    "projects": {
+      "total": 0,
+      "migrated": 0,
+      "failed": 0
+    }
+  },
+  "migrationLog": [
+    "[2025-06-18T18:21:10.159Z] 📊 Source data counts: Contacts: 0, Tasks: 0, Notes: 0, Conversations: 0",
+    "[2025-06-18T18:21:10.258Z] ✅ User profile migrated for gaston",
+    "[2025-06-18T18:21:10.300Z] ✅ Migrated 0 contacts",
+    "[2025-06-18T18:21:10.300Z] ✅ Created default project for migrated tasks",
+    "[2025-06-18T18:21:10.353Z] ✅ Migrated 0 tasks",
+    "[2025-06-18T18:21:10.470Z] ✅ Migrated 0 conversations",
+    "[2025-06-18T18:21:10.893Z] 📊 Migrated data validation:",
+    "[2025-06-18T18:21:10.893Z] - Users: 0",
+    "[2025-06-18T18:21:10.893Z] - Contacts: 0",
+    "[2025-06-18T18:21:10.893Z] - Tasks: 0",
+    "[2025-06-18T18:21:10.893Z] - Notes: 0",
+    "[2025-06-18T18:21:10.893Z] - Conversations: 0",
+    "[2025-06-18T18:21:10.893Z] - Projects: 0"
+  ],
+  "errors": [],
+  "postMigrationCounts": {
+    "users": 0,
+    "contacts": 0,
+    "tasks": 0,
+    "notes": 0,
+    "conversations": 0,
+    "projects": 0
+  }
+}

@@ -1,0 +1,1037 @@
+react refresh:37 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:118 🔌 Conectado a OpenAI Realtime API
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:224 [Deprecation] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet)
+startAudioCapture @ UnifiedChat.js:224
+await in startAudioCapture
+startVoiceConversation @ UnifiedChat.js:195
+handleVoiceToggle @ UnifiedChat.js:450
+callCallback @ react-dom.development.js:4164
+invokeGuardedCallbackDev @ react-dom.development.js:4213
+invokeGuardedCallback @ react-dom.development.js:4277
+invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:4291
+executeDispatch @ react-dom.development.js:9041
+processDispatchQueueItemsInOrder @ react-dom.development.js:9073
+processDispatchQueue @ react-dom.development.js:9086
+dispatchEventsForPlugins @ react-dom.development.js:9097
+(anonymous) @ react-dom.development.js:9288
+batchedUpdates$1 @ react-dom.development.js:26179
+batchedUpdates @ react-dom.development.js:3991
+dispatchEventForPluginEventSystem @ react-dom.development.js:9287
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ react-dom.development.js:6465
+dispatchEvent @ react-dom.development.js:6457
+dispatchDiscreteEvent @ react-dom.development.js:6430
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: session.created
+UnifiedChat.js:249 📡 Voice event: session.created {type: 'session.created', event_id: 'event_BovFYhou8kXDKK5vy8r66', session: {…}}
+UnifiedChat.js:353 📡 Unhandled event: session.created {type: 'session.created', event_id: 'event_BovFYhou8kXDKK5vy8r66', session: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: session.updated
+UnifiedChat.js:249 📡 Voice event: session.updated {type: 'session.updated', event_id: 'event_BovFYzdhTCeqaB4rTBB7Y', session: {…}}
+UnifiedChat.js:253 ✅ Sesión configurada
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: input_audio_buffer.speech_started
+UnifiedChat.js:249 📡 Voice event: input_audio_buffer.speech_started {type: 'input_audio_buffer.speech_started', event_id: 'event_BovFZPrU4bMyoGWNWiIbE', audio_start_ms: 884, item_id: 'item_BovFZ8tXa1MhBA3suMjHt'}
+UnifiedChat.js:257 🎤 Usuario empezó a hablar
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: input_audio_buffer.speech_stopped
+UnifiedChat.js:249 📡 Voice event: input_audio_buffer.speech_stopped {type: 'input_audio_buffer.speech_stopped', event_id: 'event_BovFcZW69gb9o4DJPMteW', audio_end_ms: 4256, item_id: 'item_BovFZ8tXa1MhBA3suMjHt'}
+UnifiedChat.js:272 🎤 Usuario dejó de hablar
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: input_audio_buffer.committed
+UnifiedChat.js:249 📡 Voice event: input_audio_buffer.committed {type: 'input_audio_buffer.committed', event_id: 'event_BovFcTX6Qh7fBoapl1FFM', previous_item_id: null, item_id: 'item_BovFZ8tXa1MhBA3suMjHt'}
+UnifiedChat.js:353 📡 Unhandled event: input_audio_buffer.committed {type: 'input_audio_buffer.committed', event_id: 'event_BovFcTX6Qh7fBoapl1FFM', previous_item_id: null, item_id: 'item_BovFZ8tXa1MhBA3suMjHt'}
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: conversation.item.created
+UnifiedChat.js:249 📡 Voice event: conversation.item.created {type: 'conversation.item.created', event_id: 'event_BovFcusye765c6eMwOPZ8', previous_item_id: null, item: {…}}
+UnifiedChat.js:353 📡 Unhandled event: conversation.item.created {type: 'conversation.item.created', event_id: 'event_BovFcusye765c6eMwOPZ8', previous_item_id: null, item: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.created
+UnifiedChat.js:249 📡 Voice event: response.created {type: 'response.created', event_id: 'event_BovFc6KZm7wsBAoigQrGM', response: {…}}
+UnifiedChat.js:353 📡 Unhandled event: response.created {type: 'response.created', event_id: 'event_BovFc6KZm7wsBAoigQrGM', response: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.output_item.added
+UnifiedChat.js:249 📡 Voice event: response.output_item.added {type: 'response.output_item.added', event_id: 'event_BovFdIdzHMqFo2Ee0zriH', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', output_index: 0, item: {…}}
+UnifiedChat.js:353 📡 Unhandled event: response.output_item.added {type: 'response.output_item.added', event_id: 'event_BovFdIdzHMqFo2Ee0zriH', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', output_index: 0, item: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: conversation.item.created
+UnifiedChat.js:249 📡 Voice event: conversation.item.created {type: 'conversation.item.created', event_id: 'event_BovFdqF5v1OcrXby66d8Y', previous_item_id: 'item_BovFZ8tXa1MhBA3suMjHt', item: {…}}
+UnifiedChat.js:353 📡 Unhandled event: conversation.item.created {type: 'conversation.item.created', event_id: 'event_BovFdqF5v1OcrXby66d8Y', previous_item_id: 'item_BovFZ8tXa1MhBA3suMjHt', item: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.content_part.added
+UnifiedChat.js:249 📡 Voice event: response.content_part.added {type: 'response.content_part.added', event_id: 'event_BovFdcNI3zEpIKI56axC7', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:353 📡 Unhandled event: response.content_part.added {type: 'response.content_part.added', event_id: 'event_BovFdcNI3zEpIKI56axC7', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdy9RR7AWyeggwUDPP', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: ¡
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdogOqFxQ2WeFVQwUT', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: Hola
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFd8t180qfzsEjWL01t', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: !
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola!
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdHU5QWon1adRxOnKw', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  Estoy
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdC1TNDlNQIl8FdpYF', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  bien
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdpWpwqa94LnDNP7oF', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: ,
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien,
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFdBOU59bnhcNdkYFaN', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFdHsGUHXzaA2sWlDPT', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFdZsoo8OU5Ns91sJbU', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdWngDIcd4theA6JTv', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  gracias
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdnwIuPD6zfwrEb8De', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: .
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias.
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFdtFv8G8AWsPpHjgEw', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFdbyzw978qOZV3kxzm', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdFUWkSoLlJD6j9ury', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  Sí
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdNx6e3FYjdUtOF0pa', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: ,
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí,
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFdPlQi97VRzqbiREub', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdZ9SJFso0tOHaFYkz', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  te
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFdxMZIFYI4skBiyk4a', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdfTqHnwopWb1PLcDe', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  escuch
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escuch
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdIMR7AoFUmi93KA0h', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: o
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdVZ6AqepDaVm4fztT', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  perfectamente
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdKDaJY8aUOt90voE7', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: .
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente.
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdkVuI6sUOV5nZKb3j', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  ¿
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdcc2iRmudRTTrY116', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: En
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdkllgWLiFBFcnA3Xb', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  qué
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFdXULecUJJg7mQ4Iq8', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: conversation.item.input_audio_transcription.delta
+UnifiedChat.js:249 📡 Voice event: conversation.item.input_audio_transcription.delta {type: 'conversation.item.input_audio_transcription.delta', event_id: 'event_BovFdO1zA5GhgP7jjTuft', item_id: 'item_BovFZ8tXa1MhBA3suMjHt', content_index: 0, delta: 'Hola, ¿cómo estás? ¿Me escuchas?'}
+UnifiedChat.js:353 📡 Unhandled event: conversation.item.input_audio_transcription.delta {type: 'conversation.item.input_audio_transcription.delta', event_id: 'event_BovFdO1zA5GhgP7jjTuft', item_id: 'item_BovFZ8tXa1MhBA3suMjHt', content_index: 0, delta: 'Hola, ¿cómo estás? ¿Me escuchas?'}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: conversation.item.input_audio_transcription.completed
+UnifiedChat.js:249 📡 Voice event: conversation.item.input_audio_transcription.completed {type: 'conversation.item.input_audio_transcription.completed', event_id: 'event_BovFdi3CnCbDLau5ZIGle', item_id: 'item_BovFZ8tXa1MhBA3suMjHt', content_index: 0, transcript: 'Hola, ¿cómo estás? ¿Me escuchas?', …}
+UnifiedChat.js:278 👤 Usuario transcripción RECEIVED: Hola, ¿cómo estás? ¿Me escuchas?
+UnifiedChat.js:282 👤 Stored user speech: Hola, ¿cómo estás? ¿Me escuchas?
+UnifiedChat.js:286 💬 Adding user voice message immediately...
+UnifiedChat.js:76 📝 Adding voice message: {from: 'user', text: 'Hola, ¿cómo estás? ¿Me escuchas?', type: 'voice', timestamp: '2025-07-02T17:09:33.958Z'}
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFd56CpXCcr52gNARG9', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  puedo
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFd2df94nmRoe0BqhLo', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  ayudarte
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo ayudarte
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdVamR6Q5ftStPfp2U', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  hoy
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo ayudarte hoy
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFdUsaADZZgd41Ef3uf', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: ?
+UnifiedChat.js:303 📝 Accumulated Eva speech: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo ayudarte hoy?
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFeY1mLj4ngnwfvojYw', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFeO0zpfXP7HZM6VvWI', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFeD1SSpT0Zb3lY22aV', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.done
+UnifiedChat.js:249 📡 Voice event: response.audio.done {type: 'response.audio.done', event_id: 'event_BovFewyBfizz5HtSv1JDL', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:353 📡 Unhandled event: response.audio.done {type: 'response.audio.done', event_id: 'event_BovFewyBfizz5HtSv1JDL', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.done
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.done {type: 'response.audio_transcript.done', event_id: 'event_BovFewKPHv3haVz2gjQcu', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:308 📝 Eva transcript done RECEIVED: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo ayudarte hoy?
+UnifiedChat.js:312 📝 Final Eva transcript set: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo ayudarte hoy?
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.content_part.done
+UnifiedChat.js:249 📡 Voice event: response.content_part.done {type: 'response.content_part.done', event_id: 'event_BovFeNKcnwugwD3pkfZfC', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:353 📡 Unhandled event: response.content_part.done {type: 'response.content_part.done', event_id: 'event_BovFeNKcnwugwD3pkfZfC', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', item_id: 'item_BovFcDA4pC6TuAF7VXIcG', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.output_item.done
+UnifiedChat.js:249 📡 Voice event: response.output_item.done {type: 'response.output_item.done', event_id: 'event_BovFeAMsG90wsqEuRz6Zs', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', output_index: 0, item: {…}}
+UnifiedChat.js:353 📡 Unhandled event: response.output_item.done {type: 'response.output_item.done', event_id: 'event_BovFeAMsG90wsqEuRz6Zs', response_id: 'resp_BovFcgjP5xkLVGJ03G97d', output_index: 0, item: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.done
+UnifiedChat.js:249 📡 Voice event: response.done {type: 'response.done', event_id: 'event_BovFeQX8ofITLwJw8xDQ8', response: {…}}
+UnifiedChat.js:317 🤖 Response completed RECEIVED
+UnifiedChat.js:322 🤖 Final eva speech (from ref): ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo ayudarte hoy?
+UnifiedChat.js:326 💬 Adding Eva voice message...
+UnifiedChat.js:76 📝 Adding voice message: {from: 'eva', text: '¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo ayudarte hoy?', type: 'voice', timestamp: '2025-07-02T17:09:34.422Z'}
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: rate_limits.updated
+UnifiedChat.js:249 📡 Voice event: rate_limits.updated {type: 'rate_limits.updated', event_id: 'event_BovFeZjmdLCf5Aa1VR3C4', rate_limits: Array(1)}
+UnifiedChat.js:353 📡 Unhandled event: rate_limits.updated {type: 'rate_limits.updated', event_id: 'event_BovFeZjmdLCf5Aa1VR3C4', rate_limits: Array(1)}
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: input_audio_buffer.speech_started
+UnifiedChat.js:249 📡 Voice event: input_audio_buffer.speech_started {type: 'input_audio_buffer.speech_started', event_id: 'event_BovFm4LRZSwxuPs61B8ke', audio_start_ms: 13812, item_id: 'item_BovFmEdqZbO5JRYh41aRf'}
+UnifiedChat.js:257 🎤 Usuario empezó a hablar
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: input_audio_buffer.speech_stopped
+UnifiedChat.js:249 📡 Voice event: input_audio_buffer.speech_stopped {type: 'input_audio_buffer.speech_stopped', event_id: 'event_BovFuoX1nqNY7IskZ7AGF', audio_end_ms: 22304, item_id: 'item_BovFmEdqZbO5JRYh41aRf'}
+UnifiedChat.js:272 🎤 Usuario dejó de hablar
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: input_audio_buffer.committed
+UnifiedChat.js:249 📡 Voice event: input_audio_buffer.committed {type: 'input_audio_buffer.committed', event_id: 'event_BovFuSoeAJxUmgCLfeDgi', previous_item_id: 'item_BovFcDA4pC6TuAF7VXIcG', item_id: 'item_BovFmEdqZbO5JRYh41aRf'}
+UnifiedChat.js:353 📡 Unhandled event: input_audio_buffer.committed {type: 'input_audio_buffer.committed', event_id: 'event_BovFuSoeAJxUmgCLfeDgi', previous_item_id: 'item_BovFcDA4pC6TuAF7VXIcG', item_id: 'item_BovFmEdqZbO5JRYh41aRf'}
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: conversation.item.created
+UnifiedChat.js:249 📡 Voice event: conversation.item.created {type: 'conversation.item.created', event_id: 'event_BovFum0A7GXd9WN1ekJu7', previous_item_id: 'item_BovFcDA4pC6TuAF7VXIcG', item: {…}}
+UnifiedChat.js:353 📡 Unhandled event: conversation.item.created {type: 'conversation.item.created', event_id: 'event_BovFum0A7GXd9WN1ekJu7', previous_item_id: 'item_BovFcDA4pC6TuAF7VXIcG', item: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.created
+UnifiedChat.js:249 📡 Voice event: response.created {type: 'response.created', event_id: 'event_BovFuZ5kbzhh1bEbJkplk', response: {…}}
+UnifiedChat.js:353 📡 Unhandled event: response.created {type: 'response.created', event_id: 'event_BovFuZ5kbzhh1bEbJkplk', response: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.output_item.added
+UnifiedChat.js:249 📡 Voice event: response.output_item.added {type: 'response.output_item.added', event_id: 'event_BovFvYS8fKxqc9PoO1Hiq', response_id: 'resp_BovFuTySA3dren6k2g11E', output_index: 0, item: {…}}
+UnifiedChat.js:353 📡 Unhandled event: response.output_item.added {type: 'response.output_item.added', event_id: 'event_BovFvYS8fKxqc9PoO1Hiq', response_id: 'resp_BovFuTySA3dren6k2g11E', output_index: 0, item: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: conversation.item.created
+UnifiedChat.js:249 📡 Voice event: conversation.item.created {type: 'conversation.item.created', event_id: 'event_BovFvcVp4HTYCIwGZkqMx', previous_item_id: 'item_BovFmEdqZbO5JRYh41aRf', item: {…}}
+UnifiedChat.js:353 📡 Unhandled event: conversation.item.created {type: 'conversation.item.created', event_id: 'event_BovFvcVp4HTYCIwGZkqMx', previous_item_id: 'item_BovFmEdqZbO5JRYh41aRf', item: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.content_part.added
+UnifiedChat.js:249 📡 Voice event: response.content_part.added {type: 'response.content_part.added', event_id: 'event_BovFvBwWvVVs1uqZZppXE', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:353 📡 Unhandled event: response.content_part.added {type: 'response.content_part.added', event_id: 'event_BovFvBwWvVVs1uqZZppXE', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvZ6N6GpvohY6p0V1E', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: Claro
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvtSMmLsrjK3nhQ5m6', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: ,
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro,
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvRVA4E9kEdqtsIpPL', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  puedo
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvdwLrpZVm30DRPCVY', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  ayudarte
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFvf1nJOr5htSzxMAlU', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFviEyYc366GG0o0ek1', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFvEIzLAg132FjgCvlU', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFv902SixOLr26mIUW8', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  a
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvAAuTyQqwbQz5Gfgt', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  redact
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redact
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvGnAD2EuYGCcIpzzL', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: ar
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFvNOKKK7gUAdQsf86M', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFvGgYTq3SfZOBzrmTx', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvCn9H4YHru2t5yL95', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  el
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvoB2R9SLcem6wgjGC', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  correo
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFviHouUbZtWEMGefZY', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: .
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo.
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFvUP3AjD5JVldQ8sBY', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvsfZKuhLAf9eVUtxm', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  ¿
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFvoziap7D8Y9TsGK7V', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvbdDdC0zAlqOxZoJo', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: Qué
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿Qué
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFv29EbNU0vNBWgrMfa', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  te
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿Qué te
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvi071X5MRMrvlBk3x', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  gustaría
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvLOP1OhmJnHeB0gRs', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  incluir
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFv9bBR2ajTTMrHLRYi', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  en
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvuE0oIJiwmecQV5Yp', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  el
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en el
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvKw98CZXhKaVefVjl', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED:  mensaje
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en el mensaje
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.delta
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.delta {type: 'response.audio_transcript.delta', event_id: 'event_BovFvQjtqYHhXSNMlb9ZD', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:298 📝 Eva transcript delta RECEIVED: ?
+UnifiedChat.js:303 📝 Accumulated Eva speech: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en el mensaje?
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFvZdFqHlK7jmp27Y0E', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.delta
+UnifiedChat.js:249 📡 Voice event: response.audio.delta {type: 'response.audio.delta', event_id: 'event_BovFwMBejdzbcvEWYorSP', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio.done
+UnifiedChat.js:249 📡 Voice event: response.audio.done {type: 'response.audio.done', event_id: 'event_BovFw0muz8KQaEJsuA7cA', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:353 📡 Unhandled event: response.audio.done {type: 'response.audio.done', event_id: 'event_BovFw0muz8KQaEJsuA7cA', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.audio_transcript.done
+UnifiedChat.js:249 📡 Voice event: response.audio_transcript.done {type: 'response.audio_transcript.done', event_id: 'event_BovFww1MLSDPhlKkpp4zl', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:308 📝 Eva transcript done RECEIVED: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en el mensaje?
+UnifiedChat.js:312 📝 Final Eva transcript set: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en el mensaje?
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.content_part.done
+UnifiedChat.js:249 📡 Voice event: response.content_part.done {type: 'response.content_part.done', event_id: 'event_BovFwPwBhVut2pFRvmQWb', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:353 📡 Unhandled event: response.content_part.done {type: 'response.content_part.done', event_id: 'event_BovFwPwBhVut2pFRvmQWb', response_id: 'resp_BovFuTySA3dren6k2g11E', item_id: 'item_BovFuQNayJdwsC1PtTcBB', output_index: 0, …}
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.output_item.done
+UnifiedChat.js:249 📡 Voice event: response.output_item.done {type: 'response.output_item.done', event_id: 'event_BovFwB0xEPAFjsTxOfxJG', response_id: 'resp_BovFuTySA3dren6k2g11E', output_index: 0, item: {…}}
+UnifiedChat.js:353 📡 Unhandled event: response.output_item.done {type: 'response.output_item.done', event_id: 'event_BovFwB0xEPAFjsTxOfxJG', response_id: 'resp_BovFuTySA3dren6k2g11E', output_index: 0, item: {…}}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: response.done
+UnifiedChat.js:249 📡 Voice event: response.done {type: 'response.done', event_id: 'event_BovFwwjJrnpnFVpXQXccr', response: {…}}
+UnifiedChat.js:317 🤖 Response completed RECEIVED
+UnifiedChat.js:322 🤖 Final eva speech (from ref): Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en el mensaje?
+UnifiedChat.js:326 💬 Adding Eva voice message...
+UnifiedChat.js:76 📝 Adding voice message: {from: 'eva', text: 'Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en el mensaje?', type: 'voice', timestamp: '2025-07-02T17:09:52.116Z'}
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: rate_limits.updated
+UnifiedChat.js:249 📡 Voice event: rate_limits.updated {type: 'rate_limits.updated', event_id: 'event_BovFwUOFjxyXJiPp2Yrgz', rate_limits: Array(1)}
+UnifiedChat.js:353 📡 Unhandled event: rate_limits.updated {type: 'rate_limits.updated', event_id: 'event_BovFwUOFjxyXJiPp2Yrgz', rate_limits: Array(1)}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: conversation.item.input_audio_transcription.delta
+UnifiedChat.js:249 📡 Voice event: conversation.item.input_audio_transcription.delta {type: 'conversation.item.input_audio_transcription.delta', event_id: 'event_BovFwUvGq0ySuTTMirsQ2', item_id: 'item_BovFmEdqZbO5JRYh41aRf', content_index: 0, delta: '¿Me puedes ayudar con un correo que necesito manda… a Carlitos respecto a la renta del departamento?'}
+UnifiedChat.js:353 📡 Unhandled event: conversation.item.input_audio_transcription.delta {type: 'conversation.item.input_audio_transcription.delta', event_id: 'event_BovFwUvGq0ySuTTMirsQ2', item_id: 'item_BovFmEdqZbO5JRYh41aRf', content_index: 0, delta: '¿Me puedes ayudar con un correo que necesito manda… a Carlitos respecto a la renta del departamento?'}
+UnifiedChat.js:150 📥 Frontend received JSON from Blob: conversation.item.input_audio_transcription.completed
+UnifiedChat.js:249 📡 Voice event: conversation.item.input_audio_transcription.completed {type: 'conversation.item.input_audio_transcription.completed', event_id: 'event_BovFwAxja4Yqd5wAHe7U0', item_id: 'item_BovFmEdqZbO5JRYh41aRf', content_index: 0, transcript: '¿Me puedes ayudar con un correo que necesito manda… a Carlitos respecto a la renta del departamento?', …}
+UnifiedChat.js:278 👤 Usuario transcripción RECEIVED: ¿Me puedes ayudar con un correo que necesito mandarle a Carlitos respecto a la renta del departamento?
+UnifiedChat.js:282 👤 Stored user speech: ¿Me puedes ayudar con un correo que necesito mandarle a Carlitos respecto a la renta del departamento?
+UnifiedChat.js:286 💬 Adding user voice message immediately...
+UnifiedChat.js:76 📝 Adding voice message: {from: 'user', text: '¿Me puedes ayudar con un correo que necesito manda… a Carlitos respecto a la renta del departamento?', type: 'voice', timestamp: '2025-07-02T17:09:52.873Z'}
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+UnifiedChat.js:5 💬 UnifiedChat component rendered
+
+(venv) bener@Mac backend % npm start
+
+> gaston-assistant-backend@1.0.0 start
+> node src/app.js
+
+🔌 WebSocket server iniciado en puerto 3002 para streaming continuo
+(node:3028) [MONGOOSE] Warning: Duplicate schema index on {"userId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3028) [MONGOOSE] Warning: Duplicate schema index on {"profile.email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(node:3028) [MONGOOSE] Warning: Duplicate schema index on {"projectId":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+🚀 Eva Backend Server running on port 3001
+📡 API available at: http://localhost:3001/api
+🔌 Socket.io available at: http://localhost:3001
+🧠 Intelligence system: ACTIVE
+🎯 Ready for advanced interactions!
+✅ Connected to MongoDB
+📥 Getting chat history for user: gaston
+::1 - - [02/Jul/2025:17:09:24 +0000] "GET /api/chat/history/gaston HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+📥 Getting chat history for user: gaston
+::1 - - [02/Jul/2025:17:09:24 +0000] "GET /api/chat/history/gaston HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+📥 Getting chat history for user: gaston
+::1 - - [02/Jul/2025:17:09:26 +0000] "GET /api/chat/history/gaston HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+📥 Getting chat history for user: gaston
+::1 - - [02/Jul/2025:17:09:26 +0000] "GET /api/chat/history/gaston HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+🔌 Cliente conectado para streaming continuo
+📡 Cliente envió: session.update
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+🔌 Conectado a OpenAI Realtime API para streaming
+📡 OpenAI sent: session.created
+📤 Forwarded to frontend: session.created
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: session.updated
+📤 Forwarded to frontend: session.updated
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: input_audio_buffer.speech_started
+📤 Forwarded to frontend: input_audio_buffer.speech_started
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: input_audio_buffer.speech_stopped
+📤 Forwarded to frontend: input_audio_buffer.speech_stopped
+📡 OpenAI sent: input_audio_buffer.committed
+📤 Forwarded to frontend: input_audio_buffer.committed
+📡 OpenAI sent: conversation.item.created
+📤 Forwarded to frontend: conversation.item.created
+📡 OpenAI sent: response.created
+📤 Forwarded to frontend: response.created
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.output_item.added
+📤 Forwarded to frontend: response.output_item.added
+📡 OpenAI sent: conversation.item.created
+📤 Forwarded to frontend: conversation.item.created
+📡 OpenAI sent: response.content_part.added
+📤 Forwarded to frontend: response.content_part.added
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: ¡
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: Hola
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: !
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  Estoy
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  bien
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: ,
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  gracias
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: .
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  Sí
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: ,
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  te
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  escuch
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: o
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  perfectamente
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: .
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  ¿
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: En
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  qué
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: conversation.item.input_audio_transcription.delta
+📤 Forwarded to frontend: conversation.item.input_audio_transcription.delta
+📡 OpenAI sent: conversation.item.input_audio_transcription.completed
+👤 User transcript from OpenAI: Hola, ¿cómo estás? ¿Me escuchas?
+📤 Forwarded to frontend: conversation.item.input_audio_transcription.completed
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  puedo
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  ayudarte
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  hoy
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: ?
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio.done
+📤 Forwarded to frontend: response.audio.done
+📡 OpenAI sent: response.audio_transcript.done
+📝 Eva transcript done from OpenAI: ¡Hola! Estoy bien, gracias. Sí, te escucho perfectamente. ¿En qué puedo ayudarte hoy?
+📤 Forwarded to frontend: response.audio_transcript.done
+📡 OpenAI sent: response.content_part.done
+📤 Forwarded to frontend: response.content_part.done
+📡 OpenAI sent: response.output_item.done
+📤 Forwarded to frontend: response.output_item.done
+📡 OpenAI sent: response.done
+🤖 OpenAI response done
+📤 Forwarded to frontend: response.done
+📡 OpenAI sent: rate_limits.updated
+📤 Forwarded to frontend: rate_limits.updated
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: input_audio_buffer.speech_started
+📤 Forwarded to frontend: input_audio_buffer.speech_started
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: input_audio_buffer.speech_stopped
+📤 Forwarded to frontend: input_audio_buffer.speech_stopped
+📡 OpenAI sent: input_audio_buffer.committed
+📤 Forwarded to frontend: input_audio_buffer.committed
+📡 OpenAI sent: conversation.item.created
+📤 Forwarded to frontend: conversation.item.created
+📡 OpenAI sent: response.created
+📤 Forwarded to frontend: response.created
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.output_item.added
+📤 Forwarded to frontend: response.output_item.added
+📡 OpenAI sent: conversation.item.created
+📤 Forwarded to frontend: conversation.item.created
+📡 OpenAI sent: response.content_part.added
+📤 Forwarded to frontend: response.content_part.added
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: Claro
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: ,
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  puedo
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  ayudarte
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  a
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  redact
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: ar
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  el
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  correo
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: .
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  ¿
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: Qué
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  te
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  gustaría
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  incluir
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  en
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  el
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI:  mensaje
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 OpenAI sent: response.audio_transcript.delta
+📝 Eva transcript delta from OpenAI: ?
+📤 Forwarded to frontend: response.audio_transcript.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: response.audio.delta
+📤 Forwarded to frontend: response.audio.delta
+📡 OpenAI sent: response.audio.done
+📤 Forwarded to frontend: response.audio.done
+📡 OpenAI sent: response.audio_transcript.done
+📝 Eva transcript done from OpenAI: Claro, puedo ayudarte a redactar el correo. ¿Qué te gustaría incluir en el mensaje?
+📤 Forwarded to frontend: response.audio_transcript.done
+📡 OpenAI sent: response.content_part.done
+📤 Forwarded to frontend: response.content_part.done
+📡 OpenAI sent: response.output_item.done
+📤 Forwarded to frontend: response.output_item.done
+📡 OpenAI sent: response.done
+🤖 OpenAI response done
+📤 Forwarded to frontend: response.done
+📡 OpenAI sent: rate_limits.updated
+📤 Forwarded to frontend: rate_limits.updated
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 OpenAI sent: conversation.item.input_audio_transcription.delta
+📤 Forwarded to frontend: conversation.item.input_audio_transcription.delta
+📡 OpenAI sent: conversation.item.input_audio_transcription.completed
+👤 User transcript from OpenAI: ¿Me puedes ayudar con un correo que necesito mandarle a Carlitos respecto a la renta del departamento?
+📤 Forwarded to frontend: conversation.item.input_audio_transcription.completed
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
+📡 Cliente envió: input_audio_buffer.append
