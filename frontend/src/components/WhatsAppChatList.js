@@ -123,7 +123,25 @@ const WhatsAppChatList = ({ chats, selectedChatId, onChatSelect, loading, initia
   return (
     <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Header de búsqueda */}
-      <Box sx={{ p: 1.5, borderBottom: 1, borderColor: 'divider', flexShrink: 0 }}>
+      <Box sx={{ 
+        p: 2, 
+        borderBottom: 1, 
+        borderColor: 'divider', 
+        flexShrink: 0,
+        background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+        color: 'white'
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            mb: 2, 
+            fontWeight: 600,
+            textAlign: 'center',
+            textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+          }}
+        >
+          💬 Conversaciones
+        </Typography>
         <TextField
           fullWidth
           placeholder="Buscar conversación..."
@@ -133,13 +151,32 @@ const WhatsAppChatList = ({ chats, selectedChatId, onChatSelect, loading, initia
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{
             '& .MuiOutlinedInput-root': {
-              fontSize: '0.9rem'
+              backgroundColor: 'white',
+              borderRadius: 2, // Menos redondeado
+              border: 'none',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+              fontSize: '0.9rem',
+              '& fieldset': {
+                border: 'none',
+              },
+              '&:hover fieldset': {
+                border: 'none',
+              },
+              '&.Mui-focused fieldset': {
+                border: '2px solid #059669',
+              },
+            },
+            '& .MuiOutlinedInput-input': {
+              padding: '12px 14px',
+              '&::placeholder': {
+                color: 'rgba(0,0,0,0.6)',
+              }
             }
           }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Search fontSize="small" />
+                <Search fontSize="small" sx={{ color: '#059669' }} />
               </InputAdornment>
             ),
           }}
@@ -152,26 +189,50 @@ const WhatsAppChatList = ({ chats, selectedChatId, onChatSelect, loading, initia
           flex: 1, 
           overflow: 'auto',
           minHeight: 0,
+          background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)',
           '&::-webkit-scrollbar': {
             width: '6px',
           },
           '&::-webkit-scrollbar-track': {
-            background: 'rgba(0,0,0,0.1)',
-            borderRadius: '10px',
+            background: 'transparent',
           },
           '&::-webkit-scrollbar-thumb': {
-            background: 'rgba(0,0,0,0.3)',
-            borderRadius: '10px',
+            background: 'linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%)',
+            borderRadius: '3px',
           },
           '&::-webkit-scrollbar-thumb:hover': {
-            background: 'rgba(0,0,0,0.5)',
+            background: 'linear-gradient(180deg, #94a3b8 0%, #64748b 100%)',
           },
         }}
       >
         {filteredChats.length === 0 ? (
-          <Box sx={{ p: 3, textAlign: 'center' }}>
-            <WhatsApp sx={{ fontSize: 60, color: 'grey.300', mb: 2 }} />
-            <Typography variant="body2" color="text.secondary">
+          <Box sx={{ 
+            p: 4, 
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '300px'
+          }}>
+            <Typography 
+              variant="h3" 
+              sx={{ 
+                fontSize: '3.5rem',
+                opacity: 0.3,
+                mb: 2
+              }}
+            >
+              💬
+            </Typography>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: 'rgba(0,0,0,0.6)',
+                fontWeight: 500,
+                fontSize: '0.95rem'
+              }}
+            >
               {!initialLoadComplete && loading
                 ? 'Cargando conversaciones...'
                 : chats && chats.length === 0 
@@ -180,11 +241,17 @@ const WhatsAppChatList = ({ chats, selectedChatId, onChatSelect, loading, initia
               }
             </Typography>
             {!initialLoadComplete && loading && (
-              <CircularProgress size={24} sx={{ mt: 2 }} />
+              <CircularProgress 
+                size={28} 
+                sx={{ 
+                  mt: 3,
+                  color: '#059669'
+                }} 
+              />
             )}
           </Box>
         ) : (
-          <List sx={{ p: 0 }}>
+          <List sx={{ p: 1 }}>
             {filteredChats.map((chat, index) => (
               <React.Fragment key={chat.id}>
                 <ListItem
@@ -192,34 +259,68 @@ const WhatsAppChatList = ({ chats, selectedChatId, onChatSelect, loading, initia
                   onClick={() => onChatSelect(chat)}
                   selected={selectedChatId === chat.id}
                   sx={{
-                    py: 1,
-                    px: 1.5,
-                    minHeight: '60px',
-                    '&.Mui-selected': {
-                      backgroundColor: '#e3f2fd',
-                      '&:hover': {
-                        backgroundColor: '#e3f2fd',
-                      },
-                    },
+                    py: 1.5,
+                    px: 2,
+                    my: 0.5,
+                    mx: 1,
+                    minHeight: '72px',
+                    borderRadius: 1, // Menos redondeado
+                    transition: 'all 0.2s ease-in-out',
+                    background: selectedChatId === chat.id ? 
+                      'linear-gradient(135deg, #059669 0%, #047857 100%)' : 
+                      'white',
+                    color: selectedChatId === chat.id ? 'white' : 'inherit',
+                    boxShadow: selectedChatId === chat.id ? 
+                      '0 2px 8px rgba(5, 150, 105, 0.2)' :
+                      '0 1px 2px rgba(0,0,0,0.08)',
+                    borderLeft: selectedChatId === chat.id ? 
+                      '4px solid rgba(255,255,255,0.4)' : 
+                      '4px solid transparent',
                     '&:hover': {
-                      backgroundColor: '#f5f5f5',
+                      boxShadow: selectedChatId === chat.id ? 
+                        '0 3px 12px rgba(5, 150, 105, 0.3)' :
+                        '0 2px 8px rgba(0,0,0,0.12)',
+                      background: selectedChatId === chat.id ? 
+                        'linear-gradient(135deg, #059669 0%, #047857 100%)' :
+                        '#f8fafc',
                     },
                   }}
                 >
-                  <ListItemAvatar sx={{ minWidth: '48px' }}>
+                  <ListItemAvatar sx={{ minWidth: '56px' }}>
                     <Badge
                       badgeContent={chat.unreadCount || 0}
-                      color="primary"
+                      color="error"
                       sx={{
                         '& .MuiBadge-badge': {
-                          backgroundColor: '#059669',
-                          fontSize: '0.7rem',
-                          minWidth: '16px',
-                          height: '16px'
-                        },
+                          backgroundColor: selectedChatId === chat.id ? 
+                            'rgba(255,255,255,0.9)' : '#ef4444',
+                          color: selectedChatId === chat.id ? 
+                            '#059669' : 'white',
+                          fontWeight: 600,
+                          fontSize: '0.75rem',
+                          minWidth: '20px',
+                          height: '20px',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                        }
                       }}
                     >
-                      <Avatar sx={{ bgcolor: '#f5f5f5', width: 36, height: 36 }}>
+                      <Avatar
+                        sx={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: 2, // Menos redondeado, más cuadrado
+                          background: selectedChatId === chat.id ? 
+                            'rgba(255,255,255,0.15)' : 
+                            'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                          color: 'white',
+                          fontSize: '1.1rem',
+                          fontWeight: 500,
+                          border: selectedChatId === chat.id ? 
+                            '2px solid rgba(255,255,255,0.3)' : 
+                            '1px solid rgba(5, 150, 105, 0.2)',
+                          boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+                        }}
+                      >
                         {getChatAvatar(chat)}
                       </Avatar>
                     </Badge>

@@ -643,5 +643,9 @@ The user wants to create or manage tasks. Suggest specific details like due date
   }
 }
 
-// Export as instance
-module.exports = new OpenAIService();
+// Crear instancia única
+const openaiServiceInstance = new OpenAIService();
+
+// Export both instance and getter function
+module.exports = openaiServiceInstance;
+module.exports.getOpenAIService = () => openaiServiceInstance;

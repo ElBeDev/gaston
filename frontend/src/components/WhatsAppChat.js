@@ -8,7 +8,8 @@ import {
   Avatar,
   CircularProgress,
   Chip,
-  Card
+  Card,
+  CardMedia
 } from '@mui/material';
 import {
   Send,
@@ -19,8 +20,319 @@ import {
   AccessTime,
   EmojiEmotions,
   AttachFile,
-  Mic
+  Mic,
+  PlayArrow,
+  Pause,
+  Download,
+  VideoFile,
+  InsertDriveFile
 } from '@mui/icons-material';
+
+// Componente para renderizar imágenes
+const ImageMessage = ({ message }) => {
+  if (!message.media || !message.media.isImage) return null;
+
+  const imageData = message.media.data.startsWith('data:') 
+    ? message.media.data 
+    : `data:${message.media.mimetype};base64,${message.media.data}`;
+
+  // Crear un nombre de archivo más amigable
+  const getDisplayFilename = () => {
+    if (message.media.filename && !message.media.filename.includes('@') && !message.media.filename.includes('_')) {
+      return message.media.filename;
+    }
+    // Si no hay nombre válido, usar fecha/hora
+    const date = new Date(message.timestamp * 1000);
+    const timeStr = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    return `Imagen ${timeStr}`;
+  };
+
+  return (
+    <Box sx={{ mt: 1, maxWidth: '250px' }}>
+      <CardMedia
+        component="img"
+        image={imageData}
+        alt="Imagen compartida"
+        sx={{
+          borderRadius: 3,
+          maxWidth: '100%',
+          height: 'auto',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          '&:hover': {
+            transform: 'scale(1.02)',
+            boxShadow: '0 8px 25px rgba(0,0,0,0.2)',
+          }
+        }}
+        onClick={() => {
+          // Abrir imagen en nueva ventana
+          const newWindow = window.open();
+          newWindow.document.write(`<img src="${imageData}" style="max-width:100%;height:auto;">`);
+        }}
+      />
+      <Typography 
+        variant="caption" 
+        sx={{ 
+          color: 'grey.600', 
+          mt: 1, 
+          display: 'block',
+          fontSize: '0.75rem',
+          fontWeight: 500
+        }}
+      >
+        📷 {getDisplayFilename()}
+      </Typography>
+    </Box>
+  );
+};
+
+// Componente para renderizar audio
+const AudioMessage = ({ message }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
+
+  if (!message.media || !message.media.isAudio) return null;
+
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const audioData = message.media.data.startsWith('data:') 
+    ? message.media.data 
+    : `data:${message.media.mimetype};base64,${message.media.data}`;
+
+  // Crear un nombre más amigable para el audio
+  const getAudioLabel = () => {
+    if (message.type === 'ptt') {
+      return 'Mensaje de voz';
+    }
+    // Si hay un filename válido (sin IDs complejos), usarlo
+    if (message.media.filename && 
+        !message.media.filename.includes('@') && 
+        !message.media.filename.includes('_') &&
+        message.media.filename.length < 30) {
+      return message.media.filename;
+    }
+    const date = new Date(message.timestamp * 1000);
+    const timeStr = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    return `Audio ${timeStr}`;
+  };
+
+  return (
+    <Box sx={{ 
+      mt: 1, 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: 1.5, 
+      maxWidth: '280px',
+      p: 1.5,
+      backgroundColor: 'rgba(5, 150, 105, 0.05)',
+      borderRadius: 3,
+      border: '1px solid rgba(5, 150, 105, 0.2)'
+    }}>
+      <IconButton 
+        size="medium" 
+        onClick={togglePlayPause}
+        sx={{ 
+          backgroundColor: '#059669',
+          color: 'white',
+          width: 45,
+          height: 45,
+          transition: 'all 0.3s ease',
+          boxShadow: '0 4px 12px rgba(5, 150, 105, 0.3)',
+          '&:hover': { 
+            backgroundColor: '#047857',
+            transform: 'scale(1.1)',
+            boxShadow: '0 6px 20px rgba(5, 150, 105, 0.4)',
+          }
+        }}
+      >
+        {isPlaying ? <Pause /> : <PlayArrow />}
+      </IconButton>
+      
+      <Box sx={{ flex: 1 }}>
+        <audio
+          ref={audioRef}
+          src={audioData}
+          onEnded={() => setIsPlaying(false)}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+        />
+        
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            fontSize: '0.85rem',
+            fontWeight: 600,
+            color: '#059669',
+            mb: 0.5
+          }}
+        >
+          🎵 {getAudioLabel()}
+        </Typography>
+        
+        {message.media.duration && (
+          <Typography 
+            variant="caption" 
+            sx={{ 
+              color: 'grey.600',
+              fontSize: '0.75rem',
+              fontWeight: 500
+            }}
+          >
+            Duración: {Math.floor(message.media.duration / 60)}:{(message.media.duration % 60).toString().padStart(2, '0')}
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+// Componente para renderizar documentos/archivos
+const DocumentMessage = ({ message }) => {
+  if (!message.media || message.media.isImage || message.media.isAudio) return null;
+
+  const getFileIcon = () => {
+    if (message.media.isVideo) return <VideoFile />;
+    if (message.media.isDocument) return <InsertDriveFile />;
+    return <AttachFile />;
+  };
+
+  const getFileTypeText = () => {
+    if (message.media.isVideo) return '🎥 Video';
+    if (message.media.isDocument) return '📄 Documento';
+    return '📎 Archivo';
+  };
+
+  // Crear un nombre de archivo más amigable
+  const getDisplayFilename = () => {
+    if (message.media.filename && 
+        !message.media.filename.includes('@') && 
+        !message.media.filename.includes('_') &&
+        message.media.filename.length < 50) {
+      return message.media.filename;
+    }
+    
+    // Generar nombre basado en tipo y hora
+    const date = new Date(message.timestamp * 1000);
+    const timeStr = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    
+    if (message.media.isVideo) return `Video ${timeStr}`;
+    if (message.media.isDocument) return `Documento ${timeStr}`;
+    return `Archivo ${timeStr}`;
+  };
+
+  const downloadFile = () => {
+    try {
+      const fileData = message.media.data.startsWith('data:') 
+        ? message.media.data 
+        : `data:${message.media.mimetype};base64,${message.media.data}`;
+      
+      const link = document.createElement('a');
+      link.href = fileData;
+      link.download = getDisplayFilename();
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error descargando archivo:', error);
+    }
+  };
+
+  return (
+    <Box sx={{ 
+      mt: 1, 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: 1.5, 
+      p: 2,
+      border: '1px solid',
+      borderColor: 'rgba(0,0,0,0.1)',
+      borderRadius: 3,
+      backgroundColor: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+      maxWidth: '320px',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      '&:hover': {
+        boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+        transform: 'translateY(-2px)'
+      }
+    }}>
+      <Box sx={{
+        p: 1,
+        borderRadius: '50%',
+        backgroundColor: '#059669',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        {getFileIcon()}
+      </Box>
+      
+      <Box sx={{ flex: 1 }}>
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            fontWeight: 600,
+            color: '#059669',
+            mb: 0.5
+          }}
+        >
+          {getFileTypeText()}
+        </Typography>
+        
+        <Typography 
+          variant="caption" 
+          sx={{ 
+            color: 'grey.700',
+            display: 'block',
+            fontWeight: 500
+          }}
+        >
+          {getDisplayFilename()}
+        </Typography>
+        
+        {message.media.filesize && (
+          <Typography 
+            variant="caption" 
+            sx={{ 
+              color: 'grey.600', 
+              display: 'block',
+              fontSize: '0.7rem'
+            }}
+          >
+            Tamaño: {(message.media.filesize / 1024).toFixed(1)} KB
+          </Typography>
+        )}
+      </Box>
+      
+      <IconButton 
+        size="small" 
+        onClick={downloadFile}
+        sx={{
+          backgroundColor: '#059669',
+          color: 'white',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            backgroundColor: '#047857',
+            transform: 'scale(1.1)'
+          }
+        }}
+      >
+        <Download />
+      </IconButton>
+    </Box>
+  );
+};
 
 const WhatsAppChat = ({ 
   selectedChat, 
@@ -134,6 +446,7 @@ const WhatsAppChat = ({
   const renderMessage = (message, index) => {
     const isFromMe = message.fromMe;
     const showAuthor = selectedChat?.isGroup && !isFromMe;
+    const hasMediaContent = message.hasMedia && message.media && !message.media.isError;
     
     return (
       <Box
@@ -147,15 +460,46 @@ const WhatsAppChat = ({
       >
         <Card
           sx={{
-            maxWidth: '70%',
-            minWidth: '100px',
-            backgroundColor: isFromMe ? '#d4edda' : '#ffffff',
-            border: isFromMe ? '1px solid #c3e6cb' : '1px solid #e3e3e3',
-            borderRadius: 2,
-            px: 2,
-            py: 1,
+            maxWidth: hasMediaContent ? '85%' : '75%',
+            minWidth: '120px',
+            background: isFromMe 
+              ? 'linear-gradient(135deg, #dcf8c6 0%, #d4edda 100%)' 
+              : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+            border: isFromMe 
+              ? '1px solid rgba(5, 150, 105, 0.2)' 
+              : '1px solid rgba(0,0,0,0.1)',
+            borderRadius: 4,
+            px: 2.5,
+            py: 1.5,
             position: 'relative',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
+            boxShadow: isFromMe 
+              ? '0 4px 12px rgba(5, 150, 105, 0.15)' 
+              : '0 4px 12px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              transform: 'translateY(-1px)',
+              boxShadow: isFromMe 
+                ? '0 6px 20px rgba(5, 150, 105, 0.2)' 
+                : '0 6px 20px rgba(0,0,0,0.15)'
+            },
+            // Flecha del globo de mensaje
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: '10px',
+              width: 0,
+              height: 0,
+              borderStyle: 'solid',
+              ...(isFromMe ? {
+                right: '-8px',
+                borderWidth: '8px 0 8px 8px',
+                borderColor: `transparent transparent transparent ${isFromMe ? '#dcf8c6' : '#ffffff'}`,
+              } : {
+                left: '-8px',
+                borderWidth: '8px 8px 8px 0',
+                borderColor: `transparent ${isFromMe ? '#dcf8c6' : '#ffffff'} transparent transparent`,
+              })
+            }
           }}
         >
           {showAuthor && (
@@ -163,42 +507,67 @@ const WhatsAppChat = ({
               variant="caption"
               sx={{
                 color: '#059669',
-                fontWeight: 600,
+                fontWeight: 700,
                 display: 'block',
-                mb: 0.5
+                mb: 1,
+                fontSize: '0.75rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
               }}
             >
               +{message.author?.split('@')[0]}
             </Typography>
           )}
           
-          <Typography
-            variant="body1"
-            sx={{
-              fontSize: '0.95rem',
-              lineHeight: 1.4,
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word',
-              maxHeight: '200px', // Limitar altura máxima del mensaje
-              overflow: 'auto', // Scroll si el mensaje es muy largo
-              '&::-webkit-scrollbar': {
-                width: '4px',
-              },
-              '&::-webkit-scrollbar-track': {
-                background: 'transparent',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                background: 'rgba(0,0,0,0.3)',
-                borderRadius: '2px',
-              },
-            }}
-          >
-            {message.body || (
-              <Typography variant="body2" sx={{ fontStyle: 'italic', color: 'grey.600' }}>
-                {getMediaTypeText(message.type)}
-              </Typography>
-            )}
-          </Typography>
+          {/* Renderizar multimedia si existe */}
+          {hasMediaContent && (
+            <Box>
+              <ImageMessage message={message} />
+              <AudioMessage message={message} />
+              <DocumentMessage message={message} />
+            </Box>
+          )}
+          
+          {/* Renderizar texto del mensaje */}
+          {(message.body || !hasMediaContent) && (
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: '0.95rem',
+                lineHeight: 1.5,
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                maxHeight: '200px',
+                overflow: 'auto',
+                mt: hasMediaContent ? 1.5 : 0,
+                color: isFromMe ? '#2d5016' : '#1a1a1a',
+                fontWeight: 400,
+                '&::-webkit-scrollbar': {
+                  width: '4px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: 'transparent',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: 'rgba(0,0,0,0.3)',
+                  borderRadius: '2px',
+                },
+              }}
+            >
+              {message.body || (
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    fontStyle: 'italic', 
+                    color: 'grey.600',
+                    fontSize: '0.85rem'
+                  }}
+                >
+                  {message.media?.isError ? '❌ Error cargando multimedia' : getMediaTypeText(message.type)}
+                </Typography>
+              )}
+            </Typography>
+          )}
           
           <Box
             sx={{
@@ -206,14 +575,16 @@ const WhatsAppChat = ({
               alignItems: 'center',
               justifyContent: 'flex-end',
               gap: 0.5,
-              mt: 0.5
+              mt: 1,
+              opacity: 0.8
             }}
           >
             <Typography
               variant="caption"
               sx={{
-                color: 'grey.600',
-                fontSize: '0.75rem'
+                color: isFromMe ? '#2d5016' : 'grey.600',
+                fontSize: '0.7rem',
+                fontWeight: 500
               }}
             >
               {formatMessageTime(message.timestamp)}
@@ -275,23 +646,50 @@ const WhatsAppChat = ({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          p: 1.5,
+          p: 2,
           borderBottom: 1,
           borderColor: 'divider',
-          backgroundColor: '#f5f5f5',
-          flexShrink: 0
+          background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+          color: 'white',
+          flexShrink: 0,
+          boxShadow: '0 2px 8px rgba(5, 150, 105, 0.3)'
         }}
       >
-        <Avatar sx={{ bgcolor: '#059669', mr: 1.5, width: 36, height: 36 }}>
+        <Avatar 
+          sx={{ 
+            bgcolor: 'rgba(255,255,255,0.2)', 
+            mr: 2, 
+            width: 45, 
+            height: 45,
+            border: '2px solid rgba(255,255,255,0.3)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+          }}
+        >
           {getChatAvatar(selectedChat)}
         </Avatar>
         <Box sx={{ flex: 1 }}>
-          <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 500, lineHeight: 1.2 }}>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              fontSize: '1.1rem', 
+              fontWeight: 600, 
+              lineHeight: 1.2,
+              color: 'white',
+              textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+            }}
+          >
             {getChatName(selectedChat)}
           </Typography>
           {selectedChat.isGroup && (
-            <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
-              Grupo
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                fontSize: '0.8rem',
+                color: 'rgba(255,255,255,0.8)',
+                fontWeight: 500
+              }}
+            >
+              👥 Grupo
             </Typography>
           )}
         </Box>
@@ -299,8 +697,12 @@ const WhatsAppChat = ({
           <Chip
             label={`${selectedChat.unreadCount}`}
             size="small"
-            color="primary"
-            sx={{ backgroundColor: '#059669', fontSize: '0.75rem' }}
+            sx={{ 
+              backgroundColor: 'rgba(255,255,255,0.9)', 
+              color: '#059669',
+              fontSize: '0.75rem',
+              fontWeight: 600
+            }}
           />
         )}
       </Box>
@@ -312,23 +714,46 @@ const WhatsAppChat = ({
           flex: 1,
           overflow: 'auto',
           scrollBehavior: 'smooth',
-          backgroundColor: '#e5ddd5',
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="chat-bg" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"%3E%3Cg opacity="0.02"%3E%3Cpath d="M20 20h60v60H20z" fill="%23000"/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23chat-bg)"/%3E%3C/svg%3E")',
-          minHeight: 0, // Importante para que funcione el flex
-          maxHeight: 'calc(100vh - 200px)', // Altura máxima relativa al viewport
+          background: 'linear-gradient(135deg, #e3f2fd 0%, #f0f4c3 50%, #e8f5e8 100%)',
+          backgroundSize: '400% 400%',
+          animation: 'gradientShift 15s ease infinite',
+          '@keyframes gradientShift': {
+            '0%': { backgroundPosition: '0% 50%' },
+            '50%': { backgroundPosition: '100% 50%' },
+            '100%': { backgroundPosition: '0% 50%' }
+          },
+          minHeight: 0,
+          maxHeight: 'calc(100vh - 200px)',
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `
+              radial-gradient(circle at 20% 20%, rgba(255,255,255,0.3) 1px, transparent 1px),
+              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.3) 1px, transparent 1px),
+              radial-gradient(circle at 40% 40%, rgba(255,255,255,0.2) 1px, transparent 1px)
+            `,
+            backgroundSize: '100px 100px, 150px 150px, 200px 200px',
+            opacity: 0.5,
+            pointerEvents: 'none'
+          },
           '&::-webkit-scrollbar': {
             width: '8px',
           },
           '&::-webkit-scrollbar-track': {
-            background: 'rgba(0,0,0,0.1)',
+            background: 'rgba(255,255,255,0.3)',
             borderRadius: '10px',
           },
           '&::-webkit-scrollbar-thumb': {
-            background: 'rgba(0,0,0,0.3)',
+            background: 'linear-gradient(45deg, #059669, #047857)',
             borderRadius: '10px',
           },
           '&::-webkit-scrollbar-thumb:hover': {
-            background: 'rgba(0,0,0,0.5)',
+            background: 'linear-gradient(45deg, #047857, #065f46)',
           },
         }}
       >
@@ -364,62 +789,115 @@ const WhatsAppChat = ({
       {/* Input de mensaje */}
       <Box
         sx={{
-          p: 1.5,
+          p: 2,
           borderTop: 1,
           borderColor: 'divider',
-          backgroundColor: '#ffffff',
-          flexShrink: 0
+          background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+          flexShrink: 0,
+          boxShadow: '0 -2px 8px rgba(0,0,0,0.1)'
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 1 }}>
-          <IconButton size="small" color="primary" sx={{ p: 0.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 1.5 }}>
+          <IconButton 
+            size="medium" 
+            sx={{ 
+              color: '#059669',
+              backgroundColor: 'rgba(5, 150, 105, 0.1)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                backgroundColor: 'rgba(5, 150, 105, 0.2)',
+                transform: 'scale(1.1)'
+              }
+            }}
+          >
             <EmojiEmotions />
           </IconButton>
           
-          <IconButton size="small" color="primary" sx={{ p: 0.5 }}>
+          <IconButton 
+            size="medium" 
+            sx={{ 
+              color: '#059669',
+              backgroundColor: 'rgba(5, 150, 105, 0.1)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                backgroundColor: 'rgba(5, 150, 105, 0.2)',
+                transform: 'scale(1.1)'
+              }
+            }}
+          >
             <AttachFile />
           </IconButton>
           
           <TextField
             fullWidth
             multiline
-            maxRows={3}
+            maxRows={4}
             placeholder="Escribe un mensaje..."
             variant="outlined"
-            size="small"
+            size="medium"
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
             onKeyPress={handleKeyPress}
             disabled={sendingMessage}
             sx={{
               '& .MuiOutlinedInput-root': {
-                borderRadius: 3,
+                borderRadius: 4,
                 backgroundColor: '#ffffff',
-                fontSize: '0.9rem'
+                fontSize: '0.95rem',
+                padding: '12px 16px',
+                border: '2px solid rgba(5, 150, 105, 0.2)',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                '&:hover': {
+                  borderColor: 'rgba(5, 150, 105, 0.4)',
+                },
+                '&.Mui-focused': {
+                  borderColor: '#059669',
+                  boxShadow: '0 4px 12px rgba(5, 150, 105, 0.2)',
+                }
+              },
+              '& .MuiOutlinedInput-input': {
+                padding: 0,
+                fontFamily: '"Segoe UI", Roboto, sans-serif',
+                '&::placeholder': {
+                  color: 'rgba(0,0,0,0.6)',
+                  fontSize: '0.9rem'
+                }
               }
             }}
           />
           
           <IconButton
-            color="primary"
             onClick={handleSendMessage}
             disabled={!messageText.trim() || sendingMessage}
-            size="small"
+            size="large"
             sx={{
-              backgroundColor: messageText.trim() ? '#059669' : 'transparent',
-              color: messageText.trim() ? 'white' : 'inherit',
-              p: 0.75,
+              backgroundColor: messageText.trim() ? '#059669' : 'rgba(5, 150, 105, 0.1)',
+              color: messageText.trim() ? 'white' : '#059669',
+              width: 50,
+              height: 50,
+              transition: 'all 0.3s ease',
+              boxShadow: messageText.trim() ? '0 4px 12px rgba(5, 150, 105, 0.4)' : 'none',
               '&:hover': {
-                backgroundColor: messageText.trim() ? '#047857' : 'transparent',
+                backgroundColor: messageText.trim() ? '#047857' : 'rgba(5, 150, 105, 0.2)',
+                transform: 'scale(1.1)',
+                boxShadow: messageText.trim() ? '0 6px 20px rgba(5, 150, 105, 0.5)' : '0 2px 8px rgba(5, 150, 105, 0.2)',
               },
               '&.Mui-disabled': {
-                backgroundColor: 'transparent',
-                color: 'grey.400'
+                backgroundColor: 'rgba(0,0,0,0.05)',
+                color: 'grey.400',
+                transform: 'none',
+                boxShadow: 'none'
               }
             }}
           >
-            {sendingMessage ? <CircularProgress size={18} /> : 
-             messageText.trim() ? <Send /> : <Mic />}
+            {sendingMessage ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : messageText.trim() ? (
+              <Send />
+            ) : (
+              <Mic />
+            )}
           </IconButton>
         </Box>
       </Box>

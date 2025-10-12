@@ -471,12 +471,20 @@ const WhatsAppWebPage = () => {
                   alt="WhatsApp QR Code" 
                   style={{ maxWidth: '100%', height: 'auto', marginBottom: 16 }}
                 />
-                <Typography variant="body2" color="text.secondary">
-                  1. Abre WhatsApp en tu teléfono<br />
-                  2. Toca Menú → Dispositivos vinculados<br />
-                  3. Toca Vincular un dispositivo<br />
-                  4. Apunta tu teléfono a esta pantalla para capturar el código
-                </Typography>
+                <Box sx={{ textAlign: 'left' }}>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    1. Abre WhatsApp en tu teléfono
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    2. Toca Menú → Dispositivos vinculados
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    3. Toca Vincular un dispositivo
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    4. Apunta tu teléfono a esta pantalla para capturar el código
+                  </Typography>
+                </Box>
               </>
             ) : (
               <Box sx={{ p: 3 }}>
