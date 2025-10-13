@@ -1,0 +1,6 @@
+2025/10/13-08:53:41.059 ac03 Reusing MANIFEST /Users/bener/GitHub/GastonAssistan/backend/src/whatsapp-sessions/session/Default/Local Storage/leveldb/MANIFEST-000001
+2025/10/13-08:53:41.059 ac03 Recovering log #4
+2025/10/13-08:53:41.060 ac03 Reusing old log /Users/bener/GitHub/GastonAssistan/backend/src/whatsapp-sessions/session/Default/Local Storage/leveldb/000004.log 
+2025/10/13-08:54:41.401 1aa03 Level-0 table #8: started
+2025/10/13-08:54:41.409 1aa03 Level-0 table #8: 13532 bytes OK
+2025/10/13-08:54:41.421 1aa03 Delete type=0 #4

@@ -65,9 +65,22 @@ app.use(express.urlencoded({ extended: true, limit: '10mb', parameterLimit: 1000
 const authRoutes = require('./routes/auth');
 const emailRoutes = require('./routes/email');
 const calendarRoutes = require('../routes/calendar-fallback'); // Temporary fallback
+const sessionStorage = require('./services/sessionStorageService');
+
 app.use('/auth', authRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/calendar', calendarRoutes);
+
+// Session management route
+app.get('/api/sessions/status', async (req, res) => {
+  try {
+    const status = await sessionStorage.getSessionStatus();
+    res.json(status);
+  } catch (error) {
+    console.error('Error getting session status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -149,6 +162,18 @@ app.use('/api/email', require('../routes/email'));
 const liveVoiceRoutes = require('./routes/liveVoice');
 app.use('/api/live-voice', liveVoiceRoutes);
 
+// 🎛️ EVA COMMAND CENTER - PHASE 1 CONTROL SYSTEM
+const { router: evaControlRoutes, initializeCommandCenter } = require('./routes/evaControl');
+app.use('/eva/control', evaControlRoutes);
+
+// 🤖 EVA AUTONOMOUS OPERATIONS - PHASE 2 AUTONOMOUS SYSTEM
+const { router: evaAutonomousRoutes, initializeAutonomousController } = require('./routes/evaAutonomous');
+app.use('/eva/autonomous', evaAutonomousRoutes);
+
+// 📱 EVA WHATSAPP AUTONOMOUS - PHASE 3 INTELLIGENCE ORCHESTRATION
+const evaWhatsAppRoutes = require('./routes/eva-whatsapp');
+app.use('/eva/whatsapp', evaWhatsAppRoutes);
+
 // WhatsApp Web integration
 const { router: whatsappRoutes, setupWhatsAppWebSocket } = require('./routes/whatsapp');
 app.use('/api/whatsapp', whatsappRoutes);
@@ -187,4 +212,19 @@ server.listen(PORT, () => {  // Use 'server.listen' NOT 'app.listen'
   console.log(`🔌 Socket.io available at: http://localhost:${PORT}`);
   console.log(`🧠 Intelligence system: ACTIVE`);
   console.log(`🎯 Ready for advanced interactions!`);
+  
+  // 🎛️ INITIALIZE EVA COMMAND CENTER
+  console.log(`🎛️ Initializing Eva Command Center...`);
+  const { initializeCommandCenter } = require('./routes/evaControl');
+  const commandCenter = initializeCommandCenter(io);
+  console.log(`✅ Eva Command Center available at: http://localhost:${PORT}/eva/control`);
+  console.log(`🎯 Phase 1 - Command Center: ACTIVE`);
+  
+  // 🤖 INITIALIZE EVA AUTONOMOUS OPERATIONS
+  console.log(`🤖 Initializing Eva Autonomous Operations...`);
+  const { initializeAutonomousController } = require('./routes/evaAutonomous');
+  const autonomousController = initializeAutonomousController(commandCenter);
+  console.log(`✅ Eva Autonomous Operations available at: http://localhost:${PORT}/eva/autonomous`);
+  console.log(`🎯 Phase 2 - Autonomous Operations: ACTIVE`);
+  console.log(`🧠 100% Autonomía Avanzada: ONLINE`);
 });

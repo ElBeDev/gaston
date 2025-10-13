@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { google } = require('googleapis');
 const emailService = require('../src/services/emailService');
+const sessionStorage = require('../src/services/sessionStorageService');
 
 // Load client_id, client_secret, redirect_uri from config/env
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -70,13 +71,13 @@ router.get('/google/callback', async (req, res) => {
     };
 
     // Store session in both emailService and calendarService for AI assistant to use
-    emailService.setUserSession(req.session.user.id, {
+    await emailService.setUserSession(req.session.user.id, {
       tokens: tokens,
       user: req.session.user
     });
 
     const calendarService = require('../src/services/calendarService');
-    calendarService.setUserSession(req.session.user.id, {
+    await calendarService.setUserSession(req.session.user.id, {
       tokens: tokens,
       user: req.session.user
     });
@@ -106,10 +107,35 @@ router.get('/status', (req, res) => {
 });
 
 // Logout
-router.get('/logout', (req, res) => {
+router.get('/logout', async (req, res) => {
+  if (req.session.user?.id) {
+    await sessionStorage.deleteGoogleSession(req.session.user.id);
+  }
   req.session.destroy(() => {
     res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3001'}?auth=logout`);
   });
+});
+
+// Get session status
+router.get('/sessions', async (req, res) => {
+  try {
+    const status = await sessionStorage.getSessionStatus();
+    res.json(status);
+  } catch (error) {
+    console.error('Error getting session status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Delete WhatsApp session (force re-authentication)
+router.delete('/whatsapp-session', async (req, res) => {
+  try {
+    const result = await sessionStorage.deleteWhatsAppSession();
+    res.json({ success: result });
+  } catch (error) {
+    console.error('Error deleting WhatsApp session:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 module.exports = router;

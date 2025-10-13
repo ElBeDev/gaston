@@ -73,6 +73,7 @@ const ImageMessage = ({ message }) => {
       />
       <Typography 
         variant="caption" 
+        component="div"
         sx={{ 
           color: 'grey.600', 
           mt: 1, 
@@ -182,6 +183,7 @@ const AudioMessage = ({ message }) => {
         {message.media.duration && (
           <Typography 
             variant="caption" 
+            component="div"
             sx={{ 
               color: 'grey.600',
               fontSize: '0.75rem',
@@ -292,6 +294,7 @@ const DocumentMessage = ({ message }) => {
         
         <Typography 
           variant="caption" 
+          component="div"
           sx={{ 
             color: 'grey.700',
             display: 'block',
@@ -304,6 +307,7 @@ const DocumentMessage = ({ message }) => {
         {message.media.filesize && (
           <Typography 
             variant="caption" 
+            component="div"
             sx={{ 
               color: 'grey.600', 
               display: 'block',
@@ -364,7 +368,7 @@ const WhatsAppChat = ({
     if (selectedChat && onMarkAsRead) {
       onMarkAsRead(selectedChat.id);
     }
-  }, [selectedChat, onMarkAsRead]);
+  }, [selectedChat]); // Eliminar onMarkAsRead de las dependencias
 
   const scrollToBottom = () => {
     // Método 1: Scroll del elemento de referencia
@@ -555,16 +559,15 @@ const WhatsAppChat = ({
               }}
             >
               {message.body || (
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
+                <span 
+                  style={{ 
                     fontStyle: 'italic', 
-                    color: 'grey.600',
+                    color: '#666',
                     fontSize: '0.85rem'
                   }}
                 >
                   {message.media?.isError ? '❌ Error cargando multimedia' : getMediaTypeText(message.type)}
-                </Typography>
+                </span>
               )}
             </Typography>
           )}

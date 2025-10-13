@@ -128,9 +128,25 @@ router.post('/send-message', async (req, res) => {
     }
 });
 
+// Cache simple para throttling
+let lastChatsRequest = 0;
+const CHATS_THROTTLE_MS = 5000; // 5 segundos mínimo entre requests
+
 // Obtener conversaciones activas
 router.get('/chats', async (req, res) => {
     try {
+        // Throttling agresivo
+        const now = Date.now();
+        if (now - lastChatsRequest < CHATS_THROTTLE_MS) {
+            console.log('🚫 THROTTLED - request demasiado rápido');
+            return res.status(429).json({ 
+                success: false, 
+                error: 'Too many requests',
+                waitMs: CHATS_THROTTLE_MS - (now - lastChatsRequest)
+            });
+        }
+        lastChatsRequest = now;
+        
         const whatsappService = getWhatsAppService();
         
         if (!whatsappService.isConnected) {
@@ -142,7 +158,7 @@ router.get('/chats', async (req, res) => {
         
         console.log('📋 API /chats llamada - obteniendo conversaciones...');
         const chats = await whatsappService.getChats();
-        console.log(`📋 API /chats devolviendo ${chats.length} conversaciones`);
+        // Log reducido: console.log(`📋 API /chats devolviendo ${chats.length} conversaciones`);
         
         res.json({ 
             success: true, 

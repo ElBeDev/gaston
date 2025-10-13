@@ -1,27 +1,58 @@
 const googleAuthService = require('./googleAuthService');
+const sessionStorage = require('./sessionStorageService');
 
 class EmailService {
   constructor() {
-    this.userSessions = new Map(); // In production, use Redis or database
+    this.userSessions = new Map(); // Runtime cache
+    this.loadExistingSessions();
+  }
+
+  // Load existing sessions from persistent storage
+  async loadExistingSessions() {
+    try {
+      const sessions = await sessionStorage.listGoogleSessions();
+      for (const session of sessions) {
+        this.userSessions.set(session.userId, session);
+      }
+      console.log(`📧 Loaded ${sessions.length} existing Google email sessions`);
+    } catch (error) {
+      console.error('❌ Error loading existing sessions:', error);
+    }
   }
 
   // Set user session for email sending
-  setUserSession(userId, sessionData) {
-    this.userSessions.set(userId, {
+  async setUserSession(userId, sessionData) {
+    const sessionWithLastUsed = {
       tokens: sessionData.tokens,
       user: sessionData.user,
       lastUsed: new Date()
-    });
+    };
+    
+    this.userSessions.set(userId, sessionWithLastUsed);
+    
+    // Save to persistent storage
+    await sessionStorage.saveGoogleSession(userId, sessionWithLastUsed);
   }
 
   // Get user session for email sending
-  getUserSession(userId) {
-    return this.userSessions.get(userId);
+  async getUserSession(userId) {
+    // Try runtime cache first
+    let session = this.userSessions.get(userId);
+    
+    // If not in cache, try persistent storage
+    if (!session) {
+      session = await sessionStorage.loadGoogleSession(userId);
+      if (session) {
+        this.userSessions.set(userId, session);
+      }
+    }
+    
+    return session;
   }
 
   // Send email on behalf of user (for AI assistant)
   async sendEmailAsUser(userId, emailData) {
-    const session = this.getUserSession(userId);
+    const session = await this.getUserSession(userId);
     
     if (!session || !session.tokens) {
       throw new Error('Usuario no autenticado con Google');

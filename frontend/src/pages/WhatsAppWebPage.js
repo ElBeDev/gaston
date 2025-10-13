@@ -128,22 +128,29 @@ const WhatsAppWebPage = () => {
     socketConnection.on('whatsapp_message', (data) => {
       console.log('📨 Nuevo mensaje WhatsApp:', data);
       
-      // Debounce para evitar múltiples llamadas
+      // Debounce para evitar múltiples llamadas - solo recargar si no estamos ya cargando
       setTimeout(() => {
-        loadChats();
+        if (!window.loadingChatsNow && (!window.lastChatsRequest || (Date.now() - window.lastChatsRequest) > 10000)) {
+          loadChats(false, 'whatsapp_message');
+        }
         
         // Si es el chat seleccionado, actualizar mensajes
         if (selectedChat && selectedChat.id === data.from) {
           loadChatMessages(selectedChat.id);
         }
-      }, 1000);
+      }, 5000); // Aumentar a 5 segundos
     });
 
     socketConnection.on('whatsapp_chats_updated', () => {
       console.log('📋 Lista de chats actualizada');
-      // Recargar chats cuando hay cambios
+      // Recargar chats cuando hay cambios con debounce más conservador
       if (whatsappStatus.isConnected) {
-        loadChats();
+        // Evitar recargas muy frecuentes via WebSocket - solo si ha pasado suficiente tiempo
+        setTimeout(() => {
+          if (!window.loadingChatsNow && (!window.lastChatsRequest || (Date.now() - window.lastChatsRequest) > 12000)) {
+            loadChats(false, 'chats_updated');
+          }
+        }, 8000); // Aumentar a 8 segundos
       }
     });
 
@@ -178,7 +185,7 @@ const WhatsAppWebPage = () => {
           setLoadingChats(true);
           // Esperar un poco antes de cargar chats para asegurar que esté listo
           setTimeout(() => {
-            loadChats();
+            loadChats(false, 'initial_connection');
           }, 1000);
         }
         
@@ -237,16 +244,64 @@ const WhatsAppWebPage = () => {
     }
   };
 
-  const loadChats = useCallback(async () => {
-    if (!whatsappStatus.isConnected) return;
+  const loadChats = async (force = false, source = 'unknown') => {
+    console.log(`🔍 loadChats llamado desde: ${source}, force: ${force}`);
+    const now = Date.now();
+    const lastRequest = window.lastChatsRequest || 0;
+    const minInterval = 8000; // 8 segundos mínimo entre requests (aumentado)
+    
+    console.log(`📊 Debug: now=${now}, lastRequest=${lastRequest}, diff=${now - lastRequest}, minInterval=${minInterval}`);
+    
+    // Protección global contra requests excesivos
+    window.requestCount = (window.requestCount || 0);
+    console.log(`📊 RequestCount actual: ${window.requestCount}`);
+    
+    // Resetear contador cada minuto
+    if (!window.lastCounterReset || (now - window.lastCounterReset) > 60000) {
+      console.log(`📊 Reseteando contador de requests`);
+      window.lastCounterReset = now;
+      window.requestCount = 0;
+    }
+    
+    // Bloquear si hay demasiados requests (reducido el límite)
+    if (!force && window.requestCount > 5) {
+      console.log('🚫 Request bloqueada por throttling frontend - límite alcanzado');
+      setTimeout(() => {
+        window.requestCount = 0;
+      }, 30000); // Reset más rápido
+      return;
+    }
+    
+    if (!force && (now - lastRequest) < minInterval) {
+      console.log(`⏳ Esperando ${minInterval - (now - lastRequest)}ms antes del siguiente request`);
+      return;
+    }
+    
+    // Si ya hay una carga en progreso, no hacer otra
+    if (window.loadingChatsNow) {
+      console.log('⏳ Ya hay una carga de chats en progreso...');
+      return;
+    }
     
     console.log('📋 Función loadChats llamada...');
+    window.loadingChatsNow = true;
+    window.lastChatsRequest = now;
+    window.requestCount = (window.requestCount || 0) + 1;
     setLoadingChats(true);
+
     try {
       const response = await fetch('http://localhost:3002/api/whatsapp/chats');
       const data = await response.json();
       
       console.log('📋 Respuesta de API /chats:', data);
+      
+      if (response.status === 429) {
+        // Si el servidor dice que esperemos, respetamos eso
+        const waitTime = data.waitMs || 5000;
+        console.log(`⏳ Servidor pide esperar ${waitTime}ms - NO reintentando automáticamente`);
+        // NO reintentar automáticamente para evitar ciclos infinitos
+        return;
+      }
       
       if (data.success) {
         console.log(`📋 Conversaciones recibidas: ${data.chats.length}`);
@@ -266,8 +321,9 @@ const WhatsAppWebPage = () => {
       setError('Error de conexión al cargar conversaciones');
     } finally {
       setLoadingChats(false);
+      window.loadingChatsNow = false;
     }
-  }, [whatsappStatus.isConnected, selectedChat]);
+  };
 
   const loadChatMessages = async (chatId) => {
     setLoadingMessages(true);
@@ -310,8 +366,12 @@ const WhatsAppWebPage = () => {
       if (data.success) {
         // Recargar mensajes del chat
         loadChatMessages(chatId);
-        // Recargar lista de chats para actualizar último mensaje
-        loadChats();
+        // Recargar lista de chats para actualizar último mensaje con debounce más largo
+        setTimeout(() => {
+          if (!window.loadingChatsNow && (!window.lastChatsRequest || (Date.now() - window.lastChatsRequest) > 8000)) {
+            loadChats(false, 'send_message');
+          }
+        }, 6000);
       } else {
         setError(data.error || 'Error al enviar mensaje');
       }
@@ -322,16 +382,33 @@ const WhatsAppWebPage = () => {
   };
 
   const handleMarkAsRead = async (chatId) => {
+    // Anti-spam: evitar marcar como leído demasiado frecuentemente
+    const markReadKey = `mark_read_${chatId}`;
+    const now = Date.now();
+    const lastMarkRead = window[markReadKey] || 0;
+    const minInterval = 3000; // 3 segundos mínimo entre mark-read del mismo chat
+    
+    if ((now - lastMarkRead) < minInterval) {
+      console.log('🚫 Mark as read bloqueado por throttling');
+      return;
+    }
+    
+    window[markReadKey] = now;
+    
     try {
-      await fetch(`http://localhost:3002/api/whatsapp/chat/${encodeURIComponent(chatId)}/mark-read`, {
+      const response = await fetch(`http://localhost:3002/api/whatsapp/chat/${encodeURIComponent(chatId)}/mark-read`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
       });
       
-      // Actualizar lista de chats
-      loadChats();
+      // Solo actualizar chats si la operación fue exitosa y no frecuente
+      if (response.ok) {
+        // NO recargar chats automáticamente desde markAsRead
+        // Los chats ya se actualizan via WebSocket y otros eventos
+        console.log('✅ Chat marcado como leído exitosamente');
+      }
     } catch (error) {
       console.error('Error marking as read:', error);
     }
@@ -577,7 +654,7 @@ const WhatsAppWebPage = () => {
           <Button
             variant="outlined"
             size="small"
-            onClick={loadChats}
+            onClick={() => loadChats(true, 'manual_button')}
             disabled={loadingChats}
             sx={{ mr: 2 }}
           >
@@ -648,7 +725,7 @@ const WhatsAppWebPage = () => {
           backgroundColor: '#059669',
           '&:hover': { backgroundColor: '#047857' }
         }}
-        onClick={loadChats}
+        onClick={() => loadChats(true, 'manual_fab')}
       >
         <Refresh />
       </Fab>

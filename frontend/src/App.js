@@ -15,6 +15,7 @@ import CalendarPageAdvanced from './pages/CalendarPageAdvanced';
 import EmailPage from './pages/EmailPage';
 import WhatsAppPage from './pages/WhatsAppPage';
 import WhatsAppWebPage from './pages/WhatsAppWebPage';
+import EvaWhatsAppPage from './pages/EvaWhatsAppPage';
 
 const NotesPage = lazy(() => import('./pages/NotesPage'));
 
@@ -42,6 +43,7 @@ function AppContent() {
             <Route path="/calendar" element={<CalendarPageAdvanced />} />
             <Route path="/whatsapp" element={<WhatsAppPage />} />
             <Route path="/whatsapp-web" element={<WhatsAppWebPage />} />
+            <Route path="/eva-whatsapp" element={<EvaWhatsAppPage />} />
             <Route path="/notes" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <NotesPage />

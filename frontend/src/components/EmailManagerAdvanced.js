@@ -117,7 +117,8 @@ const EmailManager = () => {
         body: JSON.stringify({
           to: composeData.to,
           subject: composeData.subject,
-          text: composeData.body
+          body: composeData.body,
+          message: composeData.body  // Para compatibilidad con backend
         })
       });
 

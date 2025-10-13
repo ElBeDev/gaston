@@ -1,27 +1,58 @@
 const googleAuthService = require('./googleAuthService');
+const sessionStorage = require('./sessionStorageService');
 
 class CalendarService {
   constructor() {
-    this.userSessions = new Map(); // In production, use Redis or database
+    this.userSessions = new Map(); // Runtime cache
+    this.loadExistingSessions();
+  }
+
+  // Load existing sessions from persistent storage
+  async loadExistingSessions() {
+    try {
+      const sessions = await sessionStorage.listGoogleSessions();
+      for (const session of sessions) {
+        this.userSessions.set(session.userId, session);
+      }
+      console.log(`📅 Loaded ${sessions.length} existing Google calendar sessions`);
+    } catch (error) {
+      console.error('❌ Error loading existing calendar sessions:', error);
+    }
   }
 
   // Set user session for calendar access
-  setUserSession(userId, sessionData) {
-    this.userSessions.set(userId, {
+  async setUserSession(userId, sessionData) {
+    const sessionWithLastUsed = {
       tokens: sessionData.tokens,
       user: sessionData.user,
       lastUsed: new Date()
-    });
+    };
+    
+    this.userSessions.set(userId, sessionWithLastUsed);
+    
+    // Save to persistent storage
+    await sessionStorage.saveGoogleSession(userId, sessionWithLastUsed);
   }
 
   // Get user session for calendar access
-  getUserSession(userId) {
-    return this.userSessions.get(userId);
+  async getUserSession(userId) {
+    // Try runtime cache first
+    let session = this.userSessions.get(userId);
+    
+    // If not in cache, try persistent storage
+    if (!session) {
+      session = await sessionStorage.loadGoogleSession(userId);
+      if (session) {
+        this.userSessions.set(userId, session);
+      }
+    }
+    
+    return session;
   }
 
   // Create calendar event on behalf of user
   async createEvent(userId, eventData) {
-    const session = this.getUserSession(userId);
+    const session = await this.getUserSession(userId);
     
     if (!session || !session.tokens) {
       throw new Error('Usuario no autenticado con Google');
@@ -106,7 +137,7 @@ class CalendarService {
 
   // Get user's calendar events
   async getEvents(userId, options = {}) {
-    const session = this.getUserSession(userId);
+    const session = await this.getUserSession(userId);
     
     if (!session || !session.tokens) {
       throw new Error('Usuario no autenticado con Google');
@@ -160,7 +191,7 @@ class CalendarService {
 
   // Update calendar event
   async updateEvent(userId, eventId, updateData) {
-    const session = this.getUserSession(userId);
+    const session = await this.getUserSession(userId);
     
     if (!session || !session.tokens) {
       throw new Error('Usuario no autenticado con Google');
@@ -206,7 +237,7 @@ class CalendarService {
 
   // Delete calendar event
   async deleteEvent(userId, eventId) {
-    const session = this.getUserSession(userId);
+    const session = await this.getUserSession(userId);
     
     if (!session || !session.tokens) {
       throw new Error('Usuario no autenticado con Google');
@@ -236,14 +267,14 @@ class CalendarService {
   }
 
   // Check if user can access calendar
-  canUserAccessCalendar(userId) {
-    const session = this.getUserSession(userId);
+  async canUserAccessCalendar(userId) {
+    const session = await this.getUserSession(userId);
     return !!(session && session.tokens);
   }
 
   // Get user calendar info
-  getUserCalendarInfo(userId) {
-    const session = this.getUserSession(userId);
+  async getUserCalendarInfo(userId) {
+    const session = await this.getUserSession(userId);
     
     if (!session) {
       return null;

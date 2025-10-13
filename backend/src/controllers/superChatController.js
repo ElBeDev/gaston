@@ -24,6 +24,25 @@ const Task = require('../models/Task');
 const Project = require('../models/Project');
 const Note = require('../models/Note');
 
+// 🤖 Eva Autonomous System Integration
+const path = require('path');
+const fs = require('fs');
+
+// Function to get Eva Autonomous Controller dynamically
+function getEvaAutonomousController() {
+  try {
+    const controllerPath = path.join(__dirname, '../eva-autonomous/EvaAutonomousController.js');
+    if (fs.existsSync(controllerPath)) {
+      const EvaAutonomousController = require('../eva-autonomous/EvaAutonomousController');
+      // Get the global instance if it exists
+      return global.evaAutonomousController || null;
+    }
+  } catch (error) {
+    console.log('🤖 Eva Autonomous Controller not available:', error.message);
+  }
+  return null;
+}
+
 class SuperChatController {
   constructor() {
     this.activeThreads = new Map();
@@ -125,9 +144,17 @@ class SuperChatController {
       console.log('🤖 Generating super-intelligent response...');
       
       // 📧📅 STEP 7.1: Check for Google Workspace intentions (Email & Calendar)
-      const googleWorkspaceResult = await this.processGoogleWorkspaceIntentions(message, userId);
+      const sessionTokens = req.session?.tokens;
+      console.log('🔐 Session tokens available:', !!sessionTokens);
+      const googleWorkspaceResult = await this.processGoogleWorkspaceIntentions(message, userId, sessionTokens);
       
-      const response = await this.generateSuperIntelligentResponse(message, superEnhancedContext, userId, googleWorkspaceResult);
+      // 🤖 STEP 7.2: Check for Eva Autonomous Email Requests  
+      const autonomousEmailResult = await this.processAutonomousEmailRequest(message, userId, sessionTokens);
+      
+      // 📱 STEP 7.3: Check for Eva Autonomous WhatsApp Requests
+      const autonomousWhatsAppResult = await this.processAutonomousWhatsAppRequest(message, userId);
+      
+      const response = await this.generateSuperIntelligentResponse(message, superEnhancedContext, userId, googleWorkspaceResult, autonomousEmailResult, autonomousWhatsAppResult);
       
       // 💾 STEP 8: Save Eva's response (With error handling)
       let assistantConversation;
@@ -210,10 +237,10 @@ class SuperChatController {
   /**
    * 🧠 Generate super-intelligent response with predictions
    */
-  async generateSuperIntelligentResponse(message, enhancedContext, userId, googleWorkspaceResult = null) {
+  async generateSuperIntelligentResponse(message, enhancedContext, userId, googleWorkspaceResult = null, autonomousEmailResult = null, autonomousWhatsAppResult = null) {
     try {
       // Build enhanced prompt with predictions and behavior analysis
-      const enhancedPrompt = this.buildSuperEnhancedPrompt(message, enhancedContext, googleWorkspaceResult);
+      const enhancedPrompt = this.buildSuperEnhancedPrompt(message, enhancedContext, googleWorkspaceResult, autonomousEmailResult, autonomousWhatsAppResult);
       
       // Get AI response
       const aiResponse = await openaiService.getChatResponse(enhancedPrompt, userId);
@@ -267,8 +294,54 @@ class SuperChatController {
   /**
    * 🎯 Build super-enhanced prompt with predictions
    */
-  buildSuperEnhancedPrompt(message, enhancedContext, googleWorkspaceResult = null) {
+  buildSuperEnhancedPrompt(message, enhancedContext, googleWorkspaceResult = null, autonomousEmailResult = null, autonomousWhatsAppResult = null) {
     let prompt = `Usuario: ${message}\n\n`;
+    
+    // Add Eva Autonomous Email context if available
+    if (autonomousEmailResult && autonomousEmailResult.hasEmailRequest) {
+      prompt += `EVA AUTONOMOUS EMAIL:\n`;
+      if (autonomousEmailResult.success) {
+        prompt += `- ✅ Email enviado autónomamente por Eva\n`;
+        prompt += `- Destinatario: ${autonomousEmailResult.details.to}\n`;
+        prompt += `- Asunto: ${autonomousEmailResult.details.subject}\n`;
+        prompt += `- Confianza del sistema: ${autonomousEmailResult.details.confidence}%\n`;
+        prompt += `- Enviado por: ${autonomousEmailResult.details.sentBy}\n`;
+      } else {
+        prompt += `- ❌ Eva no pudo enviar el email autónomamente\n`;
+        prompt += `- Razón: ${autonomousEmailResult.reason || autonomousEmailResult.message}\n`;
+        prompt += `- Confianza: ${autonomousEmailResult.confidence}%\n`;
+        if (autonomousEmailResult.fallbackToStandard) {
+          prompt += `- Nota: Se puede intentar envío manual si el usuario lo solicita\n`;
+        }
+      }
+      prompt += `\n`;
+    }
+    
+    // Add Eva Autonomous WhatsApp context if available
+    if (autonomousWhatsAppResult && autonomousWhatsAppResult.hasWhatsAppRequest) {
+      prompt += `EVA AUTONOMOUS WHATSAPP:\n`;
+      if (autonomousWhatsAppResult.success) {
+        if (autonomousWhatsAppResult.action === 'auto_response_enabled') {
+          prompt += `- ✅ Respuestas automáticas de WhatsApp activadas por Eva\n`;
+          prompt += `- Modo: ${autonomousWhatsAppResult.details.mode}\n`;
+          prompt += `- Umbral de confianza: ${autonomousWhatsAppResult.details.confidence_threshold}%\n`;
+          prompt += `- Palabras clave activas: ${autonomousWhatsAppResult.details.keywords?.join(', ') || 'N/A'}\n`;
+        } else if (autonomousWhatsAppResult.action === 'auto_response_disabled') {
+          prompt += `- ❌ Respuestas automáticas de WhatsApp desactivadas por Eva\n`;
+        } else if (autonomousWhatsAppResult.action === 'message_sent') {
+          prompt += `- ✅ Mensaje de WhatsApp enviado autónomamente por Eva\n`;
+          prompt += `- Destinatario: ${autonomousWhatsAppResult.details.chatId}\n`;
+          prompt += `- Mensaje: "${autonomousWhatsAppResult.details.message}"\n`;
+        }
+        prompt += `- Confianza del sistema: ${autonomousWhatsAppResult.details.confidence}%\n`;
+        prompt += `- Procesado por: eva_autonomous\n`;
+      } else {
+        prompt += `- ❌ Eva no pudo procesar la solicitud de WhatsApp\n`;
+        prompt += `- Razón: ${autonomousWhatsAppResult.reason || autonomousWhatsAppResult.message}\n`;
+        prompt += `- Confianza: ${autonomousWhatsAppResult.confidence}%\n`;
+      }
+      prompt += `\n`;
+    }
     
     // Add Google Workspace context if available
     if (googleWorkspaceResult) {
@@ -1128,6 +1201,371 @@ INSTRUCCIONES:
   }
 
   /**
+   * 🤖 Process Autonomous Email Request - Eva decides and sends emails automatically
+   */
+  async processAutonomousEmailRequest(message, userId, sessionTokens = null) {
+    try {
+      console.log('🤖 Eva analyzing message for autonomous email request...');
+      
+      // Detect email intent
+      const emailDetection = this.detectAdvancedEmailIntent(message);
+      
+      if (!emailDetection.hasEmailIntent) {
+        return { hasEmailRequest: false };
+      }
+      
+      console.log('📧 Email intent detected:', emailDetection);
+      
+      // Get Eva Autonomous Controller
+      const autonomousController = getEvaAutonomousController();
+      
+      if (!autonomousController) {
+        console.log('⚠️ Eva Autonomous Controller not available, using standard email');
+        return { hasEmailRequest: false, fallbackToStandard: true };
+      }
+      
+      if (!autonomousController.isActive) {
+        console.log('🤖 Starting Eva Autonomous System...');
+        await autonomousController.start();
+      }
+      
+      // Prepare email data for autonomous decision
+      const emailRequest = {
+        to: emailDetection.recipient || 'bernardoraos90@gmail.com', // Default for testing
+        subject: emailDetection.subject || '🤖 Eva Autonomous Message',
+        body: emailDetection.content || message,
+        priority: emailDetection.priority || 'normal',
+        sessionTokens: sessionTokens // Get tokens from session if available
+      };
+      
+      console.log('🤖 Eva making autonomous email decision...');
+      
+      // Send via autonomous system
+      const result = await autonomousController.sendEmailAutonomous(emailRequest);
+      
+      if (result.success) {
+        console.log('✅ Eva sent email autonomously!');
+        return {
+          hasEmailRequest: true,
+          success: true,
+          autonomous: true,
+          result: result,
+          message: '✅ Email enviado autónomamente por Eva',
+          details: {
+            to: emailRequest.to,
+            subject: emailRequest.subject,
+            confidence: result.decision?.confidence || 0,
+            sentBy: 'eva_autonomous'
+          }
+        };
+      } else {
+        console.log('❌ Eva autonomous email failed:', result.reason);
+        return {
+          hasEmailRequest: true,
+          success: false,
+          autonomous: true,
+          reason: result.reason,
+          confidence: result.confidence || 0,
+          message: `❌ Eva no pudo enviar el email: ${result.reason}`,
+          fallbackToStandard: true
+        };
+      }
+      
+    } catch (error) {
+      console.error('❌ Error in autonomous email processing:', error);
+      return {
+        hasEmailRequest: true,
+        success: false,
+        autonomous: false,
+        error: error.message,
+        message: '❌ Error en el sistema autónomo de emails',
+        fallbackToStandard: true
+      };
+    }
+  }
+
+  /**
+   * 🔍 Advanced Email Intent Detection
+   */
+  detectAdvancedEmailIntent(message) {
+    const emailPatterns = [
+      /enviar?\s*(un\s+)?(email|correo|mail)/i,
+      /mandar?\s*(un\s+)?(email|correo|mail)/i,
+      /envía\s*(me\s+)?(un\s+)?(email|correo|mail)/i,
+      /send\s*(an?\s+)?(email|mail)/i,
+      /(email|correo|mail)\s+a\s+/i,
+      /escribir?\s*(un\s+)?(email|correo|mail)/i
+    ];
+    
+    const hasEmailIntent = emailPatterns.some(pattern => pattern.test(message));
+    
+    // Extract recipient if mentioned
+    const recipientMatch = message.match(/(a\s+|to\s+)([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+    const recipient = recipientMatch ? recipientMatch[2] : null;
+    
+    // Extract subject if mentioned
+    const subjectMatch = message.match(/(asunto|subject|título)\s*:?\s*["']?([^"'\n]+)["']?/i);
+    const subject = subjectMatch ? subjectMatch[2].trim() : null;
+    
+    // Extract content/body
+    let content = message;
+    if (hasEmailIntent) {
+      // Remove the email intent part to get the content
+      content = message.replace(/enviar?\s*(un\s+)?(email|correo|mail)/i, '').trim();
+      content = content.replace(/^(a\s+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i, '').trim();
+    }
+    
+    // Determine priority
+    const urgentKeywords = ['urgente', 'urgent', 'importante', 'important', 'rápido', 'quick'];
+    const priority = urgentKeywords.some(keyword => message.toLowerCase().includes(keyword)) ? 'high' : 'normal';
+    
+    return {
+      hasEmailIntent,
+      recipient,
+      subject,
+      content: content || message,
+      priority,
+      originalMessage: message
+    };
+  }
+
+  /**
+   * 📱 Process Autonomous WhatsApp Request - Eva manages WhatsApp automatically
+   */
+  async processAutonomousWhatsAppRequest(message, userId) {
+    try {
+      console.log('📱 Eva analyzing message for autonomous WhatsApp request...');
+      
+      // Detect WhatsApp intent
+      const whatsappDetection = this.detectAdvancedWhatsAppIntent(message);
+      
+      if (!whatsappDetection.hasWhatsAppIntent) {
+        return { hasWhatsAppRequest: false };
+      }
+      
+      console.log('📱 WhatsApp intent detected:', whatsappDetection);
+      
+      // Get Eva Autonomous Controller
+      const autonomousController = getEvaAutonomousController();
+      
+      if (!autonomousController) {
+        console.log('⚠️ Eva Autonomous Controller not available');
+        return { hasWhatsAppRequest: false, fallbackToManual: true };
+      }
+      
+      if (!autonomousController.isActive) {
+        console.log('🤖 Starting Eva Autonomous System...');
+        await autonomousController.start();
+      }
+      
+      console.log('📱 Eva making autonomous WhatsApp decision...');
+      
+      let result;
+      
+      switch (whatsappDetection.action) {
+        case 'enable_auto_response':
+          result = await autonomousController.enableWhatsAppAutoResponse(whatsappDetection.settings || {});
+          break;
+        
+        case 'disable_auto_response':
+          result = await autonomousController.disableWhatsAppAutoResponse();
+          break;
+        
+        case 'send_message':
+          if (whatsappDetection.chatId && whatsappDetection.message) {
+            result = await autonomousController.sendWhatsAppMessageAutonomous({
+              chatId: whatsappDetection.chatId,
+              message: whatsappDetection.message
+            });
+          } else {
+            throw new Error('ChatId and message are required for sending WhatsApp message');
+          }
+          break;
+        
+        case 'update_settings':
+          result = await autonomousController.processWhatsAppRequest({
+            type: 'update_settings',
+            settings: whatsappDetection.settings || {}
+          });
+          break;
+        
+        default:
+          throw new Error(`Unknown WhatsApp action: ${whatsappDetection.action}`);
+      }
+      
+      if (result.success) {
+        console.log('✅ Eva processed WhatsApp request autonomously!');
+        return {
+          hasWhatsAppRequest: true,
+          success: true,
+          autonomous: true,
+          action: whatsappDetection.action,
+          result: result,
+          message: this.getWhatsAppSuccessMessage(whatsappDetection.action, result),
+          details: {
+            action: whatsappDetection.action,
+            confidence: result.decision?.confidence || result.result?.confidence || 80,
+            processedBy: 'eva_autonomous',
+            ...this.getWhatsAppActionDetails(whatsappDetection, result)
+          }
+        };
+      } else {
+        console.log('❌ Eva autonomous WhatsApp processing failed:', result.reason);
+        return {
+          hasWhatsAppRequest: true,
+          success: false,
+          autonomous: true,
+          action: whatsappDetection.action,
+          reason: result.reason,
+          confidence: result.confidence || 0,
+          message: `❌ Eva no pudo procesar WhatsApp: ${result.reason}`,
+          fallbackToManual: true
+        };
+      }
+      
+    } catch (error) {
+      console.error('❌ Error in autonomous WhatsApp processing:', error);
+      return {
+        hasWhatsAppRequest: true,
+        success: false,
+        autonomous: false,
+        error: error.message,
+        message: '❌ Error en el sistema autónomo de WhatsApp',
+        fallbackToManual: true
+      };
+    }
+  }
+
+  /**
+   * 🔍 Advanced WhatsApp Intent Detection
+   */
+  detectAdvancedWhatsAppIntent(message) {
+    const lowerMessage = message.toLowerCase();
+    
+    // Patterns for enabling auto-response
+    const enablePatterns = [
+      /activar?\s*(respuestas?\s*)?(automáticas?\s*)?whatsapp/i,
+      /habilitar?\s*(respuestas?\s*)?(automáticas?\s*)?whatsapp/i,
+      /encender?\s*(respuestas?\s*)?(automáticas?\s*)?whatsapp/i,
+      /enable\s*(auto)?\s*whatsapp/i,
+      /turn\s*on\s*(auto)?\s*whatsapp/i,
+      /activar\s*el\s*asistente\s*de\s*whatsapp/i,
+      /habilitar\s*el\s*asistente\s*de\s*whatsapp/i
+    ];
+    
+    // Patterns for disabling auto-response
+    const disablePatterns = [
+      /desactivar?\s*(respuestas?\s*)?(automáticas?\s*)?whatsapp/i,
+      /deshabilitar?\s*(respuestas?\s*)?(automáticas?\s*)?whatsapp/i,
+      /apagar?\s*(respuestas?\s*)?(automáticas?\s*)?whatsapp/i,
+      /disable\s*(auto)?\s*whatsapp/i,
+      /turn\s*off\s*(auto)?\s*whatsapp/i,
+      /desactivar\s*el\s*asistente\s*de\s*whatsapp/i,
+      /deshabilitar\s*el\s*asistente\s*de\s*whatsapp/i
+    ];
+    
+    // Patterns for sending messages
+    const sendMessagePatterns = [
+      /enviar?\s*(un\s+)?mensaje\s*(de\s+|por\s+)?whatsapp/i,
+      /mandar?\s*(un\s+)?mensaje\s*(de\s+|por\s+)?whatsapp/i,
+      /send\s*(a\s+)?whatsapp\s*message/i,
+      /whatsapp\s+message\s+to/i
+    ];
+    
+    // Check for different actions
+    let action = null;
+    let settings = {};
+    
+    if (enablePatterns.some(pattern => pattern.test(message))) {
+      action = 'enable_auto_response';
+      
+      // Extract settings from message
+      if (lowerMessage.includes('selectivo') || lowerMessage.includes('selective')) {
+        settings.mode = 'selective';
+      } else if (lowerMessage.includes('todo') || lowerMessage.includes('all')) {
+        settings.mode = 'all';
+      } else if (lowerMessage.includes('palabra') || lowerMessage.includes('keyword')) {
+        settings.mode = 'keywords';
+      }
+      
+      // Extract confidence threshold
+      const confidenceMatch = message.match(/(\d+)%?\s*(confianza|confidence)/i);
+      if (confidenceMatch) {
+        settings.confidence_threshold = parseInt(confidenceMatch[1]);
+      }
+      
+    } else if (disablePatterns.some(pattern => pattern.test(message))) {
+      action = 'disable_auto_response';
+      
+    } else if (sendMessagePatterns.some(pattern => pattern.test(message))) {
+      action = 'send_message';
+      
+      // Extract chat ID and message
+      const chatIdMatch = message.match(/a\s+([a-zA-Z0-9@._-]+)/i);
+      const messageMatch = message.match(/mensaje\s*["']([^"']+)["']/i) || 
+                          message.match(/diciendo\s*["']?([^"'\n]+)["']?/i);
+      
+      return {
+        hasWhatsAppIntent: true,
+        action,
+        chatId: chatIdMatch ? chatIdMatch[1] : null,
+        message: messageMatch ? messageMatch[1] : null,
+        originalMessage: message
+      };
+    }
+    
+    const hasWhatsAppIntent = action !== null;
+    
+    return {
+      hasWhatsAppIntent,
+      action,
+      settings,
+      originalMessage: message
+    };
+  }
+
+  /**
+   * 📱 Get success message for WhatsApp actions
+   */
+  getWhatsAppSuccessMessage(action, result) {
+    const messages = {
+      enable_auto_response: '✅ Eva ha activado las respuestas automáticas de WhatsApp',
+      disable_auto_response: '❌ Eva ha desactivado las respuestas automáticas de WhatsApp',
+      send_message: '✅ Eva ha enviado el mensaje de WhatsApp',
+      update_settings: '⚙️ Eva ha actualizado la configuración de WhatsApp'
+    };
+    
+    return messages[action] || '✅ Eva ha procesado la solicitud de WhatsApp';
+  }
+
+  /**
+   * 📱 Get action details for WhatsApp responses
+   */
+  getWhatsAppActionDetails(detection, result) {
+    const details = {};
+    
+    switch (detection.action) {
+      case 'enable_auto_response':
+        const settings = result.result?.settings || detection.settings;
+        details.mode = settings.mode || 'selective';
+        details.confidence_threshold = settings.confidence_threshold || 70;
+        details.keywords = settings.keywords || [];
+        break;
+      
+      case 'send_message':
+        details.chatId = detection.chatId;
+        details.message = detection.message;
+        break;
+      
+      case 'update_settings':
+        details.settings = detection.settings;
+        break;
+    }
+    
+    return details;
+  }
+
+  /**
    * 📧 Send Email using user's authenticated Google account
    */
   async sendEmailAsUser(userId, emailData) {
@@ -1190,13 +1628,22 @@ INSTRUCCIONES:
   /**
    * 📧📅 Process Google Workspace intentions (Email & Calendar)
    */
-  async processGoogleWorkspaceIntentions(message, userId) {
+  async processGoogleWorkspaceIntentions(message, userId, sessionTokens = null) {
     console.log('📧📅 Checking Google Workspace intentions...');
     
     try {
-      // Check if user has Google access
-      const hasGoogleAccess = emailService.canUserSendEmails(userId) && 
-                             calendarService.canUserAccessCalendar(userId);
+      // Check if user has Google access via session tokens
+      let hasGoogleAccess = false;
+      
+      if (sessionTokens && sessionTokens.access_token) {
+        hasGoogleAccess = true;
+        console.log('✅ User authenticated with Google via session tokens');
+      } else {
+        // Fallback: check emailService
+        hasGoogleAccess = emailService.canUserSendEmails(userId) && 
+                         calendarService.canUserAccessCalendar(userId);
+        console.log('🔍 Checking Google access via emailService:', hasGoogleAccess);
+      }
       
       if (!hasGoogleAccess) {
         console.log('❌ User not authenticated with Google');

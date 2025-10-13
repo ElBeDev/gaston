@@ -11,6 +11,13 @@ class WhatsAppService {
         this.connectionStatus = 'disconnected';
         this.connectedNumber = null;
         this.eventCallbacks = {};
+        
+        // Cache para evitar spam de llamadas
+        this.chatsCache = {
+            data: null,
+            lastUpdate: null,
+            expireTime: 30000 // 30 segundos para reducir spam más agresivamente
+        };
     }
 
     // Inicializar el cliente de WhatsApp
@@ -18,10 +25,14 @@ class WhatsAppService {
         try {
             console.log('🚀 Inicializando WhatsApp Web...');
             
+            // Verificar si ya existe una sesión
+            const sessionPath = path.join(__dirname, '../whatsapp-sessions');
+            console.log(`📁 Buscando sesión existente en: ${sessionPath}`);
+            
             this.client = new Client({
                 authStrategy: new LocalAuth({
                     name: 'eva-assistant-session',
-                    dataPath: path.join(__dirname, '../whatsapp-sessions')
+                    dataPath: sessionPath
                 }),
                 puppeteer: {
                     headless: true,
@@ -33,12 +44,16 @@ class WhatsAppService {
                         '--no-first-run',
                         '--no-zygote',
                         '--single-process',
-                        '--disable-gpu'
+                        '--disable-gpu',
+                        '--disable-extensions',
+                        '--disable-default-apps'
                     ]
                 }
             });
 
             this.setupEventListeners();
+            
+            console.log('🔄 Iniciando cliente WhatsApp...');
             await this.client.initialize();
             
         } catch (error) {
@@ -50,20 +65,28 @@ class WhatsAppService {
 
     // Configurar event listeners
     setupEventListeners() {
-        // QR Code generado
-        this.client.on('qr', async (qr) => {
-            console.log('📱 Código QR generado');
+                // Autenticado (sesión restaurada)
+        this.client.on('authenticated', (session) => {
+            console.log('🔐 Sesión de WhatsApp autenticada correctamente');
+            console.log('📱 Sesión restaurada desde:', path.join(__dirname, '../whatsapp-sessions'));
+            this.connectionStatus = 'authenticated';
+            this.emitEvent('authenticated', session);
+        });
+
+        // QR code para autenticación inicial
+        this.client.on('qr', (qr) => {
+            console.log('📱 Código QR generado para WhatsApp');
             this.qrString = qr;
-            this.connectionStatus = 'qr_ready';
+            this.connectionStatus = 'qr_required';
             
-            // Mostrar QR en la consola
+            // Mostrar QR en terminal
             qrcode.generate(qr, { small: true });
             
-            // Convertir QR a base64 para el frontend
+            // Convertir QR a base64 para frontend
             try {
-                const QRCode = require('qrcode');
-                const qrImage = await QRCode.toDataURL(qr);
-                this.emitEvent('qr', qrImage); // Enviar imagen base64 en lugar del string
+                const qrBase64 = require('qrcode').toDataURL(qr).then(url => {
+                    this.emitEvent('qr', url);
+                });
             } catch (error) {
                 console.error('❌ Error al convertir QR a base64:', error);
                 this.emitEvent('qr', qr); // Fallback al string raw
@@ -262,13 +285,22 @@ class WhatsAppService {
                 throw new Error('WhatsApp no está conectado');
             }
 
-            console.log('📋 Obteniendo lista de conversaciones REALES...');
+            // Verificar cache para evitar spam
+            const now = Date.now();
+            if (this.chatsCache.data && 
+                this.chatsCache.lastUpdate && 
+                (now - this.chatsCache.lastUpdate) < this.chatsCache.expireTime) {
+                console.log(`💨 CACHE HIT - usando datos guardados (${Math.floor((now - this.chatsCache.lastUpdate)/1000)}s ago)`);
+                return this.chatsCache.data;
+            }
+
+            console.log('📋 CACHE MISS - obteniendo conversaciones desde WhatsApp...');
             
-            // Intentar múltiples veces con diferentes timeouts
+            // Intentar múltiples veces con timeouts más generosos
             const attempts = [
-                { timeout: 20000, description: 'Intento 1 (20s)' },
-                { timeout: 30000, description: 'Intento 2 (30s)' },
-                { timeout: 45000, description: 'Intento 3 (45s)' }
+                { timeout: 60000, description: 'Intento 1 (60s)' },
+                { timeout: 90000, description: 'Intento 2 (90s)' },
+                { timeout: 120000, description: 'Intento 3 (120s)' }
             ];
 
             for (let attempt of attempts) {
@@ -285,28 +317,39 @@ class WhatsAppService {
                     console.log(`🎉 ¡ÉXITO! WhatsApp devolvió ${chats.length} chats totales`);
                     
                     if (chats && chats.length > 0) {
-                        // Filtrar chats válidos
+                        // Estadísticas de chats antes del filtrado
+                        const archivedCount = chats.filter(chat => chat.archived).length;
+                        const statusCount = chats.filter(chat => 
+                            chat.id?._serialized?.includes('status@broadcast')).length;
+                        
+                        console.log(`📊 Estadísticas de chats:`);
+                        console.log(`  - Total de chats: ${chats.length}`);
+                        console.log(`  - Chats archivados (excluidos): ${archivedCount}`);
+                        console.log(`  - Estados de WhatsApp (excluidos): ${statusCount}`);
+                        
+                        // Filtrar chats válidos excluyendo archivados y con criterios más específicos
                         const validChats = chats.filter(chat => {
                             try {
-                                // Excluir status de WhatsApp y chats inválidos
+                                // Excluir solo status de WhatsApp
                                 const isValidId = chat && 
                                                chat.id && 
                                                chat.id._serialized && 
-                                               !chat.id._serialized.includes('status@broadcast') &&
-                                               !chat.id._serialized.includes('announcement@') &&
-                                               chat.id._serialized !== 'status@broadcast';
+                                               !chat.id._serialized.includes('status@broadcast');
                                 
-                                // Excluir chats archivados
+                                // IMPORTANTE: Excluir chats archivados
                                 const isNotArchived = !chat.archived;
                                 
-                                // Solo chats con actividad reciente (últimos 30 días)
-                                const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
-                                const hasRecentActivity = chat.timestamp && chat.timestamp > thirtyDaysAgo;
+                                // Criterio más amplio: últimos 6 meses para mostrar más chats activos
+                                const sixMonthsAgo = Date.now() - (180 * 24 * 60 * 60 * 1000);
+                                const sixMonthsAgoInSeconds = Math.floor(sixMonthsAgo / 1000);
                                 
-                                // Solo chats con al menos un mensaje
-                                const hasMessages = chat.lastMessage || chat.unreadCount > 0;
+                                const hasActivity = 
+                                    (chat.lastMessage && chat.lastMessage.timestamp > sixMonthsAgoInSeconds) ||
+                                    (chat.timestamp && chat.timestamp > sixMonthsAgoInSeconds) ||
+                                    (chat.unreadCount && chat.unreadCount > 0) || // Siempre incluir no leídos
+                                    chat.isGroup; // Incluir grupos aunque no tengan actividad reciente
                                 
-                                return isValidId && isNotArchived && (hasRecentActivity || hasMessages);
+                                return isValidId && isNotArchived && hasActivity;
                             } catch (e) {
                                 return false;
                             }
@@ -315,10 +358,14 @@ class WhatsAppService {
                         console.log(`📋 Chats válidos encontrados: ${validChats.length}`);
 
                         if (validChats.length > 0) {
-                            // Ordenar por timestamp y tomar los más recientes
+                            // Ordenar por actividad más reciente: lastMessage timestamp primero, luego chat timestamp
                             const sortedChats = validChats
-                                .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-                                .slice(0, 15); // Máximo 15 chats
+                                .sort((a, b) => {
+                                    const aTime = (a.lastMessage?.timestamp || a.timestamp || 0);
+                                    const bTime = (b.lastMessage?.timestamp || b.timestamp || 0);
+                                    return bTime - aTime; // Más recientes primero (timestamps en segundos de WhatsApp)
+                                })
+                                .slice(0, 25); // Máximo 25 chats
 
                             console.log(`📋 Procesando ${sortedChats.length} conversaciones más recientes...`);
 
@@ -350,28 +397,39 @@ class WhatsAppService {
                                         isGroup: chat.isGroup || false,
                                         isReadOnly: chat.isReadOnly || false,
                                         unreadCount: chat.unreadCount || 0,
-                                        timestamp: chat.timestamp || Date.now(),
+                                        timestamp: chat.lastMessage?.timestamp ? (chat.lastMessage.timestamp * 1000) : (chat.timestamp * 1000 || Date.now()),
                                         lastMessage: chat.lastMessage ? {
                                             id: chat.lastMessage.id?._serialized || `msg_real_${i}`,
                                             body: (chat.lastMessage.body || 'Mensaje multimedia').substring(0, 150),
                                             type: chat.lastMessage.type || 'chat',
-                                            timestamp: chat.lastMessage.timestamp || Date.now(),
+                                            timestamp: chat.lastMessage.timestamp * 1000 || Date.now(),
                                             fromMe: chat.lastMessage.fromMe || false,
-                                            author: chat.lastMessage.author || null
+                                            author: chat.lastMessage.author || null,
+                                            // Información adicional para debugging
+                                            _debug: {
+                                                hasBody: !!chat.lastMessage.body,
+                                                originalLength: chat.lastMessage.body?.length || 0,
+                                                rawTimestamp: chat.lastMessage.timestamp
+                                            }
                                         } : {
                                             id: `msg_empty_real_${i}`,
                                             body: 'Sin mensajes recientes',
                                             type: 'chat',
-                                            timestamp: Date.now(),
+                                            timestamp: chat.timestamp * 1000 || Date.now(),
                                             fromMe: false,
                                             author: null
                                         },
                                         profilePicUrl: null,
-                                        isReal: true
+                                        isReal: true,
+                                        // Información adicional para ordenamiento
+                                        _sortWeight: (chat.lastMessage?.timestamp || chat.timestamp || 0) * 1000
                                     };
                                     
                                     processedChats.push(processedChat);
-                                    console.log(`✅ Chat real ${i + 1} procesado: "${chatName}"`);
+                                    // Solo log cada 5 chats para reducir spam
+                                    if ((i + 1) % 5 === 0 || i === validChats.length - 1) {
+                                        console.log(`✅ Procesados ${i + 1}/${validChats.length} chats`);
+                                    }
                                 } catch (chatError) {
                                     console.error(`❌ Error procesando chat ${i + 1}:`, chatError.message);
                                     continue;
@@ -380,6 +438,21 @@ class WhatsAppService {
 
                             if (processedChats.length > 0) {
                                 console.log(`🎉 ¡ÉXITO TOTAL! ${processedChats.length} conversaciones reales listas`);
+                                
+                                // Mostrar algunos ejemplos de los más recientes para debugging
+                                console.log('📋 Top 5 conversaciones más recientes:');
+                                processedChats.slice(0, 5).forEach((chat, index) => {
+                                    const lastMsgTimestamp = chat.lastMessage.timestamp;
+                                    const lastMsgTime = lastMsgTimestamp > 0 ? 
+                                        new Date(lastMsgTimestamp).toLocaleDateString() : 
+                                        'Sin fecha';
+                                    console.log(`  ${index + 1}. "${chat.name}" - Último mensaje: ${lastMsgTime} (${lastMsgTimestamp})`);
+                                });
+                                
+                                // Guardar en cache
+                                this.chatsCache.data = processedChats;
+                                this.chatsCache.lastUpdate = Date.now();
+                                
                                 return processedChats;
                             }
                         }
@@ -496,19 +569,59 @@ class WhatsAppService {
                 console.log(`📨 Obtenidos ${messages.length} mensajes del chat`);
                 
                 // Procesar mensajes y aplicar offset si es necesario
-                const processedMessages = messages
-                    .slice(offset)
-                    .map(message => ({
-                        id: message.id._serialized,
-                        body: message.body || '',
-                        type: message.type || 'chat',
-                        timestamp: message.timestamp,
-                        fromMe: message.fromMe,
-                        author: message.author,
-                        fromName: message._data?.notifyName || message.from,
-                        hasMedia: message.hasMedia || false,
-                        ack: message.ack || 1
-                    })); // Mantener orden cronológico: antiguos arriba, nuevos abajo
+                const processedMessages = await Promise.all(
+                    messages
+                        .slice(offset)
+                        .map(async (message) => {
+                            const baseMessage = {
+                                id: message.id._serialized,
+                                body: message.body || '',
+                                type: message.type || 'chat',
+                                timestamp: message.timestamp,
+                                fromMe: message.fromMe,
+                                author: message.author,
+                                fromName: message._data?.notifyName || message.from,
+                                hasMedia: message.hasMedia || false,
+                                ack: message.ack || 1
+                            };
+
+                            // Si tiene medios, procesarlos
+                            if (message.hasMedia) {
+                                try {
+                                    const media = await Promise.race([
+                                        message.downloadMedia(),
+                                        new Promise((_, reject) => 
+                                            setTimeout(() => reject(new Error('Media timeout')), 10000)
+                                        )
+                                    ]);
+
+                                    if (media) {
+                                        baseMessage.media = {
+                                            mimetype: media.mimetype,
+                                            data: media.data,
+                                            filename: media.filename || `media_${Date.now()}`,
+                                            isImage: media.mimetype?.startsWith('image/') || false,
+                                            isVideo: media.mimetype?.startsWith('video/') || false,
+                                            isAudio: media.mimetype?.startsWith('audio/') || false,
+                                            isDocument: !media.mimetype?.startsWith('image/') && 
+                                                       !media.mimetype?.startsWith('video/') && 
+                                                       !media.mimetype?.startsWith('audio/') || false,
+                                            isError: false
+                                        };
+                                        console.log(`📸 Media descargado: ${media.mimetype} (${baseMessage.media.filename})`);
+                                    }
+                                } catch (mediaError) {
+                                    console.log(`❌ Error descargando media: ${mediaError.message}`);
+                                    baseMessage.media = {
+                                        isError: true,
+                                        errorMessage: 'No se pudo descargar el archivo multimedia'
+                                    };
+                                }
+                            }
+
+                            return baseMessage;
+                        })
+                ); // Mantener orden cronológico: antiguos arriba, nuevos abajo
 
                 return processedMessages;
             } catch (realChatError) {
@@ -621,7 +734,8 @@ class WhatsAppService {
                 ]);
                 
                 await chat.sendSeen();
-                console.log('✅ Chat marcado como leído:', chatId);
+                // Log reducido para evitar spam
+                // console.log('✅ Chat marcado como leído:', chatId);
                 return true;
             } catch (realChatError) {
                 console.log('✅ Chat demo marcado como leído (fallback):', chatId);

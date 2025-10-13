@@ -25,23 +25,35 @@ function requireGoogleAuth(req, res, next) {
 // Enviar correo real usando Gmail API
 router.post('/send', requireGoogleAuth, async (req, res) => {
   try {
-    const { to, subject, message } = req.body;
-    if (!to || !subject || !message) {
-      return res.status(400).json({ error: 'Faltan campos requeridos.' });
+    const { to, subject, message, body } = req.body;
+    const emailBody = message || body; // Acepta tanto 'message' como 'body'
+    
+    if (!to || !subject || !emailBody) {
+      return res.status(400).json({ error: 'Faltan campos requeridos: to, subject, y message/body.' });
     }
+    
     const oauth2Client = getOAuth2ClientFromSession(req.session);
     const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+    
     const raw = Buffer.from(
-      `To: ${to}\r\nSubject: ${subject}\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n${message}`
+      `To: ${to}\r\nSubject: ${subject}\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n${emailBody}`
     ).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    await gmail.users.messages.send({
+    
+    const result = await gmail.users.messages.send({
       userId: 'me',
       requestBody: { raw }
     });
-    res.json({ success: true, message: 'Correo enviado.' });
+    
+    console.log('✅ Email sent successfully:', result.data.id);
+    
+    res.json({ 
+      success: true, 
+      messageId: result.data.id,
+      message: 'Correo enviado exitosamente' 
+    });
   } catch (err) {
-    console.error('Error enviando correo:', err);
-    res.status(500).json({ error: 'Error enviando correo.' });
+    console.error('❌ Error enviando correo:', err);
+    res.status(500).json({ error: 'Error enviando correo: ' + err.message });
   }
 });
 
