@@ -40,3 +40,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# WhatsApp sessions (ephemeral data)
+backend/src/whatsapp-sessions/
+backend/src/sessions/

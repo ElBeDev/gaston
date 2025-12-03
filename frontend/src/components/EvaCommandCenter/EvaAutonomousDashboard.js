@@ -12,7 +12,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   Typography,
@@ -185,7 +185,7 @@ const EvaAutonomousDashboard = () => {
 
       {/* Estado Principal */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={3}>
+        <Grid size={{ md: 3 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>Estado del Sistema</Typography>
@@ -201,7 +201,7 @@ const EvaAutonomousDashboard = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ md: 3 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>Nivel de Autonomía</Typography>
@@ -225,7 +225,7 @@ const EvaAutonomousDashboard = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ md: 3 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>Aprendizaje</Typography>
@@ -245,7 +245,7 @@ const EvaAutonomousDashboard = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ md: 3 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>Estadísticas</Typography>
@@ -273,7 +273,7 @@ const EvaAutonomousDashboard = () => {
 
       <Grid container spacing={3}>
         {/* Task Scheduler */}
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid size={{ md: 6, lg: 4 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -307,7 +307,7 @@ const EvaAutonomousDashboard = () => {
         </Grid>
 
         {/* Workflow Engine */}
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid size={{ md: 6, lg: 4 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -341,7 +341,7 @@ const EvaAutonomousDashboard = () => {
         </Grid>
 
         {/* Decision Matrix */}
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid size={{ md: 6, lg: 4 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -375,7 +375,7 @@ const EvaAutonomousDashboard = () => {
         </Grid>
 
         {/* Resource Optimizer */}
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid size={{ md: 6, lg: 4 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -409,7 +409,7 @@ const EvaAutonomousDashboard = () => {
         </Grid>
 
         {/* Security Guardian */}
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid size={{ md: 6, lg: 4 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -443,7 +443,7 @@ const EvaAutonomousDashboard = () => {
         </Grid>
 
         {/* Performance Tuner */}
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid size={{ md: 6, lg: 4 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -486,7 +486,7 @@ const EvaAutonomousDashboard = () => {
           
           <Grid container spacing={3}>
             {Object.entries(autonomousData.components.performanceTuner.metrics).map(([metric, data]) => (
-              <Grid item xs={6} md={2} key={metric}>
+              <Grid size={{ md: 2 }}key={metric}>
                 <Box sx={{ textAlign: 'center' }}>
                   <Typography variant="h6" color="primary">
                     {data.current?.toFixed(1) || 0}

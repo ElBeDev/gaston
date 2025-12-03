@@ -152,7 +152,7 @@ app.set('socketio', io);
 app.use('/api/chat', require('./routes/chatRoutes'));
 app.use('/api/context', require('./routes/context'));
 app.use('/api/crm', require('./routes/crmRoutes'));
-app.use('/api/dashboard', require('./routes/dashboard')); // NEW: Dashboard routes for Eva Intelligence
+app.use('/api/dashboard', require('./routes/dashboardRoutes')); // Dashboard stats routes
 app.use('/api/multimodal', require('./routes/multimodal')); // NEW: Multimodal processing routes
 app.use('/api/autonomous', require('./routes/autonomous')); // NEW: Autonomous Agent System routes
 app.use('/api/google', require('./routes/googleWorkspace')); // NEW: Google Workspace Integration routes

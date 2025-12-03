@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   Button,
@@ -500,7 +500,7 @@ const AnalyticsPage = () => {
 
       {activeTab === 3 && analytics && (
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12 }} sm={4}>
+          <Grid size={{ sm: 4 }}>
             <MetricCard
               title="Usuarios Activos"
               value={analytics.users.activeUsers}
@@ -510,7 +510,7 @@ const AnalyticsPage = () => {
               color="#2563eb"
             />
           </Grid>
-          <Grid size={{ xs: 12 }} sm={4}>
+          <Grid size={{ sm: 4 }}>
             <MetricCard
               title="Nuevos Usuarios"
               value={analytics.users.newUsers}
@@ -520,7 +520,7 @@ const AnalyticsPage = () => {
               color="#059669"
             />
           </Grid>
-          <Grid size={{ xs: 12 }} sm={4}>
+          <Grid size={{ sm: 4 }}>
             <MetricCard
               title="Usuarios Recurrentes"
               value={analytics.users.returningUsers}

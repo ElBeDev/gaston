@@ -10,7 +10,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   Chip,

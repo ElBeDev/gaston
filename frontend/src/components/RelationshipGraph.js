@@ -138,7 +138,7 @@ const RelationshipGraph = ({ contact }) => {
 
           {/* Network Stats */}
           <Grid container spacing={1}>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <Paper sx={{ p: 1.5, textAlign: 'center', bgcolor: '#f8fafc' }}>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#2563eb' }}>
                   {networkInsights.totalConnections}
@@ -148,7 +148,7 @@ const RelationshipGraph = ({ contact }) => {
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <Paper sx={{ p: 1.5, textAlign: 'center', bgcolor: '#f8fafc' }}>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#059669' }}>
                   {networkInsights.strongConnections}

@@ -118,7 +118,7 @@ const UnifiedChat = () => {
     try {
       setVoiceStatus("Conectando...");
       
-      const ws = new WebSocket(`ws://localhost:3002/stream`);
+      const ws = new WebSocket(`ws://localhost:3003/stream`);
       wsRef.current = ws;
 
       ws.onopen = () => {

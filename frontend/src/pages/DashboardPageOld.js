@@ -3,7 +3,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import {
   Box,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   Typography,
@@ -583,16 +583,16 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
                 Demos de Eva
               </Typography>
               <Grid container spacing={2}>
-                <Grid size={{ xs: 12 }} sm={6}>
+                <Grid size={{ sm: 6 }}>
                   <EvaProactividadDemo />
                 </Grid>
-                <Grid size={{ xs: 12 }} sm={6}>
+                <Grid size={{ sm: 6 }}>
                   <EvaMulticanalDemo />
                 </Grid>
-                <Grid size={{ xs: 12 }} sm={6}>
+                <Grid size={{ sm: 6 }}>
                   <EvaReunionesDemo />
                 </Grid>
-                <Grid size={{ xs: 12 }} sm={6}>
+                <Grid size={{ sm: 6 }}>
                   <EvaWorkflowsDemo />
                 </Grid>
               </Grid>
@@ -684,7 +684,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
 
       {/* Analytics Widgets */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid size={{ xs: 12 }} sm={12} md={6}>
+        <Grid size={{ sm: 12, md: 6 }}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
@@ -708,7 +708,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12 }} sm={12} md={6}>
+        <Grid size={{ sm: 12, md: 6 }}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
@@ -738,7 +738,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12 }} sm={12} md={6}>
+        <Grid size={{ sm: 12, md: 6 }}>
           <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
@@ -800,7 +800,7 @@ const StandardDashboardContent = ({ dashboardData, navigate, formatTimestamp }) 
               </Typography>
               <Grid container spacing={2}>
                 {quickActions.map((action, index) => (
-                  <Grid size={{ xs: 12 }} sm={6} md={4} key={index}>
+                  <Grid size={{ sm: 6, md: 4 }}key={index}>
                     <Button
                       variant="outlined"
                       color={action.color}

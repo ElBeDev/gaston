@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Container,
-  Grid,
+  Grid2 as Grid,
   Typography,
   Paper,
   Tabs,

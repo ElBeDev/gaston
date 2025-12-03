@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
+  Grid2 as Grid,
   Button,
   Chip,
   Box,
@@ -280,28 +280,28 @@ const IntegrationsCard = ({ integrations, onToggleIntegration, onRefresh }) => {
         <DialogContent>
           {selectedIntegration && (
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ sm: 6 }}>
                 <Typography variant="subtitle2">Estado:</Typography>
                 <Typography variant="body2" color="textSecondary">
                   {selectedIntegration.status}
                 </Typography>
               </Grid>
               
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ sm: 6 }}>
                 <Typography variant="subtitle2">Habilitado:</Typography>
                 <Typography variant="body2" color="textSecondary">
                   {selectedIntegration.enabled ? 'Sí' : 'No'}
                 </Typography>
               </Grid>
               
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Typography variant="subtitle2">Servicios:</Typography>
                 <Typography variant="body2" color="textSecondary">
                   {selectedIntegration.services?.join(', ') || 'N/A'}
                 </Typography>
               </Grid>
               
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Typography variant="subtitle2">Configuración:</Typography>
                 <Box component="pre" sx={{ 
                   backgroundColor: 'grey.100', 
@@ -315,7 +315,7 @@ const IntegrationsCard = ({ integrations, onToggleIntegration, onRefresh }) => {
               </Grid>
               
               {selectedIntegration.errors && selectedIntegration.errors.length > 0 && (
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant="subtitle2" color="error">Errores:</Typography>
                   {selectedIntegration.errors.map((error, index) => (
                     <Typography key={index} variant="body2" color="error">

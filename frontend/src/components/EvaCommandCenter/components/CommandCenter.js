@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
+  Grid2 as Grid,
   Button,
   TextField,
   Box,
@@ -108,7 +108,7 @@ const CommandCenter = ({ onExecuteCommand, systemStatus }) => {
   return (
     <Grid container spacing={3}>
       {/* Comandos Predefinidos */}
-      <Grid item xs={12} md={8}>
+      <Grid size={{ md: 8 }}>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -130,7 +130,7 @@ const CommandCenter = ({ onExecuteCommand, systemStatus }) => {
                 <AccordionDetails>
                   <Grid container spacing={1}>
                     {category.commands.map((cmd, cmdIndex) => (
-                      <Grid item xs={12} sm={6} md={4} key={cmdIndex}>
+                      <Grid size={{ sm: 6, md: 4 }}key={cmdIndex}>
                         <Paper
                           variant="outlined"
                           sx={{
@@ -162,7 +162,7 @@ const CommandCenter = ({ onExecuteCommand, systemStatus }) => {
       </Grid>
 
       {/* Comando Personalizado */}
-      <Grid item xs={12} md={4}>
+      <Grid size={{ md: 4 }}>
         <Card>
           <CardContent>
             <Box display="flex" alignItems="center" mb={2}>
@@ -239,7 +239,7 @@ const CommandCenter = ({ onExecuteCommand, systemStatus }) => {
 
       {/* Resultado */}
       {lastResult && (
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -256,12 +256,12 @@ const CommandCenter = ({ onExecuteCommand, systemStatus }) => {
               </Alert>
 
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ sm: 6 }}>
                   <Typography variant="subtitle2">Comando:</Typography>
                   <Chip label={lastResult.command} variant="outlined" />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ sm: 6 }}>
                   <Typography variant="subtitle2">Timestamp:</Typography>
                   <Typography variant="body2" color="textSecondary">
                     {new Date(lastResult.timestamp).toLocaleString()}
@@ -269,7 +269,7 @@ const CommandCenter = ({ onExecuteCommand, systemStatus }) => {
                 </Grid>
 
                 {lastResult.params && Object.keys(lastResult.params).length > 0 && (
-                  <Grid item xs={12}>
+                  <Grid size={{ xs: 12 }}>
                     <Typography variant="subtitle2">Parámetros:</Typography>
                     <Box component="pre" sx={{
                       backgroundColor: 'grey.100',
@@ -283,7 +283,7 @@ const CommandCenter = ({ onExecuteCommand, systemStatus }) => {
                   </Grid>
                 )}
 
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant="subtitle2">
                     {lastResult.success ? 'Resultado:' : 'Error:'}
                   </Typography>

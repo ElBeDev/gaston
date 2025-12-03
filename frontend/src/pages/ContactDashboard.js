@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Box, 
   Paper, 
-  Grid, 
+  Grid2 as Grid, 
   Typography,
   Tabs,
   Tab,
@@ -79,7 +79,7 @@ const ContactDashboard = () => {
 
         {/* Quick Stats */}
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12 }} sm={6} md={2}>
+          <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#2563eb' }}>
@@ -91,7 +91,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid size={{ xs: 12 }} sm={6} md={2}>
+          <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#059669' }}>
@@ -103,7 +103,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid size={{ xs: 12 }} sm={6} md={2}>
+          <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#7c3aed' }}>
@@ -115,7 +115,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid size={{ xs: 12 }} sm={6} md={2}>
+          <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#dc2626' }}>
@@ -127,7 +127,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid size={{ xs: 12 }} sm={6} md={2}>
+          <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#be185d' }}>
@@ -139,7 +139,7 @@ const ContactDashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid size={{ xs: 12 }} sm={6} md={2}>
+          <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#ea580c' }}>

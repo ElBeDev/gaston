@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Typography,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   Button,
@@ -24,7 +24,6 @@ import {
   Email,
   WhatsApp,
   Analytics,
-  SmartToy,
   Speed,
   Security,
   Cloud,
@@ -33,10 +32,12 @@ import {
   Work,
   Note
 } from '@mui/icons-material';
+import EvaAvatar from '../components/EvaAvatar';
+
 const DashboardPage = () => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalConversations: 0,
     totalContacts: 0,
@@ -44,24 +45,48 @@ const DashboardPage = () => {
     totalTasks: 0,
     totalNotes: 0,
     totalEmails: 0,
-    whatsappConnected: false
+    whatsappConnected: false,
+    completionRate: 0
   });
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [error, setError] = useState(null);
 
-  // Simular carga de datos (reemplazar con API real)
+  // Cargar datos reales desde el backend
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setStats({
-        totalConversations: 24,
-        totalContacts: 156,
-        totalProjects: 12,
-        totalTasks: 8,
-        totalNotes: 42,
-        totalEmails: 3,
-        whatsappConnected: false
-      });
-      setLoading(false);
-    }, 1000);
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const response = await fetch('http://localhost:3002/api/dashboard/stats?userId=gaston');
+        const data = await response.json();
+        
+        if (data.success) {
+          setStats(data.stats);
+          setRecentActivity(data.recentActivity || []);
+        } else {
+          throw new Error(data.error || 'Error al cargar datos');
+        }
+      } catch (err) {
+        console.error('❌ Error fetching dashboard data:', err);
+        setError('No se pudieron cargar las estadísticas. Mostrando datos limitados.');
+        // Set minimal default values on error
+        setStats({
+          totalConversations: 0,
+          totalContacts: 0,
+          totalProjects: 0,
+          totalTasks: 0,
+          totalNotes: 0,
+          totalEmails: 0,
+          whatsappConnected: false,
+          completionRate: 0
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
   }, []);
 
   if (loading) {
@@ -83,27 +108,40 @@ const DashboardPage = () => {
         ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)'
         : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
     }}>
+      {/* Error Alert */}
+      {error && (
+        <Box sx={{ mb: 3 }}>
+          <Paper 
+            sx={{ 
+              p: 2, 
+              bgcolor: alpha('#ef4444', 0.1), 
+              border: `1px solid ${alpha('#ef4444', 0.3)}`,
+              borderRadius: 2
+            }}
+          >
+            <Typography variant="body2" sx={{ color: '#dc2626' }}>
+              ⚠️ {error}
+            </Typography>
+          </Paper>
+        </Box>
+      )}
+      
       {/* Header Section */}
       <Box sx={{ mb: 6 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <Avatar 
-            sx={{ 
-              width: 60, 
-              height: 60, 
-              mr: 3,
-              backgroundColor: '#2563eb', // Azul profesional sólido
-              fontSize: '1.5rem',
-              color: 'white'
-            }}
-          >
-            <SmartToy />
-          </Avatar>
-          <Box>
+          <EvaAvatar 
+            status="online"
+            size="large"
+            showStatus={false}
+            animated={true}
+            onClick={() => navigate('/chat')}
+          />
+          <Box sx={{ ml: 3 }}>
             <Typography 
               variant="h3" 
               sx={{ 
                 fontWeight: 700,
-                color: '#1e293b', // Gris oscuro profesional
+                color: '#1e293b',
                 mb: 0.5
               }}
             >
@@ -227,7 +265,7 @@ const DashboardPage = () => {
 
         {/* Recent Activity & AI Intelligence */}
         <Grid size={{ xs: 12, md: 8 }}>
-          <RecentActivityCard />
+          <RecentActivityCard activity={recentActivity} />
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <SystemStatusCard />
@@ -461,37 +499,42 @@ const EvaCapabilitiesCard = () => {
 };
 
 // Recent Activity Card
-const RecentActivityCard = () => {
-  const activities = [
-    {
-      type: 'chat',
-      message: 'Nueva conversación iniciada',
-      time: 'Hace 5 minutos',
-      icon: <Chat />,
-      color: '#2563eb'
-    },
-    {
-      type: 'contact',
-      message: 'Contacto agregado: Juan Pérez',
-      time: 'Hace 1 hora',
-      icon: <Person />,
-      color: '#059669'
-    },
-    {
-      type: 'email',
-      message: 'Email enviado exitosamente',
-      time: 'Hace 2 horas',
-      icon: <Email />,
-      color: '#be185d'
-    },
-    {
-      type: 'task',
-      message: 'Tarea completada: Llamar cliente',
-      time: 'Hace 3 horas',
-      icon: <Assignment />,
-      color: '#dc2626'
+const RecentActivityCard = ({ activity = [] }) => {
+  // Iconos por tipo de actividad
+  const getActivityIcon = (type) => {
+    switch(type) {
+      case 'chat': return <Chat />;
+      case 'contact': return <Person />;
+      case 'task': return <Assignment />;
+      case 'email': return <Email />;
+      default: return <Notes />;
     }
-  ];
+  };
+
+  // Colores por tipo
+  const getActivityColor = (type) => {
+    switch(type) {
+      case 'chat': return '#2563eb';
+      case 'contact': return '#059669';
+      case 'task': return '#dc2626';
+      case 'email': return '#be185d';
+      default: return '#7c3aed';
+    }
+  };
+
+  // Formatear timestamp
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 60) return `Hace ${diffMins} minutos`;
+    if (diffHours < 24) return `Hace ${diffHours} horas`;
+    return `Hace ${diffDays} días`;
+  };
 
   return (
     <Card sx={{ height: '100%' }}>
@@ -517,32 +560,49 @@ const RecentActivityCard = () => {
             Ver Todo
           </Button>
         </Box>
-        {activities.map((activity, index) => (
-          <Box key={index} sx={{ mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar 
-                sx={{ 
-                  width: 36, 
-                  height: 36, 
-                  mr: 2,
-                  backgroundColor: alpha(activity.color, 0.1),
-                  color: activity.color
-                }}
-              >
-                {activity.icon}
-              </Avatar>
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="body1" sx={{ fontWeight: 500, color: '#1e293b' }}>
-                  {activity.message}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {activity.time}
-                </Typography>
-              </Box>
-            </Box>
-            {index < activities.length - 1 && <Divider sx={{ mt: 2 }} />}
+        
+        {activity.length === 0 ? (
+          <Box sx={{ textAlign: 'center', py: 4 }}>
+            <Typography variant="body1" color="text.secondary">
+              No hay actividad reciente
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              Comienza a usar Eva para ver tu actividad aquí
+            </Typography>
           </Box>
-        ))}
+        ) : (
+          activity.map((item, index) => (
+            <Box key={index} sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar 
+                  sx={{ 
+                    width: 36, 
+                    height: 36, 
+                    mr: 2,
+                    backgroundColor: alpha(getActivityColor(item.type), 0.1),
+                    color: getActivityColor(item.type)
+                  }}
+                >
+                  {getActivityIcon(item.type)}
+                </Avatar>
+                <Box sx={{ flex: 1 }}>
+                  <Typography variant="body1" sx={{ fontWeight: 500, color: '#1e293b' }}>
+                    {item.title || item.message}
+                  </Typography>
+                  {item.description && (
+                    <Typography variant="body2" color="text.secondary">
+                      {item.description}
+                    </Typography>
+                  )}
+                  <Typography variant="caption" color="text.secondary">
+                    {formatTime(item.timestamp)}
+                  </Typography>
+                </Box>
+              </Box>
+              {index < activity.length - 1 && <Divider sx={{ mt: 2 }} />}
+            </Box>
+          ))
+        )}
       </CardContent>
     </Card>
   );

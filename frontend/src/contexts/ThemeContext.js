@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { createTheme } from '@mui/material/styles';
+import { designTokens } from '../styles/designTokens';
 
 const ThemeContext = createContext();
 
@@ -29,68 +30,132 @@ export const ThemeContextProvider = ({ children }) => {
     palette: {
       mode: 'light',
       primary: {
-        main: '#667eea',
-        light: '#9bb5ff',
-        dark: '#3f51b5',
+        main: designTokens.colors.primary.main,
+        light: designTokens.colors.primary.light,
+        dark: designTokens.colors.primary.dark,
       },
       secondary: {
-        main: '#f093fb',
-        light: '#ff94fe',
-        dark: '#c163c8',
+        main: designTokens.colors.info.main,
+        light: designTokens.colors.info.light,
+        dark: designTokens.colors.info.dark,
+      },
+      success: {
+        main: designTokens.colors.success.main,
+        light: designTokens.colors.success.light,
+        dark: designTokens.colors.success.dark,
+      },
+      warning: {
+        main: designTokens.colors.warning.main,
+        light: designTokens.colors.warning.light,
+        dark: designTokens.colors.warning.dark,
+      },
+      error: {
+        main: designTokens.colors.error.main,
+        light: designTokens.colors.error.light,
+        dark: designTokens.colors.error.dark,
+      },
+      info: {
+        main: designTokens.colors.info.main,
+        light: designTokens.colors.info.light,
+        dark: designTokens.colors.info.dark,
       },
       background: {
-        default: '#f5f5f5',
+        default: designTokens.colors.neutral[50],
         paper: '#ffffff',
+      },
+      text: {
+        primary: designTokens.colors.neutral[900],
+        secondary: designTokens.colors.neutral[600],
       },
     },
     typography: {
-      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: designTokens.typography.fontFamily.sans,
       h4: {
-        fontWeight: 600,
+        fontWeight: designTokens.typography.fontWeight.semibold,
       },
       h6: {
-        fontWeight: 500,
+        fontWeight: designTokens.typography.fontWeight.medium,
       },
     },
     shape: {
-      borderRadius: 12,
+      borderRadius: parseInt(designTokens.borderRadius.md),
     },
+    shadows: [
+      'none',
+      designTokens.shadows.sm,
+      designTokens.shadows.base,
+      designTokens.shadows.md,
+      designTokens.shadows.lg,
+      designTokens.shadows.xl,
+      designTokens.shadows['2xl'],
+      ...Array(18).fill('none')
+    ]
   });
 
   const darkTheme = createTheme({
     palette: {
       mode: 'dark',
       primary: {
-        main: '#667eea',
-        light: '#9bb5ff',
-        dark: '#3f51b5',
+        main: designTokens.colors.primary.main,
+        light: designTokens.colors.primary.light,
+        dark: designTokens.colors.primary.dark,
       },
       secondary: {
-        main: '#f093fb',
-        light: '#ff94fe',
-        dark: '#c163c8',
+        main: designTokens.colors.info.main,
+        light: designTokens.colors.info.light,
+        dark: designTokens.colors.info.dark,
+      },
+      success: {
+        main: designTokens.colors.success.main,
+        light: designTokens.colors.success.light,
+        dark: designTokens.colors.success.dark,
+      },
+      warning: {
+        main: designTokens.colors.warning.main,
+        light: designTokens.colors.warning.light,
+        dark: designTokens.colors.warning.dark,
+      },
+      error: {
+        main: designTokens.colors.error.main,
+        light: designTokens.colors.error.light,
+        dark: designTokens.colors.error.dark,
+      },
+      info: {
+        main: designTokens.colors.info.main,
+        light: designTokens.colors.info.light,
+        dark: designTokens.colors.info.dark,
       },
       background: {
-        default: '#121212',
-        paper: '#1e1e1e',
+        default: designTokens.colors.neutral[900],
+        paper: designTokens.colors.neutral[800],
       },
       text: {
         primary: '#ffffff',
-        secondary: '#b0b0b0',
+        secondary: designTokens.colors.neutral[400],
       },
     },
     typography: {
-      fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: designTokens.typography.fontFamily.sans,
       h4: {
-        fontWeight: 600,
+        fontWeight: designTokens.typography.fontWeight.semibold,
       },
       h6: {
-        fontWeight: 500,
+        fontWeight: designTokens.typography.fontWeight.medium,
       },
     },
     shape: {
-      borderRadius: 12,
+      borderRadius: parseInt(designTokens.borderRadius.md),
     },
+    shadows: [
+      'none',
+      designTokens.shadows.sm,
+      designTokens.shadows.base,
+      designTokens.shadows.md,
+      designTokens.shadows.lg,
+      designTokens.shadows.xl,
+      designTokens.shadows['2xl'],
+      ...Array(18).fill('none')
+    ]
   });
 
   const currentTheme = darkMode ? darkTheme : lightTheme;

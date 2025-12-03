@@ -74,7 +74,7 @@ class WhatsAppService {
         });
 
         // QR code para autenticación inicial
-        this.client.on('qr', (qr) => {
+        this.client.on('qr', async (qr) => {
             console.log('📱 Código QR generado para WhatsApp');
             this.qrString = qr;
             this.connectionStatus = 'qr_required';
@@ -84,9 +84,10 @@ class WhatsAppService {
             
             // Convertir QR a base64 para frontend
             try {
-                const qrBase64 = require('qrcode').toDataURL(qr).then(url => {
-                    this.emitEvent('qr', url);
-                });
+                const QRCode = require('qrcode');
+                const qrBase64 = await QRCode.toDataURL(qr);
+                console.log('✅ QR convertido a base64, emitiendo evento...');
+                this.emitEvent('qr', qrBase64);
             } catch (error) {
                 console.error('❌ Error al convertir QR a base64:', error);
                 this.emitEvent('qr', qr); // Fallback al string raw
@@ -104,7 +105,7 @@ class WhatsAppService {
                 const info = this.client.info;
                 this.connectedNumber = info?.wid?.user || info?.me?.user || 'unknown';
                 
-                console.log('📱 Info del cliente:', JSON.stringify(info, null, 2));
+                console.log('📱 Info del cliente:', info);
                 
                 this.emitEvent('ready', {
                     number: this.connectedNumber,
@@ -120,18 +121,19 @@ class WhatsAppService {
                 });
             }
 
-            // Cargar conversaciones existentes después de un momento
+            // Cargar conversaciones existentes después de un momento más largo
             setTimeout(async () => {
                 try {
                     console.log('📋 Cargando conversaciones existentes...');
                     const chats = await this.getChats();
                     console.log(`✅ Cargadas ${chats.length} conversaciones, emitiendo evento...`);
+                    console.log(`📋 Emitiendo ${chats.length} conversaciones cargadas via WebSocket`);
                     this.emitEvent('chats_loaded', chats);
                     console.log(`📡 Evento chats_loaded emitido con ${chats.length} conversaciones`);
                 } catch (error) {
                     console.error('❌ Error al cargar conversaciones iniciales:', error);
                 }
-            }, 2000); // Esperar 2 segundos para que todo esté listo
+            }, 5000); // Esperar 5 segundos para que todo esté completamente listo
         });
 
         // Cliente autenticado
@@ -174,28 +176,88 @@ class WhatsAppService {
         });
     }
 
-    // Manejar mensajes entrantes
+    // Manejar mensajes entrantes con Eva AutoResponse
     async handleIncomingMessage(message) {
         console.log('📨 Mensaje recibido:', {
             from: message.from,
+            fromName: message._data.notifyName || 'Usuario',
             body: message.body,
             type: message.type
         });
 
-        // Evitar responder a mensajes propios o de grupos por ahora
-        if (message.fromMe || message.from.includes('@g.us')) {
+        // Evitar procesar mensajes propios
+        if (message.fromMe) {
             return;
         }
 
-        // Emitir evento para que otros servicios puedan manejar el mensaje
-        this.emitEvent('message', {
+        // Preparar datos del mensaje para Eva
+        const messageData = {
             id: message.id._serialized,
             from: message.from,
-            fromName: message._data.notifyName || 'Usuario',
-            body: message.body,
+            senderName: message._data.notifyName || message._data.pushName || 'Usuario',
+            body: message.body || '',
             type: message.type,
-            timestamp: new Date()
-        });
+            timestamp: message.timestamp,
+            isGroup: message.from.includes('@g.us'),
+            hasMedia: message.hasMedia || false,
+            notifyName: message._data.notifyName
+        };
+
+        // Emitir evento para que otros servicios puedan manejar el mensaje
+        this.emitEvent('message', messageData);
+
+        // 🤖 Procesar con Eva Auto Response (solo para mensajes privados por ahora)
+        if (!messageData.isGroup && messageData.body && messageData.body.trim().length > 0) {
+            try {
+                console.log('🤖 Eva analizando mensaje para auto-respuesta...');
+                
+                // Importar Eva Auto Response Service de forma dinámica
+                const evaAutoResponse = require('./evaAutoResponseService');
+                
+                // Analizar si Eva debe responder automáticamente
+                const responseDecision = await evaAutoResponse.analyzeIncomingMessage(messageData);
+                
+                if (responseDecision.shouldRespond && responseDecision.response) {
+                    console.log('✅ Eva decidió responder automáticamente:', {
+                        confidence: responseDecision.confidence,
+                        type: responseDecision.type,
+                        requiresApproval: responseDecision.requiresApproval
+                    });
+                    
+                    // Si requiere aprobación manual (confianza media), notificar al usuario
+                    if (responseDecision.requiresApproval) {
+                        console.log('⚠️ Respuesta requiere aprobación - notificando al propietario...');
+                        // Aquí podrías implementar notificación al usuario principal
+                        // Por ahora, continuamos con la respuesta automática
+                    }
+                    
+                    // Enviar respuesta automática
+                    setTimeout(async () => {
+                        try {
+                            await this.sendMessage(messageData.from, responseDecision.response);
+                            console.log('✅ Eva respondió automáticamente a:', messageData.senderName);
+                            
+                            // Emitir evento de respuesta automática
+                            this.emitEvent('eva_auto_response', {
+                                originalMessage: messageData,
+                                response: responseDecision.response,
+                                confidence: responseDecision.confidence,
+                                type: responseDecision.type
+                            });
+                            
+                        } catch (sendError) {
+                            console.error('❌ Error enviando respuesta automática:', sendError);
+                        }
+                    }, 2000); // Esperar 2 segundos para parecer más natural
+                } else {
+                    console.log('ℹ️ Eva decidió NO responder automáticamente:', responseDecision.reasoning);
+                }
+                
+            } catch (evaError) {
+                console.error('❌ Error en Eva Auto Response:', evaError);
+                // Continuar sin auto-respuesta si hay error
+            }
+        }
     }
 
     // Enviar mensaje

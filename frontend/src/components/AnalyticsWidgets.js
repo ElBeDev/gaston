@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   Typography,
@@ -117,7 +117,7 @@ const AnalyticsWidgets = () => {
         {/* Quick Stats Row */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {quickStats.map((stat, index) => (
-            <Grid item xs key={index}>
+            <Grid size="grow" key={index}>
               <Box sx={{ 
                 textAlign: 'center', 
                 p: 1.5, 

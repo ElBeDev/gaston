@@ -8,7 +8,7 @@ import {
   Chip,
   Button,
   TextField,
-  Grid,
+  Grid2 as Grid,
   Divider,
   List,
   ListItem,
@@ -203,7 +203,7 @@ const ContactProfile = ({ contact }) => {
 
           {/* Contact Information */}
           <Grid container spacing={2}>
-            <Grid size={{ xs: 12 }} sm={6}>
+            <Grid size={{ sm: 6 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 <Email sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Typography variant="body2" color="text.secondary">
@@ -211,7 +211,7 @@ const ContactProfile = ({ contact }) => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid size={{ xs: 12 }} sm={6}>
+            <Grid size={{ sm: 6 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 <Phone sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Typography variant="body2" color="text.secondary">
@@ -219,7 +219,7 @@ const ContactProfile = ({ contact }) => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid size={{ xs: 12 }} sm={6}>
+            <Grid size={{ sm: 6 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 <CalendarToday sx={{ fontSize: 20, color: 'text.secondary' }} />
                 <Typography variant="body2" color="text.secondary">

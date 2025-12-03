@@ -307,8 +307,8 @@ const ContactSearch = ({ onSelectContact, selectedContactId }) => {
                         </Box>
                       }
                       secondary={
-                        <Box>
-                          <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                        <Box component="span">
+                          <Typography component="span" variant="body2" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
                             {contact.company || 'Sin empresa'}
                           </Typography>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
@@ -335,7 +335,7 @@ const ContactSearch = ({ onSelectContact, selectedContactId }) => {
                               }}
                             />
                           </Box>
-                          <Typography variant="caption" color="text.disabled">
+                          <Typography component="span" variant="caption" color="text.disabled" sx={{ display: 'block' }}>
                             {getLastInteractionText(contact.metadata?.lastInteraction)}
                           </Typography>
                         </Box>

@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
+  Grid2 as Grid,
   LinearProgress,
   Chip,
   Box,
@@ -62,7 +62,7 @@ const SystemStatusCard = ({ systemStatus, onRefresh }) => {
 
         <Grid container spacing={2}>
           {/* Memoria */}
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ sm: 6 }}>
             <Box mb={2}>
               <Box display="flex" alignItems="center" mb={1}>
                 <MemoryIcon fontSize="small" sx={{ mr: 1 }} />
@@ -79,7 +79,7 @@ const SystemStatusCard = ({ systemStatus, onRefresh }) => {
           </Grid>
 
           {/* Performance */}
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ sm: 6 }}>
             <Box mb={2}>
               <Box display="flex" alignItems="center" mb={1}>
                 <SpeedIcon fontSize="small" sx={{ mr: 1 }} />
@@ -96,7 +96,7 @@ const SystemStatusCard = ({ systemStatus, onRefresh }) => {
           </Grid>
 
           {/* Uptime */}
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ sm: 6 }}>
             <Box display="flex" alignItems="center">
               <TimelineIcon fontSize="small" sx={{ mr: 1 }} />
               <Typography variant="body2">
@@ -106,7 +106,7 @@ const SystemStatusCard = ({ systemStatus, onRefresh }) => {
           </Grid>
 
           {/* Servicios */}
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ sm: 6 }}>
             <Box display="flex" alignItems="center">
               <StorageIcon fontSize="small" sx={{ mr: 1 }} />
               <Typography variant="body2">

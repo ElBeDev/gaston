@@ -228,18 +228,24 @@ class EvaEmailService {
     buildEmailMessage({ to, subject, body, priority }) {
         const recipients = Array.isArray(to) ? to.join(', ') : to;
         
+        // Ensure proper UTF-8 encoding for special characters
+        const utf8Subject = Buffer.from(subject, 'utf8').toString('utf8');
+        const utf8Body = Buffer.from(body, 'utf8').toString('utf8');
+        
         const email = [
             `To: ${recipients}`,
-            `Subject: ${subject}`,
+            `Subject: =?UTF-8?B?${Buffer.from(utf8Subject).toString('base64')}?=`,
+            `Content-Type: text/plain; charset=UTF-8`,
+            `Content-Transfer-Encoding: 8bit`,
             `X-Priority: ${priority === 'high' ? '1' : priority === 'low' ? '5' : '3'}`,
             `X-Mailer: Eva Autonomous System`,
             '',
-            body,
+            utf8Body,
             '',
             '---',
             'Este mensaje fue enviado automáticamente por Eva.',
-            'Eva Autonomous Operations - Sistema de Control Total'
-        ].join('\n');
+            'Eva Autonomous Operations'
+        ].join('\r\n');
 
         return email;
     }

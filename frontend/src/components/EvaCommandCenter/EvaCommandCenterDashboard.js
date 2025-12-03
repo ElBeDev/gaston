@@ -11,7 +11,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-  Grid, 
+  Grid2 as Grid, 
   Card, 
   CardContent, 
   Typography, 
@@ -210,7 +210,7 @@ const EvaCommandCenterDashboard = () => {
       {/* Indicadores de Estado Rápido */}
       {systemStatus && (
         <Grid container spacing={2} mb={3}>
-          <Grid item xs={12} sm={6} md={2.4}>
+          <Grid size={{ sm: 6 }}md={2.4}>
             <Card>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h6" color="primary">
@@ -228,7 +228,7 @@ const EvaCommandCenterDashboard = () => {
             </Card>
           </Grid>
           
-          <Grid item xs={12} sm={6} md={2.4}>
+          <Grid size={{ sm: 6 }}md={2.4}>
             <Card>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h6" color="primary">
@@ -246,7 +246,7 @@ const EvaCommandCenterDashboard = () => {
             </Card>
           </Grid>
           
-          <Grid item xs={12} sm={6} md={2.4}>
+          <Grid size={{ sm: 6 }}md={2.4}>
             <Card>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h6" color="primary">
@@ -264,7 +264,7 @@ const EvaCommandCenterDashboard = () => {
             </Card>
           </Grid>
           
-          <Grid item xs={12} sm={6} md={2.4}>
+          <Grid size={{ sm: 6 }}md={2.4}>
             <Card>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h6" color="primary">
@@ -282,7 +282,7 @@ const EvaCommandCenterDashboard = () => {
             </Card>
           </Grid>
           
-          <Grid item xs={12} sm={6} md={2.4}>
+          <Grid size={{ sm: 6 }}md={2.4}>
             <Card>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
                 <Typography variant="h6" color="primary">
@@ -402,13 +402,13 @@ const EvaCommandCenterDashboard = () => {
         <>
           {activeTab === 0 && (
             <Grid container spacing={3}>
-              <Grid item xs={12} md={8}>
+              <Grid size={{ md: 8 }}>
                 <SystemStatusCard 
                   systemStatus={systemStatus.system} 
                   onRefresh={fetchSystemStatus}
                 />
               </Grid>
-              <Grid item xs={12} md={4}>
+              <Grid size={{ md: 4 }}>
                 <RealTimeMonitor 
                   realTimeStatus={systemStatus.realtime}
                   lastUpdate={lastUpdate}

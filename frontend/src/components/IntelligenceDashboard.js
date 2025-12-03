@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   Typography,
@@ -359,7 +359,7 @@ const IntelligenceDashboard = ({ userId = 'gaston' }) => {
               </Box>
 
               <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Typography variant="body2" gutterBottom>
                     Horarios Pico:
                   </Typography>
@@ -376,7 +376,7 @@ const IntelligenceDashboard = ({ userId = 'gaston' }) => {
                   </Box>
                 </Grid>
                 
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Typography variant="body2" gutterBottom>
                     Tipo de Energía:
                   </Typography>

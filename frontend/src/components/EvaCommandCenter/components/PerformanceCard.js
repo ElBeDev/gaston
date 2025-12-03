@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
+  Grid2 as Grid,
   LinearProgress,
   Box,
   Button,
@@ -52,7 +52,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
   return (
     <Grid container spacing={3}>
       {/* Métricas Principales */}
-      <Grid item xs={12} md={8}>
+      <Grid size={{ md: 8 }}>
         <Card>
           <CardContent>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -69,7 +69,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
 
             <Grid container spacing={2}>
               {/* Tiempo de Respuesta */}
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid size={{ sm: 6, md: 3 }}>
                 <Box textAlign="center">
                   <SpeedIcon color="primary" fontSize="large" />
                   <Typography variant="h6" color="primary">
@@ -88,7 +88,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
               </Grid>
 
               {/* Latencia BD */}
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid size={{ sm: 6, md: 3 }}>
                 <Box textAlign="center">
                   <StorageIcon color="primary" fontSize="large" />
                   <Typography variant="h6" color="primary">
@@ -107,7 +107,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
               </Grid>
 
               {/* Requests por Minuto */}
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid size={{ sm: 6, md: 3 }}>
                 <Box textAlign="center">
                   <TimelineIcon color="primary" fontSize="large" />
                   <Typography variant="h6" color="primary">
@@ -126,7 +126,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
               </Grid>
 
               {/* Tasa de Error */}
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid size={{ sm: 6, md: 3 }}>
                 <Box textAlign="center">
                   <MemoryIcon color="primary" fontSize="large" />
                   <Typography variant="h6" color="primary">
@@ -149,7 +149,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
       </Grid>
 
       {/* Recursos del Sistema */}
-      <Grid item xs={12} md={4}>
+      <Grid size={{ md: 4 }}>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -227,7 +227,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
       </Grid>
 
       {/* Métricas Adicionales */}
-      <Grid item xs={12}>
+      <Grid size={{ xs: 12 }}>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -235,7 +235,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
             </Typography>
             
             <Grid container spacing={2}>
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ sm: 3 }}>
                 <Box textAlign="center">
                   <Typography variant="h6" color="primary">
                     {performance.throughput || 0}
@@ -246,7 +246,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
                 </Box>
               </Grid>
               
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ sm: 3 }}>
                 <Box textAlign="center">
                   <Typography variant="h6" color="primary">
                     {(performance.apiLatency || 0).toFixed(0)}ms
@@ -257,7 +257,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
                 </Box>
               </Grid>
               
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ sm: 3 }}>
                 <Box textAlign="center">
                   <Typography variant="h6" color="primary">
                     {resources.system?.platform || 'N/A'}
@@ -268,7 +268,7 @@ const PerformanceCard = ({ performance, resources, onOptimize }) => {
                 </Box>
               </Grid>
               
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ sm: 3 }}>
                 <Box textAlign="center">
                   <Typography variant="h6" color="primary">
                     {resources.system?.arch || 'N/A'}

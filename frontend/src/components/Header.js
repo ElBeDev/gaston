@@ -18,7 +18,6 @@ import {
   People,
   Analytics,
   Email,
-  CalendarToday,
   WhatsApp,
   Brightness4,
   Brightness7,
@@ -55,14 +54,11 @@ const Header = () => {
 
   const navItems = [
     { label: 'Dashboard', path: '/', icon: <Dashboard /> },
-    { label: 'Chat with Eva', path: '/chat', icon: <Chat /> },
+    { label: 'Chat con Eva', path: '/chat', icon: <Chat /> },
     { label: 'CRM', path: '/crm', icon: <People /> },
     { label: 'Analytics', path: '/analytics', icon: <Analytics /> },
     { label: 'Email', path: '/email', icon: <Email /> },
-    { label: 'Calendar', path: '/calendar', icon: <CalendarToday /> },
     { label: 'WhatsApp', path: '/whatsapp', icon: <WhatsApp /> },
-    { label: 'WhatsApp Web', path: '/whatsapp-web', icon: <WhatsApp /> },
-    { label: 'Eva WhatsApp', path: '/eva-whatsapp', icon: <WhatsApp />, special: true },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -116,36 +112,20 @@ const Header = () => {
               onClick={() => navigate(item.path)}
               startIcon={item.icon}
               sx={{
-                color: item.special ? '#9333ea' : (isActive(item.path) ? '#2563eb' : '#6b7280'),
+                color: isActive(item.path) ? '#2563eb' : '#6b7280',
                 fontWeight: isActive(item.path) ? 'bold' : 'normal',
-                background: isActive(item.path) 
-                  ? (item.special ? 'rgba(147, 51, 234, 0.1)' : 'rgba(37, 99, 235, 0.1)') 
-                  : (item.special ? 'rgba(147, 51, 234, 0.05)' : 'transparent'),
+                background: isActive(item.path) ? 'rgba(37, 99, 235, 0.1)' : 'transparent',
                 borderRadius: 2,
                 px: 2,
                 py: 1,
                 transition: 'all 0.3s ease',
-                border: item.special ? '1px solid rgba(147, 51, 234, 0.2)' : 'none',
                 '&:hover': {
-                  background: item.special ? 'rgba(147, 51, 234, 0.1)' : 'rgba(37, 99, 235, 0.1)',
-                  color: item.special ? '#9333ea' : '#2563eb'
+                  background: 'rgba(37, 99, 235, 0.1)',
+                  color: '#2563eb'
                 }
               }}
             >
               {item.label}
-              {item.special && (
-                <Chip 
-                  label="Eva" 
-                  size="small" 
-                  sx={{ 
-                    ml: 1, 
-                    height: 18, 
-                    fontSize: '0.6rem',
-                    background: 'linear-gradient(45deg, #9333ea, #c084fc)',
-                    color: 'white'
-                  }} 
-                />
-              )}
             </Button>
           ))}
 

@@ -360,6 +360,147 @@ async function handleIncomingMessageWithAI(messageData) {
     }
 }
 
+// ========================
+// 🤖 EVA AUTO-RESPONSE ROUTES
+// ========================
+
+// Obtener estado de Eva Auto Response
+router.get('/eva/status', async (req, res) => {
+    try {
+        const evaAutoResponse = require('../services/evaAutoResponseService');
+        const status = evaAutoResponse.getStatus();
+        
+        res.json({ 
+            success: true, 
+            status: {
+                ...status,
+                description: 'Eva Auto Response System Status'
+            }
+        });
+    } catch (error) {
+        console.error('❌ Error al obtener estado de Eva:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Error al obtener estado de Eva Auto Response' 
+        });
+    }
+});
+
+// Habilitar Eva Auto Response
+router.post('/eva/enable', async (req, res) => {
+    try {
+        const evaAutoResponse = require('../services/evaAutoResponseService');
+        evaAutoResponse.enable();
+        
+        res.json({ 
+            success: true, 
+            message: 'Eva Auto Response habilitada',
+            status: evaAutoResponse.getStatus()
+        });
+    } catch (error) {
+        console.error('❌ Error al habilitar Eva:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Error al habilitar Eva Auto Response' 
+        });
+    }
+});
+
+// Deshabilitar Eva Auto Response
+router.post('/eva/disable', async (req, res) => {
+    try {
+        const evaAutoResponse = require('../services/evaAutoResponseService');
+        evaAutoResponse.disable();
+        
+        res.json({ 
+            success: true, 
+            message: 'Eva Auto Response deshabilitada',
+            status: evaAutoResponse.getStatus()
+        });
+    } catch (error) {
+        console.error('❌ Error al deshabilitar Eva:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Error al deshabilitar Eva Auto Response' 
+        });
+    }
+});
+
+// Actualizar configuración de Eva
+router.post('/eva/config', async (req, res) => {
+    try {
+        const { config } = req.body;
+        
+        if (!config) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Configuración requerida' 
+            });
+        }
+        
+        const evaAutoResponse = require('../services/evaAutoResponseService');
+        evaAutoResponse.updateConfig(config);
+        
+        res.json({ 
+            success: true, 
+            message: 'Configuración de Eva actualizada',
+            status: evaAutoResponse.getStatus()
+        });
+    } catch (error) {
+        console.error('❌ Error al actualizar configuración:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Error al actualizar configuración de Eva' 
+        });
+    }
+});
+
+// Probar Eva Auto Response con un mensaje de ejemplo
+router.post('/eva/test', async (req, res) => {
+    try {
+        const { message, senderName = 'Usuario Test' } = req.body;
+        
+        if (!message) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Mensaje requerido para la prueba' 
+            });
+        }
+        
+        const evaAutoResponse = require('../services/evaAutoResponseService');
+        
+        // Crear datos de mensaje de prueba
+        const testMessageData = {
+            id: `test_${Date.now()}`,
+            from: 'test@c.us',
+            senderName: senderName,
+            body: message,
+            type: 'chat',
+            timestamp: Math.floor(Date.now() / 1000),
+            isGroup: false,
+            hasMedia: false
+        };
+        
+        // Analizar mensaje con Eva
+        const responseDecision = await evaAutoResponse.analyzeIncomingMessage(testMessageData);
+        
+        res.json({ 
+            success: true, 
+            testMessage: testMessageData,
+            evaDecision: responseDecision,
+            message: responseDecision.shouldRespond 
+                ? 'Eva respondería automáticamente' 
+                : 'Eva NO respondería automáticamente'
+        });
+    } catch (error) {
+        console.error('❌ Error al probar Eva:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Error al probar Eva Auto Response' 
+        });
+    }
+});
+
 module.exports = {
     router,
     setupWhatsAppWebSocket

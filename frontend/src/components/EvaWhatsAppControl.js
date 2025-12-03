@@ -8,7 +8,7 @@ import {
   Button,
   TextField,
   MenuItem,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
   CardActions,
@@ -95,7 +95,7 @@ const EvaWhatsAppControl = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/eva/whatsapp/status');
+      const response = await fetch('http://localhost:3002/eva/whatsapp/status');
       const data = await response.json();
       
       if (data.success) {
@@ -118,7 +118,7 @@ const EvaWhatsAppControl = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/eva/whatsapp/enable', {
+      const response = await fetch('http://localhost:3002/eva/whatsapp/enable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ settings })
@@ -146,7 +146,7 @@ const EvaWhatsAppControl = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/eva/whatsapp/disable', {
+      const response = await fetch('http://localhost:3002/eva/whatsapp/disable', {
         method: 'POST'
       });
       
@@ -181,7 +181,7 @@ const EvaWhatsAppControl = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/eva/whatsapp/settings', {
+      const response = await fetch('http://localhost:3002/eva/whatsapp/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ settings })
@@ -210,7 +210,7 @@ const EvaWhatsAppControl = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('/eva/whatsapp/send-message', {
+      const response = await fetch('http://localhost:3002/eva/whatsapp/send-message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -264,10 +264,10 @@ const EvaWhatsAppControl = () => {
       {/* Header */}
       <Paper sx={{ p: 3, mb: 3, backgroundColor: '#1e3a8a', color: 'white' }}>
         <Grid container alignItems="center" spacing={2}>
-          <Grid item>
+          <Grid>
             <WhatsApp sx={{ fontSize: 40 }} />
           </Grid>
-          <Grid item xs>
+          <Grid size="grow">
             <Typography variant="h4" gutterBottom>
               📱 Eva WhatsApp Autonomous Control
             </Typography>
@@ -275,7 +275,7 @@ const EvaWhatsAppControl = () => {
               Sistema inteligente de respuestas automáticas de WhatsApp
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid>
             <Chip
               icon={whatsappStatus.autoResponseEnabled ? <CheckCircle /> : <Close />}
               label={getStatusText()}
@@ -288,20 +288,46 @@ const EvaWhatsAppControl = () => {
 
       {/* Alerts */}
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+        <Alert 
+          severity="error" 
+          sx={{ mb: 2 }}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setError(null)}
+            >
+              <Close fontSize="inherit" />
+            </IconButton>
+          }
+        >
           {error}
         </Alert>
       )}
       
       {success && (
-        <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+        <Alert 
+          severity="success" 
+          sx={{ mb: 2 }}
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => setSuccess(null)}
+            >
+              <Close fontSize="inherit" />
+            </IconButton>
+          }
+        >
           {success}
         </Alert>
       )}
 
       <Grid container spacing={3}>
         {/* Panel de Control Principal */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -392,7 +418,7 @@ const EvaWhatsAppControl = () => {
         </Grid>
 
         {/* Panel de Configuración Rápida */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -469,7 +495,7 @@ const EvaWhatsAppControl = () => {
         </Grid>
 
         {/* Panel de Estadísticas Rápidas */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -477,7 +503,7 @@ const EvaWhatsAppControl = () => {
               </Typography>
               
               <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Box textAlign="center">
                     <Typography variant="h4" color="primary">
                       {whatsappStatus.stats?.totalMessagesReceived || 0}
@@ -488,7 +514,7 @@ const EvaWhatsAppControl = () => {
                   </Box>
                 </Grid>
                 
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Box textAlign="center">
                     <Typography variant="h4" color="success.main">
                       {whatsappStatus.stats?.totalResponsesSent || 0}
@@ -499,7 +525,7 @@ const EvaWhatsAppControl = () => {
                   </Box>
                 </Grid>
                 
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Box textAlign="center">
                     <Typography variant="h4" color="info.main">
                       {whatsappStatus.stats?.dailyResponses || 0}
@@ -510,7 +536,7 @@ const EvaWhatsAppControl = () => {
                   </Box>
                 </Grid>
                 
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Box textAlign="center">
                     <Typography variant="h4" color="warning.main">
                       {Math.round(whatsappStatus.stats?.successRate || 0)}%
@@ -526,7 +552,7 @@ const EvaWhatsAppControl = () => {
         </Grid>
 
         {/* Panel de Pruebas */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -576,7 +602,7 @@ const EvaWhatsAppControl = () => {
         <DialogTitle>⚙️ Configuración Avanzada de WhatsApp</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Límite Diario"
@@ -586,7 +612,7 @@ const EvaWhatsAppControl = () => {
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Máx. Respuestas por Chat"
@@ -596,7 +622,7 @@ const EvaWhatsAppControl = () => {
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControlLabel
                 control={
                   <Switch
@@ -608,7 +634,7 @@ const EvaWhatsAppControl = () => {
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Palabras Clave (separadas por coma)"
@@ -621,7 +647,7 @@ const EvaWhatsAppControl = () => {
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Blacklist (separadas por coma)"

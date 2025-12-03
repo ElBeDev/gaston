@@ -306,6 +306,7 @@ class SuperChatController {
         prompt += `- Asunto: ${autonomousEmailResult.details.subject}\n`;
         prompt += `- Confianza del sistema: ${autonomousEmailResult.details.confidence}%\n`;
         prompt += `- Enviado por: ${autonomousEmailResult.details.sentBy}\n`;
+        prompt += `\n🔥 IMPORTANT: Give a SHORT confirmation response (max 1-2 sentences). Just confirm email sent + recipient + maybe one small tip. NO long explanations about features!\n`;
       } else {
         prompt += `- ❌ Eva no pudo enviar el email autónomamente\n`;
         prompt += `- Razón: ${autonomousEmailResult.reason || autonomousEmailResult.message}\n`;
@@ -459,7 +460,13 @@ INSTRUCCIONES:
 - Adapta tu personalidad y estilo según el estado emocional detectado del usuario
 - Cuando el usuario mencione documentos, imágenes o audio, SIEMPRE menciona las APIs específicas
 - Proporciona ejemplos concretos de uso de las APIs cuando sea relevante
-- Explica exactamente qué puede lograr cada API y cómo usarla`;
+- Explica exactamente qué puede lograr cada API y cómo usarla
+
+MANEJO DE EMAILS:
+- Si Eva envió un email autónomamente, confirma la acción y describe lo que se envió
+- Si Eva no pudo enviar un email, explica por qué y cómo el usuario puede corregirlo
+- Para solicitudes de email futuras, recuerda que Eva puede redactar correos profesionales automáticamente
+- Siempre confirma detalles importantes como destinatario, asunto y contenido cuando proceses emails`;
 
     return prompt;
   }
@@ -1207,7 +1214,7 @@ INSTRUCCIONES:
     try {
       console.log('🤖 Eva analyzing message for autonomous email request...');
       
-      // Detect email intent
+      // Detect email intent with basic patterns
       const emailDetection = this.detectAdvancedEmailIntent(message);
       
       if (!emailDetection.hasEmailIntent) {
@@ -1215,6 +1222,25 @@ INSTRUCCIONES:
       }
       
       console.log('📧 Email intent detected:', emailDetection);
+      
+      // If recipient not detected with regex, try AI enhancement
+      let finalEmailDetection = emailDetection;
+      if (!emailDetection.recipient) {
+        console.log('🧠 Enhancing email detection with AI...');
+        const aiEnhancement = await this.enhanceEmailDetectionWithAI(message);
+        
+        if (aiEnhancement && aiEnhancement.hasEmailIntent && aiEnhancement.confidence > 0.7) {
+          finalEmailDetection = {
+            ...emailDetection,
+            recipient: aiEnhancement.recipient,
+            recipientName: aiEnhancement.recipientName,
+            subject: aiEnhancement.subject || emailDetection.subject,
+            content: aiEnhancement.content || emailDetection.content,
+            priority: aiEnhancement.priority || emailDetection.priority
+          };
+          console.log('🧠 AI enhanced detection:', finalEmailDetection);
+        }
+      }
       
       // Get Eva Autonomous Controller
       const autonomousController = getEvaAutonomousController();
@@ -1229,12 +1255,61 @@ INSTRUCCIONES:
         await autonomousController.start();
       }
       
+      // Validate that we have a recipient
+      if (!finalEmailDetection.recipient) {
+        return {
+          hasEmailRequest: true,
+          error: 'No se pudo detectar el destinatario del correo. Por favor, especifica el email del destinatario (ejemplo: "enviar correo a juan@ejemplo.com").',
+          needsRecipient: true
+        };
+      }
+      
+      // Validate email format if recipient is detected
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(finalEmailDetection.recipient)) {
+        return {
+          hasEmailRequest: true,
+          error: `El destinatario "${finalEmailDetection.recipient}" no parece ser un email válido. Por favor, proporciona un email válido (ejemplo: usuario@dominio.com).`,
+          needsValidEmail: true,
+          recipientName: finalEmailDetection.recipientName // In case it's a name that needs to be converted to email
+        };
+      }
+      
+      // Generate professional email content using AI
+      console.log('📝 Generating professional email content...');
+      let professionalEmail = null;
+      
+      try {
+        professionalEmail = await this.generateProfessionalEmailContent(
+          message, 
+          finalEmailDetection.recipient, 
+          finalEmailDetection
+        );
+        console.log('🧠 Professional email result:', professionalEmail);
+      } catch (error) {
+        console.error('❌ Error generating professional email:', error);
+        professionalEmail = null;
+      }
+      
+      let emailSubject, emailBody;
+      
+      if (professionalEmail && professionalEmail.subject && professionalEmail.body) {
+        emailSubject = professionalEmail.subject;
+        emailBody = professionalEmail.body;
+        console.log('✅ Professional email generated:', { subject: emailSubject, bodyLength: emailBody.length });
+      } else {
+        // Fallback to basic generation
+        emailSubject = finalEmailDetection.subject || 'Mensaje de Eva';
+        emailBody = finalEmailDetection.content || message;
+        console.log('⚠️ Using fallback email content - Professional generation failed');
+      }
+      
       // Prepare email data for autonomous decision
       const emailRequest = {
-        to: emailDetection.recipient || 'bernardoraos90@gmail.com', // Default for testing
-        subject: emailDetection.subject || '🤖 Eva Autonomous Message',
-        body: emailDetection.content || message,
-        priority: emailDetection.priority || 'normal',
+        to: finalEmailDetection.recipient, // Use detected recipient - NO DEFAULT
+        subject: emailSubject,
+        body: emailBody,
+        priority: finalEmailDetection.priority || 'normal',
         sessionTokens: sessionTokens // Get tokens from session if available
       };
       
@@ -1294,25 +1369,70 @@ INSTRUCCIONES:
       /envía\s*(me\s+)?(un\s+)?(email|correo|mail)/i,
       /send\s*(an?\s+)?(email|mail)/i,
       /(email|correo|mail)\s+a\s+/i,
-      /escribir?\s*(un\s+)?(email|correo|mail)/i
+      /escribir?\s*(un\s+)?(email|correo|mail)/i,
+      // Additional patterns for more flexibility
+      /contactar?\s+por\s+(email|correo)/i,
+      /notificar?\s+por\s+(email|correo)/i,
+      /avisar?\s+por\s+(email|correo)/i,
+      /comunicar?\s+por\s+(email|correo)/i
     ];
     
     const hasEmailIntent = emailPatterns.some(pattern => pattern.test(message));
     
-    // Extract recipient if mentioned
-    const recipientMatch = message.match(/(a\s+|to\s+)([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
-    const recipient = recipientMatch ? recipientMatch[2] : null;
+    // Extract recipient with multiple patterns - MORE FLEXIBLE
+    let recipient = null;
+    
+    // Pattern 1: "a email@domain.com" or "to email@domain.com"
+    let recipientMatch = message.match(/(a\s+|to\s+|para\s+)([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+    if (recipientMatch) {
+      recipient = recipientMatch[2];
+    }
+    
+    // Pattern 2: Direct email mention (email@domain.com anywhere in message)
+    if (!recipient) {
+      recipientMatch = message.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+      if (recipientMatch) {
+        recipient = recipientMatch[1];
+      }
+    }
+    
+    // Pattern 3: "enviar correo a nombre" - extract name 
+    if (!recipient) {
+      const nameMatch = message.match(/(correo|email|mail)\s+(a|para|to)\s+([a-zA-Z\s]+?)(?:\s|$|,|\.|!|\?)/i);
+      if (nameMatch) {
+        // For now, store the name and let the system ask for email or look it up
+        recipient = nameMatch[3].trim();
+      }
+    }
+    
+    // Pattern 4: Email in quotes or after "es" or ":" 
+    if (!recipient) {
+      recipientMatch = message.match(/(?:es|:|")\s*([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+      if (recipientMatch) {
+        recipient = recipientMatch[1];
+      }
+    }
     
     // Extract subject if mentioned
     const subjectMatch = message.match(/(asunto|subject|título)\s*:?\s*["']?([^"'\n]+)["']?/i);
     const subject = subjectMatch ? subjectMatch[2].trim() : null;
     
-    // Extract content/body
+    // Extract content/body - IMPROVED
     let content = message;
     if (hasEmailIntent) {
-      // Remove the email intent part to get the content
-      content = message.replace(/enviar?\s*(un\s+)?(email|correo|mail)/i, '').trim();
-      content = content.replace(/^(a\s+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i, '').trim();
+      // Remove the email intent part and recipient to get pure content
+      content = message
+        .replace(/^(manda|enviar?|envía|send)\s*(un\s+)?(email|correo|mail)/i, '')
+        .replace(/(a|para|to)\s+[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/i, '')
+        .replace(/(a|para|to)\s+[a-zA-Z\s]+?(?=,)/i, '')
+        .replace(/^[\s,]+/, '') // Remove leading spaces and commas
+        .trim();
+      
+      // Extract content after "que diga" or similar patterns
+      const contentMatch = content.match(/(?:que\s+diga\s+que|que\s+diga|que\s+|con\s+el\s+mensaje\s+|diciendo\s+que\s+)(.+)$/i);
+      if (contentMatch) {
+        content = contentMatch[1].trim();
+      }
     }
     
     // Determine priority
@@ -1327,6 +1447,267 @@ INSTRUCCIONES:
       priority,
       originalMessage: message
     };
+  }
+
+  /**
+   * ✍️ Generate Professional Email Content using OpenAI
+   */
+  async generateProfessionalEmailContent(originalMessage, recipient, detectedInfo) {
+    try {
+      const prompt = `Eres Eva, un asistente AI profesional especializado en redacción de correos empresariales. Tu tarea es convertir instrucciones casuales en emails profesionales y bien redactados.
+
+INSTRUCCIÓN ORIGINAL: "${originalMessage}"
+DESTINATARIO: ${recipient}
+INFORMACIÓN DETECTADA: ${JSON.stringify(detectedInfo)}
+
+INSTRUCCIONES ESPECÍFICAS:
+1. Convierte el mensaje casual en un email formal pero amigable
+2. Genera un asunto apropiado y profesional
+3. Estructura el contenido con saludo, cuerpo y cierre formal
+4. Mantén un tono profesional pero cálido
+5. Incluye información específica mencionada (reuniones, horarios, etc.)
+
+EJEMPLO DE TRANSFORMACIÓN:
+Entrada: "manda un correo a bener que lo veo a las 8 en la oficina para la reunion de marketing"
+Salida esperada:
+ASUNTO: Reunión de marketing - Confirmación para las 8:00
+CONTENIDO: 
+Estimado Bener,
+
+Espero que te encuentres bien. Te escribo para confirmar nuestra reunión de marketing programada para las 8:00 en la oficina.
+
+Estaré allí puntualmente para revisar los temas pendientes. Si tienes alguna documentación que debamos revisar o si surge algún inconveniente, no dudes en contactarme.
+
+Quedo atento a cualquier consulta.
+
+Saludos cordiales.
+
+Responde ÚNICAMENTE en formato JSON válido:
+{
+  "subject": "asunto profesional generado",
+  "body": "contenido completo del email con saludo, cuerpo y cierre",
+  "tone": "professional",
+  "confidence": 0.95
+}`;
+
+      console.log('📝 Generating professional email content...');
+      
+      const response = await openaiService.getChatResponse(prompt, {
+        userId: 'email-generation',
+        temperature: 0.3,
+        maxTokens: 600
+      });
+
+      console.log('🤖 OpenAI raw response:', response);
+      
+      // Extract the actual response content
+      const responseContent = response.response || response.content || response;
+      
+      // Try to parse JSON response
+      let emailContent;
+      try {
+        // Clean the response to extract JSON
+        const jsonMatch = responseContent.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          emailContent = JSON.parse(jsonMatch[0]);
+          console.log('✅ JSON parsed successfully:', emailContent);
+        } else {
+          throw new Error('No JSON found in response');
+        }
+      } catch (parseError) {
+        console.error('❌ JSON parse error:', parseError);
+        console.log('Raw response for debugging:', responseContent);
+        
+        // Fallback: try to extract content manually
+        return {
+          subject: 'Reunión programada',
+          body: this.extractContentFromMessage(originalMessage),
+          tone: 'professional',
+          confidence: 0.5
+        };
+      }
+      
+      // Validate the email content structure
+      if (!emailContent.subject || !emailContent.body) {
+        console.log('⚠️ Invalid email structure, using fallback');
+        return {
+          subject: emailContent.subject || 'Mensaje importante',
+          body: emailContent.body || this.extractContentFromMessage(originalMessage),
+          tone: 'professional',
+          confidence: 0.6
+        };
+      }
+      
+      return emailContent;
+      
+    } catch (error) {
+      console.error('❌ Error generating professional email:', error);
+      return {
+        subject: `Mensaje de ${detectedInfo.senderName || 'Eva'}`,
+        body: this.extractContentFromMessage(originalMessage),
+        tone: 'casual',
+        confidence: 0.3
+      };
+    }
+  }
+
+  /**
+   * 📝 Extract content from message as fallback
+   */
+  extractContentFromMessage(originalMessage) {
+    // Remove the email instruction part and create a professional message
+    let content = originalMessage;
+    
+    // Remove common email instruction patterns in Spanish
+    content = content.replace(/mandale?\s+un\s+(correo|email|mensaje)\s+a\s+[^,]+,?\s*/i, '');
+    content = content.replace(/enviale?\s+un\s+(correo|email|mensaje)\s+a\s+[^,]+,?\s*/i, '');
+    content = content.replace(/escribele?\s+un\s+(correo|email|mensaje)\s+a\s+[^,]+,?\s*/i, '');
+    
+    // Remove email addresses
+    content = content.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '');
+    
+    // Remove email instruction phrases
+    content = content.replace(/^que\s+(diga\s+que|diga|le\s+diga\s+que|le\s+diga)\s*/i, '');
+    content = content.replace(/con\s+el\s+mensaje\s+/i, '');
+    content = content.replace(/diciendo\s+que\s+/i, '');
+    
+    content = content.trim();
+    
+    // If content is too short, create a basic professional message
+    if (content.length < 10) {
+      return `Estimado/a,
+
+Espero que te encuentres bien. Te escribo para coordinar contigo.
+
+Quedo atento a cualquier consulta que puedas tener.
+
+Saludos cordiales.
+
+---
+Este mensaje fue enviado automáticamente por Eva.
+Eva Autonomous Operations`;
+    }
+    
+    // Capitalize first letter
+    content = content.charAt(0).toUpperCase() + content.slice(1);
+    
+    // Ensure proper punctuation
+    if (!content.endsWith('.') && !content.endsWith('!') && !content.endsWith('?')) {
+      content += '.';
+    }
+    
+    return `Estimado/a,
+
+Espero que te encuentres bien. Te escribo para informarte que ${content}
+
+Quedo atento a cualquier consulta que puedas tener.
+
+Saludos cordiales.
+
+---
+Este mensaje fue enviado automáticamente por Eva.
+Eva Autonomous Operations`;
+  }
+
+  /**
+   * 🧠 Enhanced Email Intent Detection using OpenAI
+   */
+  async enhanceEmailDetectionWithAI(message) {
+    try {
+      const prompt = `Analiza el siguiente mensaje y extrae información para envío de email:
+
+Mensaje: "${message}"
+
+Responde en JSON con:
+{
+  "hasEmailIntent": boolean,
+  "recipient": "email o null",
+  "recipientName": "nombre si se menciona o null", 
+  "subject": "asunto o null",
+  "content": "contenido limpio del mensaje (sin comandos)",
+  "priority": "high/normal",
+  "confidence": 0.0-1.0
+}
+
+Analiza estos patrones:
+- "manda un correo a juan@email.com que diga que lo veo a las 5" 
+  → recipient: "juan@email.com", content: "que lo veo a las 5"
+- "enviar email a María, elbedev90@gmail.com, diciendo que la reunión es a las 3"
+  → recipient: "elbedev90@gmail.com", content: "que la reunión es a las 3"
+- "manda correo a bener con el reporte"
+  → recipient: "bener", content: "con el reporte"
+
+Extrae SOLO el contenido real del mensaje, sin los comandos de envío.
+
+Solo responde el JSON, sin explicaciones.`;
+
+      const response = await this.openaiService.createCompletion({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3,
+        max_tokens: 300
+      });
+
+      const aiAnalysis = JSON.parse(response.choices[0].message.content.trim());
+      return aiAnalysis;
+      
+    } catch (error) {
+      console.error('❌ Error in AI email detection:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 📝 Generate Professional Email Content using AI
+   */
+  async generateProfessionalEmail(originalRequest, recipient, detectedContent) {
+    try {
+      const prompt = `Eres un asistente profesional que redacta correos electrónicos. 
+
+Solicitud original del usuario: "${originalRequest}"
+Destinatario: ${recipient}
+Mensaje detectado: "${detectedContent}"
+
+Tu tarea es redactar un correo profesional basado en esta solicitud. Analiza la intención y el contexto para crear:
+1. Un asunto apropiado y profesional
+2. Un contenido del correo bien redactado, profesional pero amigable
+3. Un saludo y despedida apropiados
+
+Responde en JSON con:
+{
+  "subject": "Asunto profesional del correo",
+  "body": "Contenido completo del correo con saludo, mensaje y despedida",
+  "tone": "professional/casual/urgent",
+  "priority": "high/normal/low"
+}
+
+Ejemplos de transformación:
+- Solicitud: "manda un correo a bener que diga que lo veo a las 5 en la oficina"
+  → Asunto: "Reunión confirmada - 5:00 PM en la oficina"
+  → Cuerpo: "Hola Bener,\n\nEspero que te encuentres bien. Te escribo para confirmar nuestra reunión programada para las 5:00 PM en la oficina.\n\nNos vemos ahí.\n\nSaludos cordiales"
+
+- Solicitud: "enviar correo a María con el reporte mensual"
+  → Asunto: "Reporte mensual adjunto"
+  → Cuerpo: "Estimada María,\n\nEspero que estés bien. Te envío el reporte mensual como acordamos.\n\nQuedo atento a cualquier comentario.\n\nSaludos"
+
+Mantén un tono profesional pero cálido. Usa el nombre del destinatario si está disponible.
+
+Solo responde el JSON, sin explicaciones.`;
+
+      const response = await this.openaiService.createCompletion({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.5,
+        max_tokens: 500
+      });
+
+      const emailContent = JSON.parse(response.choices[0].message.content.trim());
+      return emailContent;
+      
+    } catch (error) {
+      console.error('❌ Error generating professional email:', error);
+      return null;
+    }
   }
 
   /**
