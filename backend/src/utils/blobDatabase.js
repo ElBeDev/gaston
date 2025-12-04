@@ -1,14 +1,50 @@
 /**
  * Blob Storage Database Adapter
  * Reemplaza MongoDB completamente con Vercel Blob Storage
- * Todas las operaciones de datos ahora usan Blob
+ * Fallback a memoria si Blob no está configurado
  */
 
-const { put, del, list, head } = require('@vercel/blob');
+let put, del, list, head;
+try {
+  const blobModule = require('@vercel/blob');
+  put = blobModule.put;
+  del = blobModule.del;
+  list = blobModule.list;
+  head = blobModule.head;
+} catch (error) {
+  console.warn('⚠️  @vercel/blob no disponible, usando storage en memoria');
+}
+
+// Storage en memoria como fallback
+const memoryStorage = {
+  data: {},
+  
+  set(key, value) {
+    this.data[key] = value;
+  },
+  
+  get(key) {
+    return this.data[key];
+  },
+  
+  delete(key) {
+    delete this.data[key];
+  },
+  
+  keys(prefix = '') {
+    return Object.keys(this.data).filter(k => k.startsWith(prefix));
+  }
+};
 
 class BlobDatabase {
   constructor() {
     this.isProduction = process.env.NODE_ENV === 'production' || !!process.env.BLOB_READ_WRITE_TOKEN;
+    this.hasBlobStorage = !!process.env.BLOB_READ_WRITE_TOKEN;
+    
+    if (!this.hasBlobStorage && this.isProduction) {
+      console.warn('⚠️  BLOB_READ_WRITE_TOKEN no configurado. Usando storage en memoria (temporal)');
+      console.warn('⚠️  Habilita Blob Storage en Vercel Dashboard > Storage > Create Database');
+    }
   }
 
   /**
@@ -43,11 +79,15 @@ class BlobDatabase {
 
       const blobPath = this.getBlobPath(collection, id);
       
-      if (this.isProduction) {
+      if (this.hasBlobStorage) {
+        // Usar Vercel Blob Storage
         await put(blobPath, JSON.stringify(document), {
           access: 'public',
           addRandomSuffix: false
         });
+      } else if (this.isProduction) {
+        // Producción sin Blob: usar memoria
+        memoryStorage.set(blobPath, document);
       } else {
         // Desarrollo local: guardar en archivo
         const fs = require('fs').promises;
@@ -72,10 +112,14 @@ class BlobDatabase {
     try {
       const blobPath = this.getBlobPath(collection, id);
 
-      if (this.isProduction) {
+      if (this.hasBlobStorage) {
+        // Vercel Blob Storage
         const response = await fetch(`https://blob.vercel-storage.com/${blobPath}`);
         if (!response.ok) return null;
         return await response.json();
+      } else if (this.isProduction) {
+        // Memoria
+        return memoryStorage.get(blobPath) || null;
       } else {
         // Desarrollo local
         const fs = require('fs').promises;
@@ -102,16 +146,20 @@ class BlobDatabase {
       const blobPath = this.getBlobPath(collection);
       let documents = [];
 
-      if (this.isProduction) {
+      if (this.hasBlobStorage) {
+        // Vercel Blob Storage
         const { blobs } = await list({ prefix: blobPath });
         
-        // Obtener todos los documentos en paralelo
         const fetchPromises = blobs.map(async (blob) => {
           const response = await fetch(blob.url);
           return response.json();
         });
         
         documents = await Promise.all(fetchPromises);
+      } else if (this.isProduction) {
+        // Memoria
+        const keys = memoryStorage.keys(blobPath);
+        documents = keys.map(k => memoryStorage.get(k));
       } else {
         // Desarrollo local
         const fs = require('fs').promises;
@@ -177,11 +225,15 @@ class BlobDatabase {
 
       const blobPath = this.getBlobPath(collection, id);
 
-      if (this.isProduction) {
+      if (this.hasBlobStorage) {
+        // Vercel Blob Storage
         await put(blobPath, JSON.stringify(document), {
           access: 'public',
           addRandomSuffix: false
         });
+      } else if (this.isProduction) {
+        // Memoria
+        memoryStorage.set(blobPath, document);
       } else {
         // Desarrollo local
         const fs = require('fs').promises;
@@ -209,8 +261,12 @@ class BlobDatabase {
 
       const blobPath = this.getBlobPath(collection, id);
 
-      if (this.isProduction) {
+      if (this.hasBlobStorage) {
+        // Vercel Blob Storage
         await del(blobPath);
+      } else if (this.isProduction) {
+        // Memoria
+        memoryStorage.delete(blobPath);
       } else {
         // Desarrollo local
         const fs = require('fs').promises;
