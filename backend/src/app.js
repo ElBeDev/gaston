@@ -67,7 +67,11 @@ const calendarRoutes = require('../routes/calendar-fallback'); // Temporary fall
 // const sessionStorage = require('./services/sessionStorageService');
 // const dataBackupService = require('./services/dataBackupService');
 
-app.use('/auth', authRoutes);
+// Auth routes - SOLO usar src/routes/auth (sin MongoDB)
+// La versión en routes/auth tiene dependencias de MongoDB (sessionStorage, emailService)
+app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes); // Mismo router para ambas rutas (compatibilidad)
+
 app.use('/api/email', emailRoutes);
 app.use('/api/calendar', calendarRoutes);
 
@@ -143,12 +147,7 @@ app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 // Contactos con Blob Storage
 app.use('/api/contacts', require('./routes/contactsBlob'));
 
-// Auth routes (Google OAuth)
-app.use('/api/auth', require('./routes/auth'));
-app.use('/auth', require('../routes/auth'));
-
-// Email routes (Google Gmail)
-app.use('/api/email', require('../routes/email'));
+// Auth y Email ya están declarados arriba (no duplicar)
 
 // WhatsApp routes (con Blob Storage para sesiones)
 const { router: whatsappRoutes } = require('./routes/whatsapp');
