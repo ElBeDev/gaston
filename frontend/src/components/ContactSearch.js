@@ -168,9 +168,9 @@ const ContactSearch = ({ onSelectContact, selectedContactId }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Search Header */}
-      <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Search sx={{ color: '#2563eb' }} />
+      <Box sx={{ p: 3, borderBottom: 1, borderColor: 'divider', bgcolor: '#fff' }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Search sx={{ color: '#2563eb', fontSize: 28 }} />
           Buscar Contactos
         </Typography>
         
@@ -192,8 +192,8 @@ const ContactSearch = ({ onSelectContact, selectedContactId }) => {
         />
 
         {/* Filters */}
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+        <Box sx={{ display: 'flex', gap: 1.5, mb: 2.5 }}>
+          <FormControl size="small" sx={{ flex: 1, minWidth: 0 }}>
             <InputLabel>Segmento</InputLabel>
             <Select
               value={selectedSegment}
@@ -207,7 +207,7 @@ const ContactSearch = ({ onSelectContact, selectedContactId }) => {
             </Select>
           </FormControl>
           
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+          <FormControl size="small" sx={{ flex: 1, minWidth: 0 }}>
             <InputLabel>Urgencia</InputLabel>
             <Select
               value={selectedUrgency}
@@ -223,7 +223,7 @@ const ContactSearch = ({ onSelectContact, selectedContactId }) => {
         </Box>
 
         {/* Results Count */}
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
           {loading ? 'Buscando...' : `${filteredContacts.length} contacto${filteredContacts.length !== 1 ? 's' : ''} encontrado${filteredContacts.length !== 1 ? 's' : ''}`}
         </Typography>
       </Box>

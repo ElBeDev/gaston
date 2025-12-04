@@ -185,9 +185,18 @@ const ContactDashboard = () => {
       </Paper>
 
       {/* Main Content Area */}
-      <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+      <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', gap: 0 }}>
         {/* Left Sidebar - Contact Search */}
-        <Paper sx={{ width: 350, display: 'flex', flexDirection: 'column', borderRadius: 0, boxShadow: 1 }}>
+        <Paper sx={{ 
+          width: 420, 
+          minWidth: 420,
+          display: 'flex', 
+          flexDirection: 'column', 
+          borderRadius: 0, 
+          boxShadow: 1,
+          borderRight: 1,
+          borderColor: 'divider'
+        }}>
           <ContactSearch
             onSelectContact={setSelectedContact}
             selectedContactId={selectedContact ? selectedContact.id : null}
@@ -195,16 +204,30 @@ const ContactDashboard = () => {
         </Paper>
 
         {/* Center - Main Content */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minWidth: 0 }}>
           {activeTab === 0 && (
-            <Box sx={{ flex: 1, display: 'flex' }}>
+            <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
               {/* Contact Profile */}
-              <Box sx={{ flex: 2, p: 3, overflow: 'auto' }}>
+              <Box sx={{ 
+                flex: 1, 
+                minWidth: 0,
+                p: 3, 
+                overflow: 'auto',
+                bgcolor: '#f9fafb'
+              }}>
                 <ContactProfile contact={selectedContact} />
               </Box>
               
               {/* Right Sidebar - Relationship Graph */}
-              <Box sx={{ width: 300, p: 3, borderLeft: 1, borderColor: 'divider', overflow: 'auto' }}>
+              <Box sx={{ 
+                width: 380,
+                minWidth: 380,
+                p: 3, 
+                borderLeft: 1, 
+                borderColor: 'divider', 
+                overflow: 'auto',
+                bgcolor: '#fff'
+              }}>
                 <RelationshipGraph contact={selectedContact} />
               </Box>
             </Box>
