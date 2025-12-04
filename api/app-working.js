@@ -55,6 +55,30 @@ try {
   console.error('❌ Error loading auth routes:', error.message);
 }
 
+try {
+  const emailRoutes = require('../backend/src/routes/email');
+  app.use('/api/email', emailRoutes);
+  console.log('✅ Email routes loaded');
+} catch (error) {
+  console.error('❌ Error loading email routes:', error.message);
+}
+
+try {
+  const calendarRoutes = require('../backend/routes/calendar-fallback');
+  app.use('/api/calendar', calendarRoutes);
+  console.log('✅ Calendar routes loaded');
+} catch (error) {
+  console.error('❌ Error loading calendar routes:', error.message);
+}
+
+try {
+  const { router: whatsappRoutes } = require('../backend/src/routes/whatsapp');
+  app.use('/api/whatsapp', whatsappRoutes);
+  console.log('✅ WhatsApp routes loaded');
+} catch (error) {
+  console.error('❌ Error loading WhatsApp routes:', error.message);
+}
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
