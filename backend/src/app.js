@@ -9,13 +9,11 @@ const session = require('express-session');
 // Load environment variables from root directory
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
-// Import MongoDB connection manager
-const { ensureMongoConnection } = require('./utils/mongoConnection');
+// NOTE: MongoDB connection removed from app initialization
+// Routes that need MongoDB will connect on-demand
+// System works 100% with Vercel Blob Storage for sessions/tokens
 
 const app = express();
-
-// Middleware para asegurar conexión MongoDB en cada request
-app.use(ensureMongoConnection);
 
 // Increase header size limits (for serverless compatibility)
 app.use((req, res, next) => {
@@ -131,7 +129,8 @@ app.get('/api/backups/list', async (req, res) => {
 app.use('/api/chat', require('./routes/chatRoutes'));
 app.use('/api/context', require('./routes/context'));
 app.use('/api/crm', require('./routes/crmRoutes'));
-app.use('/api/dashboard', require('./routes/dashboardRoutes')); // Dashboard stats routes
+app.use('/api/dashboard', require('./routes/dashboardRoutes')); // Dashboard con Blob Storage
+app.use('/api/contacts', require('./routes/contactsBlob')); // Contactos con Blob Storage
 app.use('/api/multimodal', require('./routes/multimodal')); // NEW: Multimodal processing routes
 app.use('/api/autonomous', require('./routes/autonomous')); // NEW: Autonomous Agent System routes
 app.use('/api/google', require('./routes/googleWorkspace')); // NEW: Google Workspace Integration routes
