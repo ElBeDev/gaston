@@ -5,19 +5,40 @@
  * en lugar del sistema de archivos local (que es efímero en Vercel).
  */
 
-const { put, del, list, head } = require('@vercel/blob');
+// Lazy load @vercel/blob para evitar errores de carga en serverless
+let blobModule = null;
+let put, del, list, head;
+
+function loadBlobModule() {
+  if (!blobModule && process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      blobModule = require('@vercel/blob');
+      put = blobModule.put;
+      del = blobModule.del;
+      list = blobModule.list;
+      head = blobModule.head;
+      console.log('✅ @vercel/blob loaded for WhatsApp sessions');
+    } catch (error) {
+      console.warn('⚠️ Error loading @vercel/blob:', error.message);
+    }
+  }
+  return !!blobModule;
+}
+
 const fs = require('fs').promises;
 const path = require('path');
 
 class BlobStorageAdapter {
   constructor() {
     this.token = process.env.BLOB_READ_WRITE_TOKEN;
-    this.useBlob = process.env.NODE_ENV === 'production' && this.token;
+    loadBlobModule(); // Intentar cargar el módulo
+    this.useBlob = process.env.NODE_ENV === 'production' && this.token && blobModule;
     this.localPath = path.join(__dirname, '../whatsapp-sessions');
     
     console.log('🗄️ BlobStorage initialized:', {
       mode: this.useBlob ? 'Vercel Blob' : 'Local Files',
-      hasToken: !!this.token
+      hasToken: !!this.token,
+      hasModule: !!blobModule
     });
   }
 
