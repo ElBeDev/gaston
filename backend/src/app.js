@@ -1,13 +1,17 @@
 const express = require('express');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose'); // Not needed - using Blob Storage
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
 const session = require('express-session');
 
-// Load environment variables from root directory
-require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+// Load environment variables from root directory (safe for serverless)
+try {
+  require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+} catch (error) {
+  console.log('dotenv not available or .env not found (OK in production)');
+}
 
 // NOTE: MongoDB connection removed from app initialization
 // Routes that need MongoDB will connect on-demand
