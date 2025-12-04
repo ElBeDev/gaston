@@ -61,22 +61,30 @@ app.use(express.urlencoded({ extended: true, limit: '10mb', parameterLimit: 1000
 const authRoutes = require('./routes/auth');
 const emailRoutes = require('./routes/email');
 const calendarRoutes = require('../routes/calendar-fallback'); // Temporary fallback
-const sessionStorage = require('./services/sessionStorageService');
-const dataBackupService = require('./services/dataBackupService');
+
+// NOTE: sessionStorage y dataBackupService comentados temporalmente
+// Requieren MongoDB y pueden causar errores en serverless
+// const sessionStorage = require('./services/sessionStorageService');
+// const dataBackupService = require('./services/dataBackupService');
 
 app.use('/auth', authRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/calendar', calendarRoutes);
 
 // Iniciar respaldos automáticos solo en desarrollo local (no en serverless)
+// TEMPORALMENTE DESHABILITADO - requiere MongoDB
+/*
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   if (process.env.ENABLE_BLOB_BACKUP === 'true') {
     dataBackupService.startAutomaticBackups(120); // Cada 2 horas
     console.log('📦 Sistema de respaldos automáticos iniciado');
   }
 }
+*/
 
-// Session management route
+// Session management routes - TEMPORALMENTE DESHABILITADAS
+// Requieren sessionStorage que tiene dependencias de MongoDB
+/*
 app.get('/api/sessions/status', async (req, res) => {
   try {
     const status = await sessionStorage.getSessionStatus();
@@ -117,6 +125,7 @@ app.get('/api/backups/list', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+*/
 
 // NOTE: MongoDB connection is now handled by ensureMongoConnection middleware
 // This allows for on-demand connections in serverless environments
