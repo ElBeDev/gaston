@@ -58,7 +58,7 @@ const EvaAutoResponsePanel = () => {
   const fetchEvaStatus = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3002/api/whatsapp/eva/status');
+      const response = await fetch(getApiUrl('/api/whatsapp/eva/status'));
       const data = await response.json();
       
       if (data.success) {

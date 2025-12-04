@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../config/api';
 import {
   Box,
   Typography,
@@ -58,7 +59,7 @@ const DashboardPage = () => {
       setError(null);
       
       try {
-        const response = await fetch('http://localhost:3002/api/dashboard/stats?userId=gaston');
+        const response = await fetch(getApiUrl('/api/dashboard/stats?userId=gaston'));
         const data = await response.json();
         
         if (data.success) {

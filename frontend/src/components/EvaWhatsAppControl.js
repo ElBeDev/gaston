@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 import {
   Box,
   Paper,
@@ -95,7 +96,7 @@ const EvaWhatsAppControl = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://localhost:3002/eva/whatsapp/status');
+      const response = await fetch(getApiUrl('/eva/whatsapp/status'));
       const data = await response.json();
       
       if (data.success) {

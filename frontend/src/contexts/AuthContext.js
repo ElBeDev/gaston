@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { getApiUrl } from '../config/api';
 
 const AuthContext = createContext();
 
@@ -15,11 +16,9 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
-
   const checkAuthStatus = useCallback(async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/status`, {
+      const response = await fetch(getApiUrl('/auth/status'), {
         credentials: 'include'
       });
       
@@ -38,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [API_BASE_URL]);
+  }, []);
 
   useEffect(() => {
     checkAuthStatus();

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 import {
   Box,
   Paper,
@@ -44,15 +45,13 @@ const CalendarManager = () => {
     attendees: ''
   });
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
-
   // Fetch calendar events
   const fetchEvents = async () => {
     if (!isAuthenticated) return;
     
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/calendar/events`, {
+      const response = await fetch(getApiUrl('/api/calendar/events'), {
         credentials: 'include'
       });
       
@@ -82,7 +81,7 @@ const CalendarManager = () => {
         ? newEvent.attendees.split(',').map(email => email.trim()).filter(email => email)
         : [];
 
-      const response = await fetch(`${API_BASE_URL}/api/calendar/events`, {
+      const response = await fetch(getApiUrl('/api/calendar/events'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

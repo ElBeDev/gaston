@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 import {
   Box,
   Typography,
@@ -61,8 +62,6 @@ const EmailManager = () => {
     body: ''
   });
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
-
   const tabs = [
     { label: 'Inbox', icon: <Inbox />, folder: 'INBOX', color: 'primary' },
     { label: 'Sent', icon: <Send />, folder: 'SENT', color: 'success' },
@@ -78,7 +77,7 @@ const EmailManager = () => {
     setError(null);
     
     try {
-      const response = await fetch(`${API_BASE_URL}/api/email/messages?folder=${folder}`, {
+      const response = await fetch(getApiUrl(`/api/email/messages?folder=${folder}`), {
         credentials: 'include'
       });
       
@@ -108,7 +107,7 @@ const EmailManager = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/email/send`, {
+      const response = await fetch(getApiUrl(`/api/email/send`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { getApiUrl, getWsUrl } from '../config/api';
 import {
   Box,
   Container,
@@ -71,7 +72,7 @@ const WhatsAppUnifiedPage = () => {
 
   useEffect(() => {
     // Conectar a WebSocket
-    const socketConnection = io('http://localhost:3002');
+    const socketConnection = io(getWsUrl(''));
 
     // Escuchar eventos de WhatsApp
     socketConnection.on('whatsapp_qr', (data) => {
@@ -142,7 +143,7 @@ const WhatsAppUnifiedPage = () => {
     // Verificar estado inicial
     const checkStatus = async () => {
       try {
-        const response = await fetch('http://localhost:3002/api/whatsapp/status');
+        const response = await fetch(getApiUrl('/api/whatsapp/status'));
         const data = await response.json();
         
         if (data.isConnected) {
@@ -170,7 +171,7 @@ const WhatsAppUnifiedPage = () => {
     setError(null);
     
     try {
-      const response = await fetch('http://localhost:3002/api/whatsapp/initialize', {
+      const response = await fetch(getApiUrl('/api/whatsapp/initialize'), {
         method: 'POST'
       });
       
@@ -206,7 +207,7 @@ const WhatsAppUnifiedPage = () => {
     setLoadingChats(true);
     
     try {
-      const response = await fetch('http://localhost:3002/api/whatsapp/chats');
+      const response = await fetch(getApiUrl('/api/whatsapp/chats'));
       const data = await response.json();
       
       if (data.success && data.chats) {
@@ -229,7 +230,7 @@ const WhatsAppUnifiedPage = () => {
     setLoadingMessages(true);
     
     try {
-      const response = await fetch(`http://localhost:3002/api/whatsapp/chat/${chatId}/messages`);
+      const response = await fetch(getApiUrl(`/api/whatsapp/chat/${chatId}/messages`));
       const data = await response.json();
       
       if (data.success && data.messages) {
@@ -255,7 +256,7 @@ const WhatsAppUnifiedPage = () => {
     if (!selectedChat) return;
     
     try {
-      const response = await fetch('http://localhost:3002/api/whatsapp/send-message', {
+      const response = await fetch(getApiUrl('/api/whatsapp/send-message'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -279,7 +280,7 @@ const WhatsAppUnifiedPage = () => {
 
   const handleMarkAsRead = async (chatId) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/whatsapp/chat/${chatId}/mark-read`, {
+      const response = await fetch(getApiUrl(`/api/whatsapp/chat/${chatId}/mark-read`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
@@ -294,7 +295,7 @@ const WhatsAppUnifiedPage = () => {
 
   const handleDisconnect = async () => {
     try {
-      const response = await fetch('http://localhost:3002/api/whatsapp/disconnect', {
+      const response = await fetch(getApiUrl('/api/whatsapp/disconnect'), {
         method: 'POST'
       });
       
