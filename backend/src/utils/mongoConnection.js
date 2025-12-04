@@ -1,6 +1,7 @@
 /**
  * MongoDB Connection Manager para Serverless
  * Mantiene la conexión activa entre invocaciones y maneja reconexiones
+ * NOTA: MongoDB es OPCIONAL en producción. Sistema funciona con Blob Storage.
  */
 
 const mongoose = require('mongoose');
@@ -13,7 +14,6 @@ let isConnected = false;
  */
 const connectToDatabase = async () => {
   if (isConnected && mongoose.connection.readyState === 1) {
-    console.log('♻️  Reutilizando conexión MongoDB existente');
     return mongoose.connection;
   }
 
@@ -21,40 +21,38 @@ const connectToDatabase = async () => {
     const mongoUri = process.env.MONGODB_URI;
     
     if (!mongoUri) {
-      console.warn('⚠️  MONGODB_URI no configurado, funcionando sin base de datos');
+      // No es un error - el sistema funciona sin MongoDB usando Blob Storage
       return null;
     }
 
-    console.log('🔌 Conectando a MongoDB...');
-    
     const connection = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 5000, // Timeout rápido en serverless
+      serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     });
 
     isConnected = true;
-    console.log('✅ Conectado a MongoDB');
+    console.log('✅ MongoDB conectado');
     
     return connection;
   } catch (error) {
-    console.error('❌ Error conectando a MongoDB:', error.message);
+    console.warn('⚠️  MongoDB no disponible (opcional):', error.message);
     isConnected = false;
     return null;
   }
 };
 
 /**
- * Middleware para asegurar conexión MongoDB antes de cada request
+ * Middleware para intentar conexión MongoDB antes de cada request
+ * No falla si MongoDB no está disponible - sistema funciona sin él
  */
 const ensureMongoConnection = async (req, res, next) => {
   try {
     await connectToDatabase();
-    next();
   } catch (error) {
-    console.error('Error en middleware de MongoDB:', error);
-    // Continuar sin MongoDB - algunas rutas pueden funcionar sin DB
-    next();
+    // Continuar sin MongoDB - muchas rutas funcionan sin DB
+    console.warn('Request procesado sin MongoDB');
   }
+  next();
 };
 
 module.exports = {
