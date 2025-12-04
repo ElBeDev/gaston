@@ -46,6 +46,14 @@ try {
   console.error('❌ Error loading contacts routes:', error.message);
 }
 
+// Auth status endpoint (ANTES de auth routes para que no sea capturado)
+app.get('/auth/status', (req, res) => {
+  res.json({
+    authenticated: !!(req.session && req.session.tokens),
+    user: req.session?.user || null
+  });
+});
+
 try {
   const authRoutes = require('../backend/src/routes/auth');
   app.use('/api/auth', authRoutes);
@@ -54,14 +62,6 @@ try {
 } catch (error) {
   console.error('❌ Error loading auth routes:', error.message);
 }
-
-// Auth status endpoint
-app.get('/auth/status', (req, res) => {
-  res.json({
-    authenticated: !!(req.session && req.session.tokens),
-    user: req.session?.user || null
-  });
-});
 
 try {
   const emailRoutes = require('../backend/src/routes/email');
