@@ -125,36 +125,44 @@ app.get('/api/backups/list', async (req, res) => {
 // Socket connections require persistent server, not compatible with serverless functions
 // Real-time features will need alternative implementation (polling, webhooks, etc.)
 
-// Routes - Use the comprehensive chatRoutes.js
+// === RUTAS BÁSICAS (SIN DEPENDENCIAS DE MONGODB) ===
+// Estas rutas funcionan con Blob Storage o datos mock
+
+// Dashboard con Blob Storage
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+
+// Contactos con Blob Storage
+app.use('/api/contacts', require('./routes/contactsBlob'));
+
+// Auth routes (Google OAuth)
+app.use('/api/auth', require('./routes/auth'));
+app.use('/auth', require('../routes/auth'));
+
+// Email routes (Google Gmail)
+app.use('/api/email', require('../routes/email'));
+
+// WhatsApp routes (con Blob Storage para sesiones)
+const { router: whatsappRoutes } = require('./routes/whatsapp');
+app.use('/api/whatsapp', whatsappRoutes);
+
+// === RUTAS AVANZADAS (COMENTADAS - REQUIEREN MONGODB) ===
+// Descomentar cuando configures MongoDB Atlas o migres a Blob Storage
+/*
 app.use('/api/chat', require('./routes/chatRoutes'));
 app.use('/api/context', require('./routes/context'));
 app.use('/api/crm', require('./routes/crmRoutes'));
-app.use('/api/dashboard', require('./routes/dashboardRoutes')); // Dashboard con Blob Storage
-app.use('/api/contacts', require('./routes/contactsBlob')); // Contactos con Blob Storage
-app.use('/api/multimodal', require('./routes/multimodal')); // NEW: Multimodal processing routes
-app.use('/api/autonomous', require('./routes/autonomous')); // NEW: Autonomous Agent System routes
-app.use('/api/google', require('./routes/googleWorkspace')); // NEW: Google Workspace Integration routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/auth', require('../routes/auth'));
-app.use('/api/email', require('../routes/email'));
+app.use('/api/multimodal', require('./routes/multimodal'));
+app.use('/api/autonomous', require('./routes/autonomous'));
+app.use('/api/google', require('./routes/googleWorkspace'));
 const liveVoiceRoutes = require('./routes/liveVoice');
 app.use('/api/live-voice', liveVoiceRoutes);
-
-// 🎛️ EVA COMMAND CENTER - PHASE 1 CONTROL SYSTEM
-const { router: evaControlRoutes, initializeCommandCenter } = require('./routes/evaControl');
+const { router: evaControlRoutes } = require('./routes/evaControl');
 app.use('/eva/control', evaControlRoutes);
-
-// 🤖 EVA AUTONOMOUS OPERATIONS - PHASE 2 AUTONOMOUS SYSTEM
-const { router: evaAutonomousRoutes, initializeAutonomousController } = require('./routes/evaAutonomous');
+const { router: evaAutonomousRoutes } = require('./routes/evaAutonomous');
 app.use('/eva/autonomous', evaAutonomousRoutes);
-
-// 📱 EVA WHATSAPP AUTONOMOUS - PHASE 3 INTELLIGENCE ORCHESTRATION
 const evaWhatsAppRoutes = require('./routes/eva-whatsapp');
 app.use('/eva/whatsapp', evaWhatsAppRoutes);
-
-// WhatsApp Web integration
-const { router: whatsappRoutes } = require('./routes/whatsapp');
-app.use('/api/whatsapp', whatsappRoutes);
+*/
 
 // NOTE: WhatsApp WebSocket setup moved to local development section below
 // Serverless functions don't support persistent WebSocket connections
