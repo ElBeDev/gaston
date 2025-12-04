@@ -1,4 +1,4 @@
-// Progressive Express app - adding routes
+// Progressive Express app - adding real routes
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -29,21 +29,38 @@ app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Try loading blobDatabase
-let blobDB;
+// Try loading routes one by one
 try {
-  blobDB = require('../backend/src/utils/blobDatabase');
-  console.log('✅ blobDatabase loaded successfully');
+  const dashboardRoutes = require('../backend/src/routes/dashboardRoutes');
+  app.use('/api/dashboard', dashboardRoutes);
+  console.log('✅ Dashboard routes loaded');
 } catch (error) {
-  console.error('❌ Error loading blobDatabase:', error.message);
+  console.error('❌ Error loading dashboard routes:', error.message);
+}
+
+try {
+  const contactsRoutes = require('../backend/src/routes/contactsBlob');
+  app.use('/api/contacts', contactsRoutes);
+  console.log('✅ Contacts routes loaded');
+} catch (error) {
+  console.error('❌ Error loading contacts routes:', error.message);
+}
+
+try {
+  const authRoutes = require('../backend/src/routes/auth');
+  app.use('/api/auth', authRoutes);
+  app.use('/auth', authRoutes);
+  console.log('✅ Auth routes loaded');
+} catch (error) {
+  console.error('❌ Error loading auth routes:', error.message);
 }
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'Express with session + routes loading test',
-    blobDB: blobDB ? 'loaded' : 'failed'
+    message: 'Express with real routes',
+    timestamp: new Date().toISOString()
   });
 });
 
