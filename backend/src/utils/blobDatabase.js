@@ -4,15 +4,25 @@
  * Fallback a memoria si Blob no está configurado
  */
 
+// Intentar cargar @vercel/blob de forma segura
+let blobModule = null;
 let put, del, list, head;
+
 try {
-  const blobModule = require('@vercel/blob');
-  put = blobModule.put;
-  del = blobModule.del;
-  list = blobModule.list;
-  head = blobModule.head;
+  // Solo intentar cargar si tenemos el token configurado
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    blobModule = require('@vercel/blob');
+    put = blobModule.put;
+    del = blobModule.del;
+    list = blobModule.list;
+    head = blobModule.head;
+    console.log('✅ Blob Storage module loaded');
+  } else {
+    console.log('ℹ️  Blob Storage no configurado, usando memoria');
+  }
 } catch (error) {
-  console.warn('⚠️  @vercel/blob no disponible, usando storage en memoria');
+  console.warn('⚠️  Error cargando @vercel/blob:', error.message);
+  console.warn('⚠️  Usando storage en memoria');
 }
 
 // Storage en memoria como fallback
@@ -38,12 +48,11 @@ const memoryStorage = {
 
 class BlobDatabase {
   constructor() {
-    this.isProduction = process.env.NODE_ENV === 'production' || !!process.env.BLOB_READ_WRITE_TOKEN;
-    this.hasBlobStorage = !!process.env.BLOB_READ_WRITE_TOKEN;
+    this.hasBlobStorage = !!process.env.BLOB_READ_WRITE_TOKEN && !!blobModule;
     
-    if (!this.hasBlobStorage && this.isProduction) {
-      console.warn('⚠️  BLOB_READ_WRITE_TOKEN no configurado. Usando storage en memoria (temporal)');
-      console.warn('⚠️  Habilita Blob Storage en Vercel Dashboard > Storage > Create Database');
+    if (!this.hasBlobStorage) {
+      console.log('💾 Usando storage en memoria (datos temporales)');
+      console.log('💡 Para persistencia: Habilita Blob Storage en Vercel Dashboard > Storage');
     }
   }
 
@@ -85,16 +94,20 @@ class BlobDatabase {
           access: 'public',
           addRandomSuffix: false
         });
-      } else if (this.isProduction) {
-        // Producción sin Blob: usar memoria
-        memoryStorage.set(blobPath, document);
       } else {
-        // Desarrollo local: guardar en archivo
-        const fs = require('fs').promises;
-        const path = require('path');
-        const dir = path.join(__dirname, '../blob-local', collection);
-        await fs.mkdir(dir, { recursive: true });
-        await fs.writeFile(path.join(dir, `${id}.json`), JSON.stringify(document, null, 2));
+        // Usar memoria (producción sin Blob o desarrollo)
+        const isLocal = !process.env.VERCEL;
+        if (isLocal) {
+          // Desarrollo local: guardar en archivo
+          const fs = require('fs').promises;
+          const path = require('path');
+          const dir = path.join(__dirname, '../blob-local', collection);
+          await fs.mkdir(dir, { recursive: true });
+          await fs.writeFile(path.join(dir, `${id}.json`), JSON.stringify(document, null, 2));
+        } else {
+          // Producción sin Blob: memoria
+          memoryStorage.set(blobPath, document);
+        }
       }
 
       console.log(`✅ Documento creado en ${collection}:`, id);
@@ -117,19 +130,23 @@ class BlobDatabase {
         const response = await fetch(`https://blob.vercel-storage.com/${blobPath}`);
         if (!response.ok) return null;
         return await response.json();
-      } else if (this.isProduction) {
-        // Memoria
-        return memoryStorage.get(blobPath) || null;
       } else {
-        // Desarrollo local
-        const fs = require('fs').promises;
-        const path = require('path');
-        const filePath = path.join(__dirname, '../blob-local', collection, `${id}.json`);
-        try {
-          const data = await fs.readFile(filePath, 'utf-8');
-          return JSON.parse(data);
-        } catch {
-          return null;
+        // Memoria o archivos locales
+        const isLocal = !process.env.VERCEL;
+        if (isLocal) {
+          // Desarrollo local
+          const fs = require('fs').promises;
+          const path = require('path');
+          const filePath = path.join(__dirname, '../blob-local', collection, `${id}.json`);
+          try {
+            const data = await fs.readFile(filePath, 'utf-8');
+            return JSON.parse(data);
+          } catch {
+            return null;
+          }
+        } else {
+          // Memoria
+          return memoryStorage.get(blobPath) || null;
         }
       }
     } catch (error) {
@@ -156,30 +173,34 @@ class BlobDatabase {
         });
         
         documents = await Promise.all(fetchPromises);
-      } else if (this.isProduction) {
-        // Memoria
-        const keys = memoryStorage.keys(blobPath);
-        documents = keys.map(k => memoryStorage.get(k));
       } else {
-        // Desarrollo local
-        const fs = require('fs').promises;
-        const path = require('path');
-        const dir = path.join(__dirname, '../blob-local', collection);
-        
-        try {
-          await fs.mkdir(dir, { recursive: true });
-          const files = await fs.readdir(dir);
+        // Memoria o archivos locales
+        const isLocal = !process.env.VERCEL;
+        if (isLocal) {
+          // Desarrollo local
+          const fs = require('fs').promises;
+          const path = require('path');
+          const dir = path.join(__dirname, '../blob-local', collection);
           
-          const readPromises = files
-            .filter(f => f.endsWith('.json'))
-            .map(async (file) => {
-              const data = await fs.readFile(path.join(dir, file), 'utf-8');
-              return JSON.parse(data);
-            });
-          
-          documents = await Promise.all(readPromises);
-        } catch {
-          documents = [];
+          try {
+            await fs.mkdir(dir, { recursive: true });
+            const files = await fs.readdir(dir);
+            
+            const readPromises = files
+              .filter(f => f.endsWith('.json'))
+              .map(async (file) => {
+                const data = await fs.readFile(path.join(dir, file), 'utf-8');
+                return JSON.parse(data);
+              });
+            
+            documents = await Promise.all(readPromises);
+          } catch {
+            documents = [];
+          }
+        } else {
+          // Memoria
+          const keys = memoryStorage.keys(blobPath);
+          documents = keys.map(k => memoryStorage.get(k));
         }
       }
 
@@ -231,16 +252,20 @@ class BlobDatabase {
           access: 'public',
           addRandomSuffix: false
         });
-      } else if (this.isProduction) {
-        // Memoria
-        memoryStorage.set(blobPath, document);
       } else {
-        // Desarrollo local
-        const fs = require('fs').promises;
-        const path = require('path');
-        const dir = path.join(__dirname, '../blob-local', collection);
-        await fs.mkdir(dir, { recursive: true });
-        await fs.writeFile(path.join(dir, `${id}.json`), JSON.stringify(document, null, 2));
+        // Memoria o archivos locales
+        const isLocal = !process.env.VERCEL;
+        if (isLocal) {
+          // Desarrollo local
+          const fs = require('fs').promises;
+          const path = require('path');
+          const dir = path.join(__dirname, '../blob-local', collection);
+          await fs.mkdir(dir, { recursive: true });
+          await fs.writeFile(path.join(dir, `${id}.json`), JSON.stringify(document, null, 2));
+        } else {
+          // Memoria
+          memoryStorage.set(blobPath, document);
+        }
       }
 
       console.log(`✅ Documento actualizado en ${collection}:`, id);
@@ -264,15 +289,19 @@ class BlobDatabase {
       if (this.hasBlobStorage) {
         // Vercel Blob Storage
         await del(blobPath);
-      } else if (this.isProduction) {
-        // Memoria
-        memoryStorage.delete(blobPath);
       } else {
-        // Desarrollo local
-        const fs = require('fs').promises;
-        const path = require('path');
-        const filePath = path.join(__dirname, '../blob-local', collection, `${id}.json`);
-        await fs.unlink(filePath);
+        // Memoria o archivos locales
+        const isLocal = !process.env.VERCEL;
+        if (isLocal) {
+          // Desarrollo local
+          const fs = require('fs').promises;
+          const path = require('path');
+          const filePath = path.join(__dirname, '../blob-local', collection, `${id}.json`);
+          await fs.unlink(filePath);
+        } else {
+          // Memoria
+          memoryStorage.delete(blobPath);
+        }
       }
 
       console.log(`✅ Documento eliminado de ${collection}:`, id);
