@@ -18,9 +18,11 @@ OPENAI_API_KEY=your_openai_api_key
 SESSION_SECRET=your_random_secret_string
 CORS_ORIGIN=https://your-vercel-app.vercel.app
 BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
+ENABLE_BLOB_BACKUP=true
 ```
 
 > **Nota**: El `BLOB_READ_WRITE_TOKEN` se genera automáticamente al conectar Vercel Blob Storage a tu proyecto.
+> **Nota 2**: `ENABLE_BLOB_BACKUP=true` activa respaldos automáticos de contactos y conversaciones cada 2 horas en Blob Storage.
 
 ### Optional (for Google integrations)
 ```

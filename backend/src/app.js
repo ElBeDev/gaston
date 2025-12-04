@@ -66,10 +66,17 @@ const authRoutes = require('./routes/auth');
 const emailRoutes = require('./routes/email');
 const calendarRoutes = require('../routes/calendar-fallback'); // Temporary fallback
 const sessionStorage = require('./services/sessionStorageService');
+const dataBackupService = require('./services/dataBackupService');
 
 app.use('/auth', authRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/calendar', calendarRoutes);
+
+// Iniciar respaldos automáticos en producción
+if (process.env.NODE_ENV === 'production' || process.env.ENABLE_BLOB_BACKUP === 'true') {
+  dataBackupService.startAutomaticBackups(120); // Cada 2 horas
+  console.log('📦 Sistema de respaldos automáticos iniciado');
+}
 
 // Session management route
 app.get('/api/sessions/status', async (req, res) => {
@@ -78,6 +85,37 @@ app.get('/api/sessions/status', async (req, res) => {
     res.json(status);
   } catch (error) {
     console.error('Error getting session status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Backup management routes
+app.get('/api/backups/status', async (req, res) => {
+  try {
+    const stats = await dataBackupService.getBackupStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error getting backup status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/backups/trigger', async (req, res) => {
+  try {
+    const result = await dataBackupService.performFullBackup();
+    res.json(result);
+  } catch (error) {
+    console.error('Error triggering backup:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/backups/list', async (req, res) => {
+  try {
+    const backups = await dataBackupService.listBackups();
+    res.json(backups);
+  } catch (error) {
+    console.error('Error listing backups:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

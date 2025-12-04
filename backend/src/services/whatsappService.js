@@ -2,6 +2,7 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
+const { BlobAuthStrategy } = require('../utils/whatsappBlobAuth');
 
 class WhatsAppService {
     constructor() {
@@ -29,11 +30,22 @@ class WhatsAppService {
             const sessionPath = path.join(__dirname, '../whatsapp-sessions');
             console.log(`📁 Buscando sesión existente en: ${sessionPath}`);
             
-            this.client = new Client({
-                authStrategy: new LocalAuth({
+            // Usar Blob Storage en producción (Vercel) o LocalAuth en desarrollo
+            const isProduction = process.env.NODE_ENV === 'production' || process.env.BLOB_READ_WRITE_TOKEN;
+            const authStrategy = isProduction
+                ? new BlobAuthStrategy({
+                    sessionName: 'eva-assistant-session',
+                    clientId: 'eva-client'
+                  })
+                : new LocalAuth({
                     name: 'eva-assistant-session',
                     dataPath: sessionPath
-                }),
+                  });
+            
+            console.log(`🔐 Usando estrategia de autenticación: ${isProduction ? 'Blob Storage (Producción)' : 'LocalAuth (Desarrollo)'}`);
+            
+            this.client = new Client({
+                authStrategy,
                 puppeteer: {
                     headless: true,
                     args: [
