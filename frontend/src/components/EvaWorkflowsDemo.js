@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography, Grid2 as Grid, Button, Chip, Box } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Button, Chip, Box } from '@mui/material';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import EventIcon from '@mui/icons-material/Event';
 import TaskIcon from '@mui/icons-material/Task';

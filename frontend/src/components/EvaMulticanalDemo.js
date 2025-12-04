@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography, Grid2 as Grid, Button } from '@mui/material';
+import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import SmsIcon from '@mui/icons-material/Sms';
 import CallIcon from '@mui/icons-material/Call';

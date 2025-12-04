@@ -8,7 +8,7 @@ import {
   Chip,
   Button,
   TextField,
-  Grid2 as Grid,
+  Grid,
   Divider,
   List,
   ListItem,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Box, 
   Paper, 
-  Grid2 as Grid, 
+  Grid, 
   Typography,
   Tabs,
   Tab,

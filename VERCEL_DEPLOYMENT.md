@@ -17,7 +17,10 @@ MONGODB_URI=your_mongodb_atlas_uri
 OPENAI_API_KEY=your_openai_api_key
 SESSION_SECRET=your_random_secret_string
 CORS_ORIGIN=https://your-vercel-app.vercel.app
+BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 ```
+
+> **Nota**: El `BLOB_READ_WRITE_TOKEN` se genera automáticamente al conectar Vercel Blob Storage a tu proyecto.
 
 ### Optional (for Google integrations)
 ```
@@ -49,6 +52,23 @@ vercel --prod
 
 1. **Update CORS_ORIGIN**: Set to your Vercel deployment URL
 2. **MongoDB Whitelist**: Add Vercel IPs to MongoDB Atlas network access
+3. **Enable Vercel Blob Storage**:
+   - Go to Vercel Dashboard → Storage → Create Database
+   - Select "Blob" storage
+   - Click "Connect" → This will automatically add `BLOB_READ_WRITE_TOKEN` to your env vars
+   - Your WhatsApp sessions will now persist between deployments! 🎉
+
+## About WhatsApp Sessions
+
+### Local Development
+- Sessions are stored in `backend/src/whatsapp-sessions/` (gitignored)
+- Files are persisted between restarts
+
+### Production (Vercel)
+- Sessions are stored in **Vercel Blob Storage**
+- Uses the custom `BlobAuthStrategy` to save/load session data
+- Sessions persist even when serverless functions restart
+- Automatic fallback to local storage if Blob token is not configured
 3. **Google OAuth**: Update redirect URIs in Google Console
 4. **Test**: Visit your Vercel URL and test all features
 

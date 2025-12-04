@@ -11,7 +11,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-  Grid2 as Grid, 
+  Grid, 
   Card, 
   CardContent, 
   Typography, 

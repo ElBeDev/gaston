@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Grid2 as Grid,
+  Grid,
   Accordion,
   AccordionSummary,
   AccordionDetails,

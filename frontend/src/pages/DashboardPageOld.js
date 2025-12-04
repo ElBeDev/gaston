@@ -3,7 +3,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import { PieChart } from '@mui/x-charts/PieChart';
 import {
   Box,
-  Grid2 as Grid,
+  Grid,
   Card,
   CardContent,
   Typography,
