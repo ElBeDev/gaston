@@ -3,35 +3,27 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const { Server } = require('socket.io');
-const http = require('http');
 const path = require('path');
-
 const session = require('express-session');
 
 // Load environment variables from root directory
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
-const app = express();
-const server = http.createServer(app);
+// Import MongoDB connection manager
+const { ensureMongoConnection } = require('./utils/mongoConnection');
 
-// Increase header size limits
-server.maxHeadersCount = 0; // Remove headers count limit
+const app = express();
+
+// Middleware para asegurar conexión MongoDB en cada request
+app.use(ensureMongoConnection);
+
+// Increase header size limits (for serverless compatibility)
 app.use((req, res, next) => {
   // Increase max header size
-  req.connection.maxHeadersCount = 0;
-  next();
-});
-
-const io = new Server(server, {
-  cors: {
-    origin: process.env.NODE_ENV === 'production' ? false : [
-      "http://localhost:3001",
-      "http://localhost:3002",
-      "http://192.168.10.147:3001"
-    ],
-    methods: ["GET", "POST"]
+  if (req.connection) {
+    req.connection.maxHeadersCount = 0;
   }
+  next();
 });
 
 // Session middleware (configure secret in .env for production)
@@ -40,7 +32,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // Solo true en producción con HTTPS
+    secure: process.env.NODE_ENV === 'production', // true en producción con HTTPS
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000 // 24 horas
   }
@@ -48,14 +40,20 @@ app.use(session({
 
 // Middleware
 app.use(helmet());
-app.use(cors({
-  origin: [
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'http://192.168.10.147:3001'
-  ],
+
+// CORS configuration
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL, 'https://gaston-jet.vercel.app'].filter(Boolean)
+    : [
+        'http://localhost:3001',
+        'http://localhost:3002',
+        'http://192.168.10.147:3001'
+      ],
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb', parameterLimit: 1000 }));
@@ -72,10 +70,12 @@ app.use('/auth', authRoutes);
 app.use('/api/email', emailRoutes);
 app.use('/api/calendar', calendarRoutes);
 
-// Iniciar respaldos automáticos en producción
-if (process.env.NODE_ENV === 'production' || process.env.ENABLE_BLOB_BACKUP === 'true') {
-  dataBackupService.startAutomaticBackups(120); // Cada 2 horas
-  console.log('📦 Sistema de respaldos automáticos iniciado');
+// Iniciar respaldos automáticos solo en desarrollo local (no en serverless)
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  if (process.env.ENABLE_BLOB_BACKUP === 'true') {
+    dataBackupService.startAutomaticBackups(120); // Cada 2 horas
+    console.log('📦 Sistema de respaldos automáticos iniciado');
+  }
 }
 
 // Session management route
@@ -120,71 +120,12 @@ app.get('/api/backups/list', async (req, res) => {
   }
 });
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+// NOTE: MongoDB connection is now handled by ensureMongoConnection middleware
+// This allows for on-demand connections in serverless environments
 
-// Socket.IO connection handling
-io.on('connection', (socket) => {
-  console.log('👤 User connected:', socket.id);
-
-  socket.on('join_room', (userId) => {
-    socket.join(userId);
-    console.log(`👤 User ${userId} joined room`);
-  });
-
-  socket.on('user_message', async (data) => {
-    console.log('📥 Received message from user:', data);
-    
-    try {
-      socket.emit('typing');
-      
-      const { message, userId } = data;
-      
-      // Use the superChatController's enhanced sendMessage method
-      const superChatController = require('./controllers/superChatController');
-      
-      // Create a mock request and response object for the controller
-      const mockReq = {
-        body: { message, userId },
-        app: { get: () => io }
-      };
-      
-      const mockRes = {
-        json: (data) => {
-          console.log('📤 Sending response to user:', data);
-          
-          // Send response back to user via socket
-          socket.emit('assistant_message', {
-            message: data.response || data.message || data,
-            timestamp: new Date().toISOString()
-          });
-        },
-        status: (code) => ({
-          json: (error) => {
-            console.error('❌ Controller error:', error);
-            socket.emit('error', { message: error.error || 'Something went wrong' });
-          }
-        })
-      };
-      
-      // Call the controller method - use handleMessage
-      await superChatController.sendMessage(mockReq, mockRes);
-      
-    } catch (error) {
-      console.error('❌ Error processing message:', error);
-      socket.emit('error', { message: 'Sorry, I encountered an error processing your message.' });
-    }
-  });
-
-  socket.on('disconnect', () => {
-    console.log('👤 User disconnected:', socket.id);
-  });
-});
-
-// Make io accessible to routes
-app.set('socketio', io);
+// NOTE: Socket.IO is disabled in serverless (Vercel) environment
+// Socket connections require persistent server, not compatible with serverless functions
+// Real-time features will need alternative implementation (polling, webhooks, etc.)
 
 // Routes - Use the comprehensive chatRoutes.js
 app.use('/api/chat', require('./routes/chatRoutes'));
@@ -213,11 +154,11 @@ const evaWhatsAppRoutes = require('./routes/eva-whatsapp');
 app.use('/eva/whatsapp', evaWhatsAppRoutes);
 
 // WhatsApp Web integration
-const { router: whatsappRoutes, setupWhatsAppWebSocket } = require('./routes/whatsapp');
+const { router: whatsappRoutes } = require('./routes/whatsapp');
 app.use('/api/whatsapp', whatsappRoutes);
 
-// Setup WhatsApp WebSocket events
-setupWhatsAppWebSocket(io);
+// NOTE: WhatsApp WebSocket setup moved to local development section below
+// Serverless functions don't support persistent WebSocket connections
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -247,6 +188,38 @@ module.exports = app;
 
 // Start server only if not in serverless environment (Vercel)
 if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  // Socket.IO and HTTP server only in local development
+  const { Server } = require('socket.io');
+  const http = require('http');
+  
+  const server = http.createServer(app);
+  const io = new Server(server, {
+    cors: {
+      origin: [
+        "http://localhost:3001",
+        "http://localhost:3002",
+        "http://192.168.10.147:3001"
+      ],
+      methods: ["GET", "POST"]
+    }
+  });
+  
+  // Socket.IO connection handling (local development only)
+  io.on('connection', (socket) => {
+    console.log('👤 User connected:', socket.id);
+    
+    socket.on('disconnect', () => {
+      console.log('👋 User disconnected:', socket.id);
+    });
+  });
+  
+  // Make io accessible to routes
+  app.set('socketio', io);
+  
+  // WhatsApp WebSocket setup (local only)
+  const { setupWhatsAppWebSocket } = require('./services/whatsappService');
+  setupWhatsAppWebSocket(io);
+  
   const PORT = process.env.PORT || 3002;
   server.listen(PORT, () => {
     console.log(`🚀 Eva Backend Server running on port ${PORT}`);
@@ -255,19 +228,15 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     console.log(`🧠 Intelligence system: ACTIVE`);
     console.log(`🎯 Ready for advanced interactions!`);
     
-    // 🎛️ INITIALIZE EVA COMMAND CENTER
-    console.log(`🎛️ Initializing Eva Command Center...`);
-    const { initializeCommandCenter } = require('./routes/evaControl');
-    const commandCenter = initializeCommandCenter(io);
-    console.log(`✅ Eva Command Center available at: http://localhost:${PORT}/eva/control`);
-    console.log(`🎯 Phase 1 - Command Center: ACTIVE`);
-    
-    // 🤖 INITIALIZE EVA AUTONOMOUS OPERATIONS
-    console.log(`🤖 Initializing Eva Autonomous Operations...`);
-    const { initializeAutonomousController } = require('./routes/evaAutonomous');
-    const autonomousController = initializeAutonomousController(commandCenter);
-    console.log(`✅ Eva Autonomous Operations available at: http://localhost:${PORT}/eva/autonomous`);
-    console.log(`🎯 Phase 2 - Autonomous Operations: ACTIVE`);
-    console.log(`🧠 100% Autonomía Avanzada: ONLINE`);
+    // Initialize command center in local development
+    if (io) {
+      const { initializeCommandCenter } = require('./routes/evaControl');
+      const commandCenter = initializeCommandCenter(io);
+      console.log(`✅ Eva Command Center ACTIVE`);
+      
+      const { initializeAutonomousController } = require('./routes/evaAutonomous');
+      const autonomousController = initializeAutonomousController(commandCenter);
+      console.log(`✅ Eva Autonomous Operations ACTIVE`);
+    }
   });
 }
