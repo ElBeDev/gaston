@@ -9,8 +9,7 @@
     "frontend": "cd frontend && npm start",
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "build": "cd frontend && npm run build",
-    "start": "cd backend && npm start",
-    "postinstall": "cd backend && npm install"
+    "start": "cd backend && npm start"
   },
   "dependencies": {
     "@vercel/blob": "^2.0.0",
