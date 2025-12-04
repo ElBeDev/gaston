@@ -242,27 +242,32 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server with Socket.io (CRITICAL FIX)
-const PORT = process.env.PORT || 3002;
-server.listen(PORT, () => {  // Use 'server.listen' NOT 'app.listen'
-  console.log(`🚀 Eva Backend Server running on port ${PORT}`);
-  console.log(`📡 API available at: http://localhost:${PORT}/api`);
-  console.log(`🔌 Socket.io available at: http://localhost:${PORT}`);
-  console.log(`🧠 Intelligence system: ACTIVE`);
-  console.log(`🎯 Ready for advanced interactions!`);
-  
-  // 🎛️ INITIALIZE EVA COMMAND CENTER
-  console.log(`🎛️ Initializing Eva Command Center...`);
-  const { initializeCommandCenter } = require('./routes/evaControl');
-  const commandCenter = initializeCommandCenter(io);
-  console.log(`✅ Eva Command Center available at: http://localhost:${PORT}/eva/control`);
-  console.log(`🎯 Phase 1 - Command Center: ACTIVE`);
-  
-  // 🤖 INITIALIZE EVA AUTONOMOUS OPERATIONS
-  console.log(`🤖 Initializing Eva Autonomous Operations...`);
-  const { initializeAutonomousController } = require('./routes/evaAutonomous');
-  const autonomousController = initializeAutonomousController(commandCenter);
-  console.log(`✅ Eva Autonomous Operations available at: http://localhost:${PORT}/eva/autonomous`);
-  console.log(`🎯 Phase 2 - Autonomous Operations: ACTIVE`);
-  console.log(`🧠 100% Autonomía Avanzada: ONLINE`);
-});
+// Export app for Vercel serverless
+module.exports = app;
+
+// Start server only if not in serverless environment (Vercel)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const PORT = process.env.PORT || 3002;
+  server.listen(PORT, () => {
+    console.log(`🚀 Eva Backend Server running on port ${PORT}`);
+    console.log(`📡 API available at: http://localhost:${PORT}/api`);
+    console.log(`🔌 Socket.io available at: http://localhost:${PORT}`);
+    console.log(`🧠 Intelligence system: ACTIVE`);
+    console.log(`🎯 Ready for advanced interactions!`);
+    
+    // 🎛️ INITIALIZE EVA COMMAND CENTER
+    console.log(`🎛️ Initializing Eva Command Center...`);
+    const { initializeCommandCenter } = require('./routes/evaControl');
+    const commandCenter = initializeCommandCenter(io);
+    console.log(`✅ Eva Command Center available at: http://localhost:${PORT}/eva/control`);
+    console.log(`🎯 Phase 1 - Command Center: ACTIVE`);
+    
+    // 🤖 INITIALIZE EVA AUTONOMOUS OPERATIONS
+    console.log(`🤖 Initializing Eva Autonomous Operations...`);
+    const { initializeAutonomousController } = require('./routes/evaAutonomous');
+    const autonomousController = initializeAutonomousController(commandCenter);
+    console.log(`✅ Eva Autonomous Operations available at: http://localhost:${PORT}/eva/autonomous`);
+    console.log(`🎯 Phase 2 - Autonomous Operations: ACTIVE`);
+    console.log(`🧠 100% Autonomía Avanzada: ONLINE`);
+  });
+}
