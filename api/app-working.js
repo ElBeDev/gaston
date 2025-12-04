@@ -55,6 +55,14 @@ try {
   console.error('❌ Error loading auth routes:', error.message);
 }
 
+// Auth status endpoint
+app.get('/auth/status', (req, res) => {
+  res.json({
+    authenticated: !!(req.session && req.session.tokens),
+    user: req.session?.user || null
+  });
+});
+
 try {
   const emailRoutes = require('../backend/src/routes/email');
   app.use('/api/email', emailRoutes);
@@ -78,6 +86,48 @@ try {
 } catch (error) {
   console.error('❌ Error loading WhatsApp routes:', error.message);
 }
+
+// CRM routes (mock - pendiente migración a Blob)
+app.get('/api/crm/contacts', async (req, res) => {
+  // Usar contacts de Blob Storage
+  try {
+    const contactsBlob = require('../backend/src/routes/contactsBlob');
+    // Redirigir a /api/contacts
+    return res.redirect('/api/contacts');
+  } catch (error) {
+    res.json({ success: true, contacts: [], total: 0, message: 'CRM usando Blob Storage' });
+  }
+});
+
+app.get('/api/crm/contacts/analytics/summary', (req, res) => {
+  res.json({
+    success: true,
+    summary: {
+      total: 0,
+      bySegment: {},
+      byStatus: {},
+      recentActivity: 0
+    },
+    message: 'Analytics disponible después de migración completa'
+  });
+});
+
+// Chat routes (mock - pendiente migración a Blob)
+app.get('/api/chat/history/:userId', (req, res) => {
+  res.json({
+    success: true,
+    conversations: [],
+    message: 'Chat history disponible después de migración a Blob Storage'
+  });
+});
+
+app.post('/api/chat/message', (req, res) => {
+  res.json({
+    success: false,
+    message: 'Chat temporalmente deshabilitado - migración en proceso',
+    error: 'MIGRATION_IN_PROGRESS'
+  });
+});
 
 // Health check
 app.get('/api/health', (req, res) => {

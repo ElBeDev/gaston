@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import EvaAvatar from "./EvaAvatar";
+import { getApiUrl } from '../config/api';
 
 const UnifiedChat = () => {
   console.log("💬 UnifiedChat component rendered");
@@ -50,11 +51,11 @@ const UnifiedChat = () => {
   useEffect(() => {
     const loadHistory = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/chat/history/gaston');
-        const history = await response.json();
+        const response = await fetch(getApiUrl('/api/chat/history/gaston'));
+        const data = await response.json();
         
-        if (history && history.length > 0) {
-          const formattedMessages = history.map(msg => ({
+        if (data.success && data.conversations && data.conversations.length > 0) {
+          const formattedMessages = data.conversations.map(msg => ({
             from: msg.role === 'user' ? 'user' : 'eva',
             text: msg.message || msg.content,
             type: 'text',
@@ -96,14 +97,19 @@ const UnifiedChat = () => {
     setTyping(true);
 
     try {
-      const response = await fetch("http://localhost:3001/api/chat/message", {
+      const response = await fetch(getApiUrl("/api/chat/message"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg.text, userId: "gaston" }),
       });
       const data = await response.json();
       
-      addMessage("eva", data.response || "No entendí, ¿puedes repetir?", "text");
+      // Si está en migración, mostrar mensaje amigable
+      if (data.error === 'MIGRATION_IN_PROGRESS') {
+        addMessage("eva", "El chat está siendo actualizado. ¡Pronto estará disponible!", "info");
+      } else {
+        addMessage("eva", data.response || "No entendí, ¿puedes repetir?", "text");
+      }
 
     } catch (err) {
       addMessage("eva", "Ocurrió un error al contactar a Eva.", "error");
@@ -116,8 +122,11 @@ const UnifiedChat = () => {
   // Voice conversation functions
   const startVoiceConversation = async () => {
     try {
-      setVoiceStatus("Conectando...");
+      setVoiceStatus("La funcionalidad de voz estará disponible pronto...");
       
+      // TODO: Implementar voz con WebRTC o alternativa serverless-compatible
+      // WebSocket tradicional no funciona en Vercel serverless
+      /*
       const ws = new WebSocket(`ws://localhost:3003/stream`);
       wsRef.current = ws;
 
@@ -202,6 +211,7 @@ const UnifiedChat = () => {
       await startAudioCapture();
       setConversationActive(true);
       setVoiceStatus("🎤 Habla ahora...");
+      */
       
     } catch (err) {
       console.error("❌ Error iniciando conversación:", err);
