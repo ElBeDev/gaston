@@ -53,12 +53,12 @@ const ContactDashboard = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: '#f9fafb' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: '#f9fafb', overflow: 'hidden' }}>
       {/* Header with Stats */}
-      <Paper sx={{ p: 3, borderRadius: 0, boxShadow: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+      <Paper sx={{ p: 2, borderRadius: 0, boxShadow: 1, flexShrink: 0 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
           <Box>
-            <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1f2937', mb: 1 }}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#1f2937', mb: 1 }}>
               CRM Dashboard
             </Typography>
             <Typography variant="body1" color="text.secondary">
@@ -78,14 +78,14 @@ const ContactDashboard = () => {
         </Box>
 
         {/* Quick Stats */}
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
-              <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#2563eb' }}>
+              <CardContent sx={{ textAlign: 'center', py: 1.5 }}>
+                <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#2563eb' }}>
                   {stats.totalContacts}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="caption" color="text.secondary">
                   Total Contactos
                 </Typography>
               </CardContent>
@@ -94,10 +94,10 @@ const ContactDashboard = () => {
           <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#059669' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#059669' }}>
                   {stats.vipContacts}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="caption" color="text.secondary">
                   VIP
                 </Typography>
               </CardContent>
@@ -106,10 +106,10 @@ const ContactDashboard = () => {
           <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#7c3aed' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#7c3aed' }}>
                   {stats.newThisWeek}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="caption" color="text.secondary">
                   Nuevos
                 </Typography>
               </CardContent>
@@ -118,10 +118,10 @@ const ContactDashboard = () => {
           <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#dc2626' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#dc2626' }}>
                   {stats.pendingFollowup}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="caption" color="text.secondary">
                   Follow-up
                 </Typography>
               </CardContent>
@@ -130,10 +130,10 @@ const ContactDashboard = () => {
           <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#be185d' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#be185d' }}>
                   {stats.highEngagement}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="caption" color="text.secondary">
                   Alto Engagement
                 </Typography>
               </CardContent>
@@ -142,10 +142,10 @@ const ContactDashboard = () => {
           <Grid size={{ sm: 6, md: 2 }}>
             <Card sx={{ bgcolor: '#fff', boxShadow: 1 }}>
               <CardContent sx={{ textAlign: 'center', py: 2 }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#ea580c' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#ea580c' }}>
                   {stats.atRisk}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="caption" color="text.secondary">
                   En Riesgo
                 </Typography>
               </CardContent>
@@ -154,8 +154,8 @@ const ContactDashboard = () => {
         </Grid>
 
         {/* Navigation Tabs */}
-        <Box sx={{ mt: 3 }}>
-          <Tabs value={activeTab} onChange={handleTabChange} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ mt: 2 }}>
+          <Tabs value={activeTab} onChange={handleTabChange} sx={{ borderBottom: 1, borderColor: 'divider', minHeight: 42 }}>
             <Tab 
               label="Vista General" 
               icon={<Person />} 
@@ -185,7 +185,7 @@ const ContactDashboard = () => {
       </Paper>
 
       {/* Main Content Area */}
-      <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', gap: 0 }}>
+      <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', gap: 0, minHeight: 0 }}>
         {/* Left Sidebar - Contact Search */}
         <Paper sx={{ 
           width: 420, 
@@ -195,7 +195,8 @@ const ContactDashboard = () => {
           borderRadius: 0, 
           boxShadow: 1,
           borderRight: 1,
-          borderColor: 'divider'
+          borderColor: 'divider',
+          overflow: 'hidden'
         }}>
           <ContactSearch
             onSelectContact={setSelectedContact}
@@ -218,17 +219,21 @@ const ContactDashboard = () => {
                 <ContactProfile contact={selectedContact} />
               </Box>
               
-              {/* Right Sidebar - Relationship Graph */}
+              {/* Right Sidebar - Analytics */}
               <Box sx={{ 
-                width: 380,
-                minWidth: 380,
+                width: 420,
+                minWidth: 420,
                 p: 3, 
                 borderLeft: 1, 
                 borderColor: 'divider', 
                 overflow: 'auto',
-                bgcolor: '#fff'
+                bgcolor: '#fff',
+                display: 'flex',
+                flexDirection: 'column'
               }}>
-                <RelationshipGraph contact={selectedContact} />
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+                  <AnalyticsWidgets />
+                </Box>
               </Box>
             </Box>
           )}
@@ -238,7 +243,7 @@ const ContactDashboard = () => {
               <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold' }}>
                 Analytics del CRM
               </Typography>
-              <Grid container spacing={3}>
+              <Grid container spacing={2}>
                 <Grid size={{ xs: 12, md: 6 }}>
                   <Card sx={{ p: 3 }}>
                     <Typography variant="h6" sx={{ mb: 2 }}>
@@ -318,11 +323,6 @@ const ContactDashboard = () => {
           )}
         </Box>
       </Box>
-
-      {/* Bottom Analytics Bar */}
-      <Paper sx={{ borderRadius: 0, boxShadow: 1 }}>
-        <AnalyticsWidgets />
-      </Paper>
     </Box>
   );
 };

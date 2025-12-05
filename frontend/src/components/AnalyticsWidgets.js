@@ -107,28 +107,28 @@ const AnalyticsWidgets = () => {
   ];
 
   return (
-    <Card sx={{ mt: 3, boxShadow: 1 }}>
-      <CardContent sx={{ p: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Assessment sx={{ color: '#2563eb' }} />
+    <Card sx={{ boxShadow: 1 }}>
+      <CardContent sx={{ p: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Assessment sx={{ color: '#2563eb', fontSize: 20 }} />
           Resumen CRM
         </Typography>
         
         {/* Quick Stats Row */}
-        <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid container spacing={1} sx={{ mb: 2 }}>
           {quickStats.map((stat, index) => (
             <Grid size="grow" key={index}>
               <Box sx={{ 
                 textAlign: 'center', 
-                p: 1.5, 
-                borderRadius: 2, 
+                p: 1, 
+                borderRadius: 1, 
                 bgcolor: `${stat.color}08`,
                 border: `1px solid ${stat.color}20`
               }}>
                 <Box sx={{ color: stat.color, mb: 0.5 }}>
                   {React.cloneElement(stat.icon, { fontSize: 'small' })}
                 </Box>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', color: stat.color, fontSize: '1rem' }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: stat.color, fontSize: '0.95rem' }}>
                   {stat.value}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
@@ -139,19 +139,19 @@ const AnalyticsWidgets = () => {
           ))}
         </Grid>
 
-        <Divider sx={{ mb: 2 }} />
+        <Divider sx={{ mb: 1.5 }} />
 
         {/* Compact Segments & Engagement */}
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 8 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1.5, color: 'text.secondary' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1, color: 'text.secondary', fontSize: '0.8rem' }}>
               Engagement por Segmento
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
               {kpis.topSegments.map((segment) => (
                 <Box key={segment.name}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <Chip 
                         label={segment.name}
                         size="small"
@@ -159,15 +159,16 @@ const AnalyticsWidgets = () => {
                           bgcolor: `${segment.color}15`,
                           color: segment.color,
                           fontWeight: 500,
-                          fontSize: '0.75rem',
-                          height: 24
+                          fontSize: '0.7rem',
+                          height: 20,
+                          '& .MuiChip-label': { px: 1 }
                         }}
                       />
-                      <Typography variant="caption" color="text.secondary">
-                        {segment.count} contactos
+                      <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
+                        {segment.count}
                       </Typography>
                     </Box>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold', color: segment.color }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', color: segment.color, fontSize: '0.8rem' }}>
                       {segment.percentage}%
                     </Typography>
                   </Box>
@@ -175,12 +176,12 @@ const AnalyticsWidgets = () => {
                     variant="determinate" 
                     value={segment.percentage} 
                     sx={{ 
-                      height: 4, 
-                      borderRadius: 2,
+                      height: 6, 
+                      borderRadius: 3,
                       bgcolor: `${segment.color}10`,
                       '& .MuiLinearProgress-bar': {
                         bgcolor: segment.color,
-                        borderRadius: 2
+                        borderRadius: 3
                       }
                     }} 
                   />
@@ -190,14 +191,14 @@ const AnalyticsWidgets = () => {
           </Grid>
           
           <Grid size={{ xs: 12, md: 4 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1.5, color: 'text.secondary' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1, color: 'text.secondary', fontSize: '0.8rem' }}>
               Engagement General
             </Typography>
             <Box sx={{ textAlign: 'center', p: 2, borderRadius: 2, bgcolor: '#f8fafc' }}>
               <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#2563eb', mb: 0.5 }}>
                 {kpis.averageEngagement}%
               </Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
                 Promedio general
               </Typography>
             </Box>
