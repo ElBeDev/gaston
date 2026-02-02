@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { getApiUrl } from '../config/api';
+import { getApiUrl, API_BASE_URL } from '../config/api';
 
 const AuthContext = createContext();
 
@@ -66,6 +66,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    // Auth routes don't use /api prefix
     window.location.href = `${API_BASE_URL}/auth/logout`;
   };
 

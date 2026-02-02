@@ -1,4 +1,5 @@
 const OpenAI = require('openai');
+const { getModel } = require('../config/openai.config');
 const TaskOrchestrator = require('./taskOrchestrator');
 const DecisionEngine = require('./decisionEngine');
 const ExecutionMonitor = require('./executionMonitor');
@@ -115,7 +116,7 @@ class AutonomousAgent {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });
@@ -153,7 +154,7 @@ class AutonomousAgent {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });
@@ -352,7 +353,7 @@ class AutonomousAgent {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });

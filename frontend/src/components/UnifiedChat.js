@@ -104,14 +104,16 @@ const UnifiedChat = () => {
       });
       const data = await response.json();
       
-      // Si está en migración, mostrar mensaje amigable
-      if (data.error === 'MIGRATION_IN_PROGRESS') {
+      if (data.success && data.message) {
+        addMessage("eva", data.message.text, "text");
+      } else if (data.error === 'MIGRATION_IN_PROGRESS') {
         addMessage("eva", "El chat está siendo actualizado. ¡Pronto estará disponible!", "info");
       } else {
         addMessage("eva", data.response || "No entendí, ¿puedes repetir?", "text");
       }
 
     } catch (err) {
+      console.error('Error sending message:', err);
       addMessage("eva", "Ocurrió un error al contactar a Eva.", "error");
     }
     
@@ -499,13 +501,22 @@ const UnifiedChat = () => {
       console.log("👤 User:", pendingConversation.userText);
       console.log("🤖 Eva:", pendingConversation.evaText);
       
-      // Add user message first
-      addMessage("user", pendingConversation.userText, "voice");
-      
-      // Add Eva message after a short delay to ensure proper order
-      setTimeout(() => {
-        addMessage("eva", pendingConversation.evaText, "voice");
-      }, 50);
+      // Add both messages
+      setMessages(prev => [
+        ...prev,
+        {
+          from: "user",
+          text: pendingConversation.userText,
+          type: "voice",
+          timestamp: new Date().toISOString()
+        },
+        {
+          from: "eva",
+          text: pendingConversation.evaText,
+          type: "voice",
+          timestamp: new Date().toISOString()
+        }
+      ]);
       
       // Clear pending conversation
       setPendingConversation({
@@ -515,7 +526,7 @@ const UnifiedChat = () => {
         evaReceived: false
       });
     }
-  }, [pendingConversation]);
+  }, [pendingConversation.userReceived, pendingConversation.evaReceived, pendingConversation.userText, pendingConversation.evaText]);
 
   return (
     <div

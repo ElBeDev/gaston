@@ -1,6 +1,7 @@
 const OpenAI = require('openai');
 const path = require('path');
 const UserContext = require('../models/UserContext');
+const { getModel, CONFIG } = require('../config/openai.config');
 
 // Ensure environment variables are loaded
 require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
@@ -14,7 +15,7 @@ class OpenAIService {
     // Enhanced model configurations for different use cases
     this.modelConfigs = {
       conversation: {
-        model: 'gpt-4-turbo-preview',
+        model: getModel('chat'),
         temperature: 0.7,
         max_tokens: 2000,
         top_p: 0.9,
@@ -22,7 +23,7 @@ class OpenAIService {
         presence_penalty: 0.1
       },
       analysis: {
-        model: 'gpt-4-turbo-preview',
+        model: getModel('analysis'),
         temperature: 0.3,
         max_tokens: 1000,
         top_p: 0.8,
@@ -30,7 +31,7 @@ class OpenAIService {
         presence_penalty: 0
       },
       creative: {
-        model: 'gpt-4-turbo-preview',
+        model: getModel('creative'),
         temperature: 0.9,
         max_tokens: 2500,
         top_p: 0.95,
@@ -38,7 +39,7 @@ class OpenAIService {
         presence_penalty: 0.3
       },
       precise: {
-        model: 'gpt-4-turbo-preview',
+        model: getModel('code'),
         temperature: 0.1,
         max_tokens: 1500,
         top_p: 0.7,
@@ -108,7 +109,7 @@ class OpenAIService {
 
       // 🚀 CALL OPENAI with optimal configuration
       const response = await this.openai.chat.completions.create({
-        model: 'gpt-4-turbo-preview',
+        model: getModel('chat'),
         messages: messages,
         max_tokens: 800,
         temperature: 0.7,
@@ -137,7 +138,7 @@ class OpenAIService {
 
       return {
         response: response.choices[0].message.content,
-        model: 'gpt-4-turbo-preview',
+        model: getModel('chat'),
         tokensUsed: response.usage?.total_tokens || 0,
         responseTime,
         relevanceScore,
@@ -658,7 +659,7 @@ The user wants to create or manage tasks. Suggest specific details like due date
       console.log('🔍 Testing OpenAI connection...');
 
       const response = await this.openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: getModel('default'),
         messages: [{ role: 'user', content: 'Test connection' }],
         max_tokens: 10
       });
@@ -666,7 +667,7 @@ The user wants to create or manage tasks. Suggest specific details like due date
       return {
         success: true,
         status: 'connected',
-        model: 'gpt-3.5-turbo',
+        model: getModel('default'),
         response: response.choices[0].message.content
       };
 

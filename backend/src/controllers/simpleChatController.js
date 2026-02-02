@@ -1,4 +1,5 @@
 const openaiService = require('../services/openaiService');
+const { getModel } = require('../config/openai.config');
 
 class SimpleChatController {
   
@@ -30,7 +31,7 @@ class SimpleChatController {
         metadata: {
           tokensUsed: aiResponse.tokensUsed || 100,
           processingTime: Date.now(),
-          model: 'gpt-4'
+          model: getModel('chat')
         },
         userId: userId,
         timestamp: new Date().toISOString()

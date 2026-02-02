@@ -1,4 +1,5 @@
 const OpenAI = require('openai');
+const { getModel } = require('../config/openai.config');
 const MemoryService = require('./memoryService');
 const EmotionalIntelligence = require('./emotionalIntelligence');
 const Contact = require('../models/Contact');
@@ -218,7 +219,7 @@ class DecisionEngine {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });
@@ -383,7 +384,7 @@ class DecisionEngine {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.2
         });

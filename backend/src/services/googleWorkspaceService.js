@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 const { OAuth2Client } = require('google-auth-library');
 const OpenAI = require('openai');
+const { getModel } = require('../config/openai.config');
 
 class GoogleWorkspaceService {
     constructor() {
@@ -195,7 +196,7 @@ class GoogleWorkspaceService {
 
         try {
             const response = await this.openai.chat.completions.create({
-                model: "gpt-4o",
+                model: getModel(),
                 messages: [{ role: "user", content: prompt }],
                 temperature: 0.1,
                 response_format: { type: "json_object" }
@@ -243,7 +244,7 @@ class GoogleWorkspaceService {
 
         try {
             const response = await this.openai.chat.completions.create({
-                model: "gpt-4o",
+                model: getModel(),
                 messages: [{ role: "user", content: prompt }],
                 temperature: 0.2,
                 response_format: { type: "json_object" }
@@ -625,7 +626,7 @@ class GoogleWorkspaceService {
 
         try {
             const response = await this.openai.chat.completions.create({
-                model: "gpt-4o",
+                model: getModel(),
                 messages: [{ role: "user", content: prompt }],
                 temperature: 0.1,
                 response_format: { type: "json_object" }

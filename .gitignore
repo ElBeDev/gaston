@@ -44,3 +44,11 @@ Thumbs.db
 # WhatsApp sessions (ephemeral data)
 backend/src/whatsapp-sessions/
 backend/src/sessions/
+
+# Production files
+.env.production
+
+# Logs
+*.log
+logs/
+/var/log/

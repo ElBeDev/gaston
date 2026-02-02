@@ -4,6 +4,7 @@
  * análisis de comportamiento y memoria a largo plazo
  */
 
+const { getModel } = require('../config/openai.config');
 const UserContext = require('../models/UserContext');
 const User = require('../models/User');
 const openaiService = require('../services/openaiService');
@@ -1642,7 +1643,7 @@ Extrae SOLO el contenido real del mensaje, sin los comandos de envío.
 Solo responde el JSON, sin explicaciones.`;
 
       const response = await this.openaiService.createCompletion({
-        model: 'gpt-4',
+        model: getModel(),
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.3,
         max_tokens: 300
@@ -1695,7 +1696,7 @@ Mantén un tono profesional pero cálido. Usa el nombre del destinatario si est�
 Solo responde el JSON, sin explicaciones.`;
 
       const response = await this.openaiService.createCompletion({
-        model: 'gpt-4',
+        model: getModel(),
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.5,
         max_tokens: 500

@@ -1,4 +1,5 @@
 const OpenAI = require('openai');
+const { getModel } = require('../config/openai.config');
 const Contact = require('../models/Contact');
 const Task = require('../models/Task');
 const Project = require('../models/Project');
@@ -202,7 +203,7 @@ class TaskOrchestrator {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });
@@ -359,7 +360,7 @@ class TaskOrchestrator {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });
@@ -409,7 +410,7 @@ class TaskOrchestrator {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.2
         });
@@ -439,7 +440,7 @@ class TaskOrchestrator {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });
@@ -490,7 +491,7 @@ class TaskOrchestrator {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });
@@ -565,7 +566,7 @@ class TaskOrchestrator {
         `;
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: getModel(),
             messages: [{ role: "user", content: prompt }],
             temperature: 0.1
         });
